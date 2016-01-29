@@ -30,3 +30,10 @@
 
 # Merge related files
 *.orig
+
+# Clion files
+.idea/
+
+# binary
+
+whatdowedonow
