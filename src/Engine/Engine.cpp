@@ -66,10 +66,12 @@ void Engine::Destroy() {
 int Engine::screen_width()
 {
 #ifdef FULLSCREEN
-	int display_count = 0, display_index = 0, mode_index = 0;
-	SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
-	SDL_GetDisplayMode(display_index, mode_index, &mode);
-	return mode.w;
+	SDL_Rect r;
+	if (SDL_GetDisplayBounds(0, &r) != 0) {
+		SDL_Log("SDL_GetDisplayBounds failed: %s", SDL_GetError());
+		return 1;
+	}
+	return r.w;
 #else
 	return DEF_SCREEN_WIDTH;
 #endif
@@ -77,10 +79,12 @@ int Engine::screen_width()
 int Engine::screen_height()
 {
 #ifdef FULLSCREEN
-	int display_count = 0, display_index = 0, mode_index = 0;
-	SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
-	SDL_GetDisplayMode(display_index, mode_index, &mode);
-	return mode.h;
+	SDL_Rect r;
+	if (SDL_GetDisplayBounds(0, &r) != 0) {
+		SDL_Log("SDL_GetDisplayBounds failed: %s", SDL_GetError());
+		return 1;
+	}
+	return r.h;
 #else
 	return DEF_SCREEN_HEIGHT;
 #endif
