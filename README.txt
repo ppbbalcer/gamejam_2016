@@ -43,3 +43,5 @@ Following problems are known:
 
 - Game wasn't designed to run on dual monitor setups and may crash on
   such.
+
+
