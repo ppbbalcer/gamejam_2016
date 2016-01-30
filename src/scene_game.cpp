@@ -599,41 +599,8 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 	SDL_RenderSetViewport(renderer, &veryTopBar);
 
 	/* PLAYER 1 */
-	{
-		_player1->renderAvatar(renderer, EngineInst->screen_width() - tileSize - playerBarXPadding, 0, SDL_FLIP_HORIZONTAL);
-		EngineInst->font()->printf(EngineInst->screen_width()  - tileSize - playerBarXPadding - 210, playerBarYPadding + veryTopBar.y, ALIGN_RIGHT | ALIGN_TOP, "Player controls UP, DOWN, LEFT, RIGHT CTRL-Fire");
-
-		SDL_Rect p1_hp_rect = { EngineInst->screen_width()  - tileSize - playerBarXPadding - _player1->getHealth() * 2, playerBarYPadding, _player1->getHealth() * 2, playerBarHeight};
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderFillRect(renderer, &p1_hp_rect);
-		EngineInst->font()->printf(0, 0, ALIGN_LEFT | ALIGN_TOP, "Room %u-%u", level->getId(), room_id);		
-		//Frame
-		SDL_SetRenderDrawColor(renderer, 200, 0, 30, SDL_ALPHA_OPAQUE);
-		p1_hp_rect.x = EngineInst->screen_width() - tileSize - playerBarXPadding - 200;
-		p1_hp_rect.w = 200;
-		SDL_RenderDrawRect( renderer, &p1_hp_rect );
-		p1_hp_rect.x++;
-		p1_hp_rect.y++;
-		p1_hp_rect.w -= 2;
-		p1_hp_rect.h -= 2;
-		SDL_RenderDrawRect( renderer, &p1_hp_rect );
-
-		SDL_Rect p1_mana_rect = { EngineInst->screen_width() - tileSize - playerBarXPadding - _player1->getMana() * 2, playerBarHeight + paddingBetweenBars + playerBarYPadding, _player1->getMana() * 2, playerBarHeight};
-		SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderFillRect(renderer, &p1_mana_rect);
-
-		//Frame
-		SDL_SetRenderDrawColor(renderer, 20, 20, 180, SDL_ALPHA_OPAQUE);
-		p1_mana_rect.x = EngineInst->screen_width() - tileSize - playerBarXPadding - 200;
-		p1_mana_rect.w = 200;
-		SDL_RenderDrawRect( renderer, &p1_mana_rect );
-		p1_mana_rect.x++;
-		p1_mana_rect.y++;
-		p1_mana_rect.w -= 2;
-		p1_mana_rect.h -= 2;
-		SDL_RenderDrawRect( renderer, &p1_mana_rect );
-
-	}
+	renderGUI(renderer, tileSize, veryTopBar, playerBarYPadding, playerBarXPadding, playerBarHeight,
+			  paddingBetweenBars);
 #ifdef TWO_PLAYER_MODE
 	/* PLAYER 2 */
 	{
@@ -671,3 +638,40 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 	}
 #endif 
 }
+
+void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize, const SDL_Rect &veryTopBar, int playerBarYPadding,
+						  int playerBarXPadding, int playerBarHeight, int paddingBetweenBars) const {
+		_player1->renderAvatar(renderer, EngineInst->screen_width() - tileSize - playerBarXPadding, 0, SDL_FLIP_HORIZONTAL);
+		EngineInst->font()->printf(EngineInst->screen_width()  - tileSize - playerBarXPadding - 210, playerBarYPadding + veryTopBar.y, ALIGN_RIGHT | ALIGN_TOP, "Player controls UP, DOWN, LEFT, RIGHT CTRL-Fire");
+
+		SDL_Rect p1_hp_rect = { EngineInst->screen_width()  - tileSize - playerBarXPadding - _player1->getHealth() * 2, playerBarYPadding, _player1->getHealth() * 2, playerBarHeight};
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderFillRect(renderer, &p1_hp_rect);
+		EngineInst->font()->printf(0, 0, ALIGN_LEFT | ALIGN_TOP, "Room %u-%u", level->getId(), room_id);
+		//Frame
+		SDL_SetRenderDrawColor(renderer, 200, 0, 30, SDL_ALPHA_OPAQUE);
+		p1_hp_rect.x = EngineInst->screen_width() - tileSize - playerBarXPadding - 200;
+		p1_hp_rect.w = 200;
+		SDL_RenderDrawRect( renderer, &p1_hp_rect );
+		p1_hp_rect.x++;
+		p1_hp_rect.y++;
+		p1_hp_rect.w -= 2;
+		p1_hp_rect.h -= 2;
+		SDL_RenderDrawRect( renderer, &p1_hp_rect );
+
+		SDL_Rect p1_mana_rect = { EngineInst->screen_width() - tileSize - playerBarXPadding - _player1->getMana() * 2, playerBarHeight + paddingBetweenBars + playerBarYPadding, _player1->getMana() * 2, playerBarHeight};
+		SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderFillRect(renderer, &p1_mana_rect);
+
+		//Frame
+		SDL_SetRenderDrawColor(renderer, 20, 20, 180, SDL_ALPHA_OPAQUE);
+		p1_mana_rect.x = EngineInst->screen_width() - tileSize - playerBarXPadding - 200;
+		p1_mana_rect.w = 200;
+		SDL_RenderDrawRect( renderer, &p1_mana_rect );
+		p1_mana_rect.x++;
+		p1_mana_rect.y++;
+		p1_mana_rect.w -= 2;
+		p1_mana_rect.h -= 2;
+		SDL_RenderDrawRect( renderer, &p1_mana_rect );
+
+	}
