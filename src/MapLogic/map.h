@@ -17,6 +17,12 @@ struct map_params {
 	int start_hp;
 };
 
+enum map_obstruction {
+	OBSTRUCTION_TRAP,
+
+	MAX_MAP_OBSTRUCTIONS
+};
+
 typedef std::pair<int,int> starting_pos;
 typedef std::list<starting_pos> start_list;
 typedef std::list<enemy_definition*> enemies_list;
@@ -40,6 +46,8 @@ public:
 	virtual const starting_pos & GetPlayer2Start() =0;
 	virtual const enemies_list & GetEnemies() = 0;
 	virtual map_params* getParams() = 0;
+	virtual int placeObstruction(int x, int y, map_obstruction ob) = 0;
+
 	/**
 	 * @return in fields
 	 */

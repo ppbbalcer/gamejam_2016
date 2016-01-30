@@ -51,11 +51,13 @@ void Field::EnsureFieldIdsInitialized()
 	assigned_field[EVIL_COMPUTER] = 39;
 	initialized = true;
 }
+
 int Field::GetTileId()
 {
 	EnsureFieldIdsInitialized();
 	return assigned_field[GetType()];
 }
+
 bool Field::IsObstacle()
 {
 	if (someone_is_here) {
@@ -66,6 +68,7 @@ bool Field::IsObstacle()
 		return true;
 	return (type >= WALL && type <= T_BOTTOM);
 }
+
 int Field::GetType()
 {
 	return type;

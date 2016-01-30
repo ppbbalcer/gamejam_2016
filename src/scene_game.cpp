@@ -212,6 +212,10 @@ void SceneGame::updatePlayers(int timems)
 			fireballs.push_back(fb);
 	}
 
+	if (EngineInst->input()->getState(INPUT_USE)) {
+		_player1->placeTrap();
+	}
+
 	_player1->OnUpdate(timems);
 
 }

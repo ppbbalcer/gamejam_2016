@@ -45,6 +45,7 @@ PlayerInput::PlayerInput() {
 	setInputDelay(INPUT_MENU_RIGHT, 100);
 	setInputDelay(INPUT_MENU_ENTER, 100);
 	setInputDelay(INPUT_MENU_BACK, 100);
+	setInputDelay(INPUT_USE, 100);
 }
 
 void PlayerInput::reset() {
@@ -95,8 +96,7 @@ void PlayerInput::update(int time) {
 				input_state[i] = currentKeyStates[keyboard_input_bindings[i]];
 				input_delay[i].current = input_delay[i].delay;
 			}
-		}
-		else {
+		} else {
 			input_state[i] = currentKeyStates[keyboard_input_bindings[i]];
 		}
 	}
@@ -112,13 +112,11 @@ void PlayerInput::update(int time) {
 					input_state[i] = SDL_GameControllerGetButton(gc.second, controller_input_bindings[i]);
 					input_delay[i].current = input_delay[i].delay;
 				}
-			}
-			else {
+			} else {
 				input_state[i] = SDL_GameControllerGetButton(gc.second, controller_input_bindings[i]);
 			}
 		}
 	}
-
 
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) ) {

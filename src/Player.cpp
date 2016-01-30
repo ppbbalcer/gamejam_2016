@@ -15,9 +15,33 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 	printf("PLAYER: %u %u\n", _health, _mana);
 	_time_to_shot=0;
 	viewangle = M_PI;
+
+	for (int i = 0; i < MAX_INVENTORY_ITEM; ++i) {
+		inventory[i].available = 10;
+		inventory[i].capacity = 10;
+	}
+
 };
 
 Player::~Player(void) {};
+
+void Player::placeTrap()
+{
+	if (inventory[ITEM_TRAP].available <= 0)
+		return;
+
+	modInventoryItemCount(ITEM_TRAP, -1);
+
+	_map->placeObstruction(getPosAfterX(), getPosAfterY(), OBSTRUCTION_TRAP);
+}
+
+void Player::modInventoryItemCount(inventory_item item, int mod)
+{
+	inventory[item].available += mod;
+
+	inventory[item].available = max(inventory[item].available, 0);
+	inventory[item].available = min(inventory[item].available, inventory[item].capacity);
+}
 
 int Player::getMana()
 {
@@ -30,6 +54,7 @@ void Player::Win()
 	_map->GetFieldAt(getPosBeforeX(), getPosBeforeY())->LeftField();
 
 }
+
 void Player::restoreMana(int howMuchMana)
 {
 	_mana += howMuchMana;

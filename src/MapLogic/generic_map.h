@@ -1,7 +1,9 @@
 #ifndef __GENERIC_MAP
 #define __GENERIC_MAP
 #include "map.h"
+#include "field.h"
 #include "field_impl.h"
+#include "spikes.h"
 #include <cstring>
 
 class GenericMap: public IMap {
@@ -44,21 +46,6 @@ protected:
 		if (fields[x+y*width])
 			delete fields[x+y*width];
 	}
-	/**
-	 * @param x,y - coordinates
-	 * @param field1 field to be supplied. Must be either NULL
-	 *  or a valid pointer. If valid field existed before call
-	 *  it is freed.
-	 */
-	int PlaceField(int x, int y, Field *field1)
-	{
-		if (fields[x+y*width]) {
-			FreeFieldIfExists(x,y);
-		}
-		fields[x+y*width] = field1;
-		field1->InitMapAssociation(this);
-		return 0;
-	}
 	void DeallocateFields() {
 		for (int i = 0 ; i!=width*height; ++i ) {
 			if (fields[i])
@@ -82,7 +69,40 @@ protected:
 			return true;
 		return false;
 	}
+	/**
+	* @param x,y - coordinates
+	* @param field1 field to be supplied. Must be either NULL
+	*  or a valid pointer. If valid field existed before call
+	*  it is freed.
+	*/
+	int PlaceField(int x, int y, Field *field1)
+	{
+		if (fields[x + y*width]) {
+			FreeFieldIfExists(x, y);
+		}
+		fields[x + y*width] = field1;
+		field1->InitMapAssociation(this);
+		return 0;
+	}
+
+
+
 public:
+	int placeObstruction(int x, int y, map_obstruction ob)
+	{
+		Field *f;
+		switch (ob) {
+		case OBSTRUCTION_TRAP:
+			f = new Spikes(1);
+			break;
+		default:
+			assert(0);
+		}
+		PlaceField(x, y, f);
+
+		return 0;
+	}
+
 	void ResetDoorsOpen() {
 		_all_doors_open=0;
 	}

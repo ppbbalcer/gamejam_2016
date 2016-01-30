@@ -309,4 +309,4 @@ public:
 IMap * IMap::Factory(int type, const char * parameter) {
 	return new LoadedMap(parameter);
 }
- 
+
