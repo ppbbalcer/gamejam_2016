@@ -2,6 +2,7 @@
 #include "GlobalData.h"
 #include "Engine/Engine.h"
 #include "fireball.h"
+#include <algorithm>
 
 using namespace std;
 

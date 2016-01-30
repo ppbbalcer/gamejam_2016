@@ -11,6 +11,8 @@
 #include "skull.h"
 #include "stairs.h"
 #include "spikes.h"
+#include <algorithm>
+
 using namespace std;
 
 /*

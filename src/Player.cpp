@@ -2,6 +2,7 @@
 #include "GlobalData.h"
 #include "Engine/RTexture.h"
 #include "Equipment.h"
+#include <algorithm>
 
 using namespace std;
 
