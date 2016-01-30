@@ -86,7 +86,7 @@ public:
 	int getPosAfterY() const;
 	/* if position TO equals FROM, character is NOT moving */
 
-	void updateDirection(DIRECT directMove);
+	virtual void updateDirection(DIRECT directMove);
 	virtual void OnUpdate(int time_ms);
 	CharacterType getType() { return _type; }
 

@@ -243,8 +243,30 @@ void SceneGame::updateEnemies(int timems)
 			continue;
 
 		if((*enemy)->getWay().size() > 0) {
+			if ( (*enemy)->canSee(_player1->getPosBeforeX(),
+					      _player1->getPosBeforeY()))
+			{
+				if ((*enemy)->getWayAge() < 1) {
+					continue;
+				} else {
+					puts("He runs away!");
+				}
+			} else {
+				continue;
+			}
+		} else if (!(*enemy)->canSee(_player1->getPosBeforeX(),
+					    _player1->getPosBeforeY())
+			    )
+		{
+			//Where is he?
+			DIRECT d = (*enemy)->getRandomDirection();
+			if (d != DIRECT_NO_WAY) { 
+				(*enemy)->updateDirection(d);
+			}
 			continue;
 		}
+		puts("It's him!");
+
 
 		int startX = (*enemy)->getPosAfterX();
 		int startY = (*enemy)->getPosAfterY();
@@ -256,14 +278,17 @@ void SceneGame::updateEnemies(int timems)
 		DIRECT direct1 = DIRECT_NO_WAY;
 		DIRECT direct2 = DIRECT_NO_WAY;
 
-		int distQuad = EngineInst->getTileSize()*EngineInst->getTileSize()*6*6;
+		int distQuad = EngineInst->getTileSize()
+			* EngineInst->getTileSize() * 6 * 6;
 		int distX = _player1->getPosX() - (*enemy)->getPosX();
 		int distY = _player1->getPosY() - (*enemy)->getPosY();
 
 
-		if (_player1->GetState()==Character::DEAD) {
+		if (_player1->GetState() == Character::DEAD) {
 			direct1 = DIRECT_NO_WAY;
-		} else if ((*enemy)->getAI() != ENEMY_AI_DISTANCE || distX*distX + distY*distY <= distQuad ) {
+		} else if ( ((*enemy)->getAI() != ENEMY_AI_DISTANCE
+			     || distX*distX + distY*distY <= distQuad ))
+		{
 			direct1 =
 				findAstar(way1, maxSteps,
 					  startX, startY,
@@ -281,7 +306,13 @@ void SceneGame::updateEnemies(int timems)
 		if (_player2->GetState()==Character::DEAD) {
 			direct2 = DIRECT_NO_WAY;
 		} else if ((*enemy)->getAI() != ENEMY_AI_DISTANCE || distX*distX + distY*distY <= distQuad ) {
-			direct2 = findAstar(way2, maxSteps,  startX, startY, _player2->getPosBeforeX(), _player2->getPosBeforeY(), map->GetWidth(), map->GetHeight(), IMap_isObstacle, map);
+			direct2 = findAstar(way2, maxSteps,
+					    startX, startY,
+					    _player2->getPosBeforeX(),
+					    _player2->getPosBeforeY(),
+					    map->GetWidth(),
+					    map->GetHeight(),
+					    IMap_isObstacle, map);
 		}
 		#endif
 		if (heartbeat_tempo == 0 && ((way1.size() != 0 && way1.size() < 10 ) || (way2.size() != 0 && way2.size() < 10))) {
@@ -382,11 +413,7 @@ void SceneGame::updateShadows()
 {
 	memset(_arrayShadow, 00, _arrayShadowW * _arrayShadowH
 	       * sizeof(_arrayShadowH));
-	//updateShadowsChr(_player1);
-	updateShadowsChr(*_enemys.begin());
-	for (auto enemy : _enemys) {
-		updateShadowsChr(enemy);
-	}
+	updateShadowsChr(_player1);
 
 
 	for (int i = 0 ; i != map->GetHeight(); i++) {
@@ -415,7 +442,7 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 				alfa = map->getParams()->alpha;
 			}
 			if (!_arrayVisibility[y*_arrayShadowW + x]) {
-				_tiles->setAlpha(180);
+				_tiles->setAlpha(255);
 
 			} else {
 				_tiles->setAlpha(alfa);
