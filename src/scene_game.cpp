@@ -21,6 +21,7 @@ using namespace std;
 #define UI_HEIGHT	0.15f
 #define GP_HEIGHT	1.0f - UI_HEIGHT
 #define GP_START_Y	UI_HEIGHT
+#define GP_WIDTH_RATIO	1.3f
 
 // Global
 IMap *gCurrentMap = NULL;
@@ -65,8 +66,8 @@ SDL_Rect SceneGame::GetGameplayViewport()
 	SDL_Rect topLeftViewport = GetDefaultViewport();
 	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
 	topLeftViewport.h *= GP_HEIGHT;
-	topLeftViewport.x = topLeftViewport.w - topLeftViewport.h;
-	topLeftViewport.w = topLeftViewport.h;
+	topLeftViewport.x = topLeftViewport.w - topLeftViewport.h * GP_WIDTH_RATIO;
+	topLeftViewport.w = topLeftViewport.h * GP_WIDTH_RATIO;
 	return topLeftViewport;
 }
 
@@ -86,7 +87,7 @@ SDL_Rect SceneGame::GetBossViewport()
 	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
 	topLeftViewport.h *= GP_HEIGHT;
 	topLeftViewport.x = 0;
-	topLeftViewport.w = topLeftViewport.w - topLeftViewport.h;
+	topLeftViewport.w = topLeftViewport.w - topLeftViewport.h * GP_WIDTH_RATIO;
 	return topLeftViewport;
 }
 
@@ -146,7 +147,7 @@ void SceneGame::OnLoad()
 			     ;it!=ens.end();
 		     ++it)
 		{
-			tmpTexture = new RTexture(texturesScene_game[8]);
+			tmpTexture = new RTexture(texturesScene_game[9]);
 			tmpTexture->setTileSizeSrc(tileSizeSrc);
 			tmpTexture->setTileSizeDst(tile_size);
 			tmpTexture->setTileIdx(1);
@@ -175,7 +176,10 @@ void SceneGame::OnLoad()
 	globalAudios[HEARTBEAT].res.sound->play(-1, 0, HEARTBEAT_BASE_INTERVAL);
 	is_loaded = true;
 
-	_boss = new BossScreen(new RTexture(texturesScene_game[4]));
+	_boss = new BossScreen(
+		new RTexture(texturesScene_game[4]),
+		new RTexture(texturesScene_game[5]),
+		GetBossViewport());
 }
 
 void SceneGame::OnFree()
@@ -478,7 +482,7 @@ void SceneGame::renderBoss(SDL_Renderer* renderer)
 {
 	SDL_Rect topLeftViewport = GetBossViewport();
 	SDL_RenderSetViewport(renderer, &topLeftViewport);
-	_boss->OnRender(renderer, topLeftViewport);
+	_boss->OnRender(renderer);
 }
 
 void SceneGame::renderGUI(SDL_Renderer *renderer) {

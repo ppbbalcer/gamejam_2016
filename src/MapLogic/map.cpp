@@ -11,6 +11,7 @@
 #include "skull.h"
 #include "stairs.h"
 #include "spikes.h"
+#include "artifact.h"
 #include <algorithm>
 
 using namespace std;
@@ -138,6 +139,9 @@ LoadedMap::LoadedMap(const char * path) {
 				break;
 			case 'E':
 				new_field= new EvilComputer;
+				break;
+			case 'A':
+				new_field = new Artifact();
 				break;
 			case '!':{
 				enemy_definition *enemy = new enemy_definition();

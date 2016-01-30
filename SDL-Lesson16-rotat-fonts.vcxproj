@@ -25,6 +25,7 @@
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MapLogic\artifact.cpp" />
     <ClCompile Include="src\MapLogic\controller_field.cpp" />
     <ClCompile Include="src\MapLogic\door.cpp" />
     <ClCompile Include="src\MapLogic\field.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\KeyMap.h" />
     <ClInclude Include="src\level.h" />
+    <ClInclude Include="src\MapLogic\artifact.h" />
     <ClInclude Include="src\MapLogic\controller_field.h" />
     <ClInclude Include="src\MapLogic\door.h" />
     <ClInclude Include="src\MapLogic\field.h" />

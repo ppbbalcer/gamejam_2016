@@ -50,6 +50,7 @@ void Field::EnsureFieldIdsInitialized()
 	assigned_field[SPIKES_ON] = 47;
 	assigned_field[SPIKES_OFF] = 48;
 	assigned_field[EVIL_COMPUTER] = 39;
+	assigned_field[ARTIFACT] = 39;
 	initialized = true;
 }
 

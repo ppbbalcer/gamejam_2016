@@ -50,6 +50,7 @@ public:
 		TRAP,
 		SWITCH_DOWN,
 		EVIL_COMPUTER, /*spawns fireballs everywhere*/
+		ARTIFACT,
 		NUM_FIELD_TYPES
 
 	};
