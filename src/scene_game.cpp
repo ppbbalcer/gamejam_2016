@@ -328,42 +328,29 @@ void SceneGame::OnUpdate(int timems)
 	updateEnemies(timems);
 	updateShadows();
 }
+#include<math.h>
 
-void SceneGame::updateShadowsObj4(int centerTiltX, int centerTiltY) 
-{
-	int radius = 4;
-	int alfa,xx,yy;
-	int idx;
-	for(int y=-radius; y<=radius; ++y) {
-		for(int x=-radius; x<=radius; ++x) {
-			alfa = calcCircleAlfaRadius4[x+radius][y+radius];
-			if(alfa > 0) {
-				xx = x + centerTiltX;
-				yy = y + centerTiltY;
-				if(xx >= 0 && xx < _arrayShadowW && yy >= 0 && yy < _arrayShadowH) {
-					idx = yy*_arrayShadowW + xx;
-					_arrayShadow[idx] += alfa;
-					if(_arrayShadow[idx] > 255) {
-						_arrayShadow[idx] = 255;
-					}
-				}
-			}
-		}
-	}
+float sqrf(float a) {
+	return a * a;
 }
-
-void SceneGame::updateShadowsObj6(int centerTiltX, int centerTiltY) 
+void SceneGame::updateShadowsChr(Character *ch) 
 {
-	int radius = 6;
+	int radius = 9;
 	int alfa,xx,yy;
 	int idx;
+	int centerTiltX = ch->getPosAfterX();
+	int centerTiltY = ch->getPosAfterY();
+
 	for(int y=-radius; y<=radius; ++y) {
 		for(int x=-radius; x<=radius; ++x) {
-			alfa = calcCircleAlfaRadius6[x+radius][y+radius];
-			if(alfa > 0) {
-				xx = x + centerTiltX;
-				yy = y + centerTiltY;
-				if(xx >= 0 && xx < _arrayShadowW && yy >= 0 && yy < _arrayShadowH) {
+			alfa = 255*(1-sqrf(
+				    sqrtf(x*x + y*y) /
+				    sqrtf(radius * radius *2)));
+			xx = x + centerTiltX;
+			yy = y + centerTiltY;
+			if(alfa > 0 && ch->canSee(xx,yy)) {
+				if(xx >= 0 && xx < _arrayShadowW
+				   && yy >= 0 && yy < _arrayShadowH) {
 					idx = yy*_arrayShadowW + xx;
 					_arrayShadow[idx] += alfa;
 					if(_arrayShadow[idx] > 255) {
@@ -379,15 +366,17 @@ void SceneGame::updateShadows()
 {
 	memset(_arrayShadow, 00, _arrayShadowW*_arrayShadowH*sizeof(_arrayShadowH));
 
-	updateShadowsObj6(_player1->getPosAfterX(), _player1->getPosAfterY());
-	updateShadowsObj6(_player2->getPosAfterX(), _player2->getPosAfterY());
+	updateShadowsChr(_player1);
+	//updateShadowsChr(_player2);
+
+
 	
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
 			int field = map->GetFieldAt(j, i)->GetType();
 			//int tile =  map->GetFieldAt(j, i)->GetTileId();
 			if (field == IField::MEDKIT ||  field == IField::POWERUP) {
-				updateShadowsObj4(j, i);
+				//updateShadowsObj4(j, i);
 			}
 
 		}
@@ -399,6 +388,7 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 	
 	int tileSize = EngineInst->getTileSize();
 	int alfa;
+	
 	for (int y = 0 ; y < _arrayShadowH; ++y) {
 		for (int x = 0 ;x< _arrayShadowW; ++x) {
 			alfa = 255 - _arrayShadow[y*_arrayShadowW + x];
@@ -407,7 +397,9 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 				alfa = map->getParams()->alpha;
 			}
 			_tiles->setAlpha(alfa);
-			_tiles->renderTile(renderer, x*tileSize, y*tileSize, 35, SDL_FLIP_NONE);
+			_tiles->renderTile(renderer,
+					   x*tileSize, y*tileSize,
+					   35, SDL_FLIP_NONE);
 		}
 	}
 

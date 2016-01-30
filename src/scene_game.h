@@ -35,8 +35,8 @@ private:
 	void updateEnemies(int timems);
 	void updateFireballs(int timems);
 	void updatePlayers(int timems);
-	void updateShadowsObj4(int centerTiltX, int centerTiltY); 
-	void updateShadowsObj6(int centerTiltX, int centerTiltY); 
+	void updateShadowsChr(Character *ch);
+
 	void updateShadows();
 public:
 	SceneGame(Level *level, int room_id);

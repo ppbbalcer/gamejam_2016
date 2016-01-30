@@ -13,9 +13,9 @@ Character::Character(RTexture* texture, IMap * map)
 	_health = MAX_HEALTH;
 	_state = ALIVE;
 	_pos_after_x =
-	        _pos_before_x =
-	                _pos_after_y =
-	                        _pos_before_y = 0;
+		_pos_before_x =
+			_pos_after_y =
+				_pos_before_y = 0;
 	last_dir_x = 1;
 	last_dir_y = 0;
 }
@@ -73,41 +73,43 @@ int Character::SetPowerLevel(int x)
 	return (power_level = x);
 }
 
-void Character::OnRenderCircle(SDL_Renderer *renderer, int radius, int tileIdx)
+
+void Character::OnRenderCircle()
 {
-	int title_size = 23;
+	// precalc
+}
 
-	if (radius == 4) {
- 		int cx = (int)getPosX();
-		int cy = (int)getPosY();
+bool Character::canSee(int x0, int y0)
+{
+	int x1 = getPosAfterX();
+	int y1 = getPosAfterY();
+	bool landscape = abs(x1 - x0) > abs(y1 - y0);
+	int num_fields = std::max<int>(abs(x1 - x0) , abs(y1 - y0));
+	bool negative = landscape ? ( x0 > x1) : (y0 > y1);
+	int sign = negative ? -1 : +1;
+	int x, y;
+	// iterate from (x0, y0 to x1, y1)
+	for (int i = 0 ; i != num_fields; ++i) {
+		if (landscape) {
+			x = x0 + i * sign;
+			y = y0 + i * sign * ( y1 - y0 ) / (x1 - x0);
+		} else {
+			y = y0 + i * sign;
+			x = x0 + i * sign * ( x1 - x0 ) / (y1 - y0);
+		}
+		if (x<0 || y<0 || x>= _map->GetWidth()
+		    || y>= _map->GetHeight()) {
 
-		int alfa;
-		for (int x = -radius; x <= radius; ++x) {
-			for (int y = -radius; y <= radius; ++y) {
-
-				int tx = (cx / title_size) + x;
-				int ty = (cy / title_size) + y;
-				if (tx < 0 || tx >= (_map)->GetWidth()) continue;
-				if (ty < 0 || ty >= (_map)->GetHeight()) continue;
-
-				if ((_map)->GetFieldAt(tx, ty)->IsObstacle()) {
-					continue;
-				}
-				alfa = calcCircleAlfaRadius4[x + radius][y + radius];
-				if (alfa > 0) {
-					_texture->setAlpha(alfa);
-
-					_texture->renderTile(renderer, cx + x * title_size, cy + y * title_size, tileIdx, SDL_FLIP_NONE);
-				}
-			}
+		} else {
+			IField * f = _map->GetFieldAt(x,y);
+			if (!f) return false;
+			if (f->IsObstacle() && ! f->WhoIsHere()) return false;
 		}
 
-	} else {
-		printf("No calculated Radius\n");
-		PAUSE();
 	}
-	_texture->setAlpha(255);
+	return true;
 }
+
 
 void Character::OnRender(SDL_Renderer *renderer)
 {

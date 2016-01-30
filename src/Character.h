@@ -57,9 +57,14 @@ public:
 	virtual int crucio(int howMuchCrucio);
 	void heal(int howMuchHeal);
 	virtual void Win();
-	void OnRenderCircle(SDL_Renderer *renderer, int radius, int tileIdx);
+	/* precalc for rendering circle; */
+	void OnRenderCircle();
+	/* return true if character can see a tile given map coordinates */
+	bool canSee(int x, int y);
 	virtual void OnRender(SDL_Renderer *renderer);
-	void renderAvatar(SDL_Renderer *renderer, int x, int y, SDL_RendererFlip flip);
+	void renderAvatar(SDL_Renderer *renderer,
+			  int x, int y,
+			  SDL_RendererFlip flip);
 	void setPosTiles(int x, int y);
 	/* strength of damage dealt by character*/
 	int GetPowerLevel();
@@ -76,7 +81,7 @@ public:
 	int getPosBeforeY();
 	int getPosAfterY();
 	/* if position TO equals FROM, character is NOT moving */
-	
+
 	void updateDirection(DIRECT directMove);
 	virtual void OnUpdate(int time_ms);
 	CharacterType getType() { return _type; }
@@ -100,7 +105,10 @@ private:
 	int _pos_after_x;
 	int _pos_before_y;
 	int _pos_after_y;
-
+	/**
+	 * visibility angle in degrees
+	 */
+	int viewangle;
 protected:
 	int last_dir_x;
 	int last_dir_y;
