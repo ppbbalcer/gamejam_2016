@@ -21,7 +21,6 @@ set(client_src
 	fireball.h
 	GlobalData.cpp
 	GlobalData.h
-	KeyMap.h
 	level.cpp
 	level.h
 	main.cpp
