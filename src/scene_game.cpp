@@ -66,6 +66,27 @@ SDL_Rect SceneGame::GetDefaultViewport()
 	topLeftViewport.h = EngineInst->screen_height()-MARGIN_TOP-MARGIN_BOTTOM;
 	return topLeftViewport;
 }
+
+SDL_Rect SceneGame::GetGameplayViewport()
+{
+	SDL_Rect topLeftViewport = GetDefaultViewport();
+	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
+	topLeftViewport.h *= GP_HEIGHT;
+	topLeftViewport.x = topLeftViewport.w - topLeftViewport.h;
+	topLeftViewport.w = topLeftViewport.h;
+	return topLeftViewport;
+}
+
+SDL_Rect SceneGame::GetUIViewport()
+{
+	SDL_Rect veryTopBar;
+	veryTopBar.x = 0;
+	veryTopBar.y = 0;
+	veryTopBar.w = EngineInst->screen_width();
+	veryTopBar.h = EngineInst->screen_height() * UI_HEIGHT;
+	return veryTopBar;
+}
+
 void SceneGame::OnLoad()
 {
 	/* command generating set of tiles found in Resources/tiles/walls.png
@@ -218,8 +239,8 @@ void SceneGame::updatePlayers(int timems)
 
 void SceneGame::updateCamera()
 {
-	_camera.x = _player1->getPosX() - GetDefaultViewport().w / 2;
-	_camera.y = _player1->getPosY() - GetDefaultViewport().h / 2;
+	_camera.x = _player1->getPosX() - GetGameplayViewport().w / 2 + EngineInst->getTileSize() / 2;
+	_camera.y = _player1->getPosY() - GetGameplayViewport().h / 2 + EngineInst->getTileSize() / 2;
 }
 
 void SceneGame::updateEnemies(int timems)
@@ -518,11 +539,7 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 {
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect topLeftViewport = GetDefaultViewport();
-	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
-	topLeftViewport.h *= GP_HEIGHT;
-	
-
+	SDL_Rect topLeftViewport = GetGameplayViewport();
 	SDL_RenderSetViewport(renderer, &topLeftViewport);
 	
 	renderMap(renderer);
@@ -550,18 +567,14 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 	renderShadow(renderer);
 }
 
-void SceneGame::renderGUI(SDL_Renderer *renderer) const {
+void SceneGame::renderGUI(SDL_Renderer *renderer) {
 	// Render top bar
 	int screenWidth = EngineInst->screen_width();
-	int screenHeight = EngineInst->screen_height();
+	int screenHeight = EngineInst->screen_width();
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect veryTopBar;
-	veryTopBar.x = 0;
-	veryTopBar.y = 0;
-	veryTopBar.w = screenWidth;
-	veryTopBar.h = screenHeight * UI_HEIGHT;
-
+	SDL_Rect veryTopBar = GetUIViewport();
+	
 	int playerBarYPadding = 5;
 	int playerBarXPadding = 20;
 	int playerBarHeight = 20;
