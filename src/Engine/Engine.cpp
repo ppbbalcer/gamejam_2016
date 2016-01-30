@@ -8,8 +8,6 @@
 #include "Scene.h"
 #include <assert.h>
 
-
-
 void PAUSE() {
 	assert(false);
 }
@@ -138,6 +136,8 @@ bool Engine::init() {
 	_sceneNext = NULL;
 	_font = NULL;
 	_showFPS = false;
+
+	_input = new PlayerInput();
 
 	return true;
 }
@@ -342,6 +342,7 @@ void Engine::mainLoop() {
 			_font->OnUpdate();
 		}
 
+		_input->update();
 		_scene->OnUpdate(delta);
 
 		//Change scene

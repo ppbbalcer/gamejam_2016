@@ -52,7 +52,7 @@ Fireball * Player::Shoot()
 
 	if (_mana - FIREBALL_MANA_COST < 0)
 		return NULL;
-	
+
 	if (_time_to_shot)
 		return NULL;
 

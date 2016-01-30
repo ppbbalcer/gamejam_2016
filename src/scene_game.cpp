@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include "fireball.h"
 #include "Enemy.h"
-#include "KeyMap.h"
 #include "level.h"
 #include "MapLogic/door.h"
 #include "MapLogic/stairs.h"
@@ -17,8 +16,6 @@ using namespace std;
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
 
-// Uncomment following to enable structures supporting
-//#define TWO_PLAYER_MODE
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -183,47 +180,49 @@ void SceneGame::updateFireballs(int timems)
 
 void SceneGame::updatePlayers(int timems)
 {
-	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+
+	//const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 	/*react on keys for both players*/
-	if (currentKeyStates[PLAYER_1_MOVE_DOWN]) {
+	if (EngineInst->input()->getState(PLAYER_1_MOVE_DOWN)) {
 		_player1->updateDirection(DIRECT_DOWN);
 	}
 
-	if (currentKeyStates[PLAYER_1_MOVE_UP]) {
+	if (EngineInst->input()->getState(PLAYER_1_MOVE_UP)) {
 		_player1->updateDirection(DIRECT_UP);
 	}
 
-	if (currentKeyStates[PLAYER_1_MOVE_LEFT]) {
+	if (EngineInst->input()->getState(PLAYER_1_MOVE_LEFT)) {
 		_player1->updateDirection(DIRECT_LEFT);
 	}
 
-	if (currentKeyStates[PLAYER_1_MOVE_RIGHT]) {
+	if (EngineInst->input()->getState(PLAYER_1_MOVE_RIGHT)) {
 		_player1->updateDirection(DIRECT_RIGHT);
 	}
 
-	if (currentKeyStates[PLAYER_1_SHOOT]) {
+	if (EngineInst->input()->getState(PLAYER_1_SHOOT)) {
 		Fireball * fb = _player1->Shoot();
 		if (fb)
 			fireballs.push_back(fb);
 	}
+
 #ifdef TWO_PLAYER_MODE
-	if (currentKeyStates[PLAYER_2_MOVE_DOWN]) {
+	if (EngineInst->input()->getState(PLAYER_2_MOVE_DOWN)) {
 		_player2->updateDirection(DIRECT_DOWN);
 	}
 
-	if (currentKeyStates[PLAYER_2_MOVE_UP]) {
+	if (EngineInst->input()->getState(PLAYER_2_MOVE_UP)) {
 		_player2->updateDirection(DIRECT_UP);
 	}
 
-	if (currentKeyStates[PLAYER_2_MOVE_LEFT]) {
+	if (EngineInst->input()->getState(PLAYER_2_MOVE_LEFT)) {
 		_player2->updateDirection(DIRECT_LEFT);
 	}
 
-	if (currentKeyStates[PLAYER_2_MOVE_RIGHT]) {
+	if (EngineInst->input()->getState(PLAYER_2_MOVE_RIGHT)) {
 		_player2->updateDirection(DIRECT_RIGHT);
 	}
 
-	if (currentKeyStates[PLAYER_2_SHOOT]) {
+	if (EngineInst->input()->getState(PLAYER_2_SHOOT)) {
 		Fireball * fb = _player2->Shoot();
 		if (fb)
 			fireballs.push_back(fb);
@@ -524,8 +523,10 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 
 		int target_level1=level->getId()+1;
 		int target_map1=0;
-		//int target_level2=level->getId()+1;
-		//int target_map2=0;
+#ifdef TWO_PLAYER_MODE
+		int target_level2=level->getId()+1;
+		int target_map2=0;
+#endif
 		/* game ended with victory ? */
 		bool game_end=false;
 		Door * dor = dynamic_cast <Door*>(

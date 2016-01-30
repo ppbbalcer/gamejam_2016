@@ -19,6 +19,8 @@ set(engine_src
 	RTexture.h
 	Scene.h
 	StructsGlobal.h
+	PlayerInput.cpp
+	PlayerInput.h
 )
 
 add_library(engine ${engine_src})
