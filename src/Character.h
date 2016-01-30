@@ -90,7 +90,7 @@ public:
 	virtual void updateDirection(DIRECT directMove);
 	virtual void OnUpdate(int time_ms);
 	CharacterType getType() { return _type; }
-
+	void root(int time);
 protected:
 	RTexture *_texture;
 	int power_level;
@@ -101,6 +101,7 @@ protected:
 		_state=state;
 	}
 private:
+	int _root_timer;
 	mutable std::vector<std::vector<bool>> visibility;
 	void setPos(float x, float y);
 	int _speed;

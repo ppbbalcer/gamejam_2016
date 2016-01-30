@@ -378,6 +378,10 @@ void Character::OnUpdate(int time_ms)
 	bool finishX = false;
 	bool finishY = false;
 
+	if (_root_timer > 0) {
+		_root_timer -= time_ms;
+		return;
+	}
 
 	if (getType() == TYPE_ENEMY) {
 		dist /= 5.0f;
@@ -484,4 +488,8 @@ void Character::renderAvatar(SDL_Renderer *renderer, int x, int y, SDL_RendererF
 	}
 }
 
+void Character::root(int time)
+{
+	_root_timer = time;
+}
 
