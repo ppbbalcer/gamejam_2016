@@ -29,7 +29,7 @@ class Enemy : public Character
 
 public:
 	Enemy(RTexture* texture, IMap * map, int hp, int ai);
-	~Enemy(void);
+	virtual ~Enemy(void);
 	virtual void OnRender(SDL_Renderer *renderer);
 
 	virtual void OnUpdate(int time_ms);

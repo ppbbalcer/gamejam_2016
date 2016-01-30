@@ -49,11 +49,11 @@ void Enemy::OnUpdate(int time_ms)
 
 	if (_time_to_attack)
 		return;
-	
-	/* inflicit damage on all player characters on neighboring 
+
+	/* inflicit damage on all player characters on neighboring
 	 * fields
 	 */
-	for (int i = getPosBeforeX()-1; i!= getPosBeforeX()+2; ++i) 
+	for (int i = getPosBeforeX()-1; i!= getPosBeforeX()+2; ++i)
 			for (int j = getPosBeforeY()-1; j!= getPosBeforeY()+2; ++j)
 			{
 				/*check if field is within boundaries
@@ -65,21 +65,21 @@ void Enemy::OnUpdate(int time_ms)
 				if (j<0) continue;
 				Character * wih = _map->GetFieldAt(i,j)->WhoIsHere();
 				/* if field is occupied and a character
-				 * who is there happens to be a players 
+				 * who is there happens to be a players
 				 * character (don't harm AIs) */
 				if (wih && dynamic_cast<Player*>(wih))
 				{
 					printf("Crucio!\n");
 					wih->crucio(20);
 				}
-					
+
 			}
 	_time_to_attack=500;
 }
 
 DIRECT Enemy::getRandomDirection()
 {
-	clock_t now = clock();
+	//clock_t now = clock();
 	if (_time_to_random_direction) {
 		return DIRECT_NO_WAY;
 	}

@@ -29,7 +29,7 @@ float Q_rsqrt( float number )
 	long i;
 	float x2, y;
 	const float threehalfs = 1.5F;
-	
+
 	if(number < 1.0f) {
 		return 1.0f;
 	}
@@ -41,7 +41,7 @@ float Q_rsqrt( float number )
 	y  = * ( float * ) &i;
 	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
 //      y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
- 
+
 	return 1.0f/y;
 }
 
@@ -93,46 +93,46 @@ int Engine::screen_height()
 
 bool Engine::init() {
 	_tile_size=0;
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) { 
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError()); 
-		return false; 
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		return false;
 	}
 
 	_window = SDL_CreateWindow(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, EngineInst->screen_width(), EngineInst->screen_height(), SDL_WINDOW_SHOWN);
-	if (_window == NULL) { 
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError()); 
-		return false; 
+	if (_window == NULL) {
+		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+		return false;
 	}
 #ifdef FULLSCREEN
 	SDL_SetWindowFullscreen(_window, SDL_WINDOW_FULLSCREEN);
-#endif		
-	
+#endif
+
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-	if (_renderer == NULL) { 
-		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError()); 
-		return false; 
+	if (_renderer == NULL) {
+		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+		return false;
 	}
 
-	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF); 
+	SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-	if (!(IMG_Init( IMG_INIT_PNG ) & IMG_INIT_PNG) ) { 
-		printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() ); 
-		return false; 
+	if (!(IMG_Init( IMG_INIT_PNG ) & IMG_INIT_PNG) ) {
+		printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+		return false;
 	}
 
-	_screenSurface = SDL_GetWindowSurface( _window ); 
-	
-	if (TTF_Init() == -1) { 
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError()); 
-		return false; 
-	} 
+	_screenSurface = SDL_GetWindowSurface( _window );
+
+	if (TTF_Init() == -1) {
+		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		return false;
+	}
 
 	_audio = new AudioEngine();
 
-	_viewportScreen.x = 0; 
-	_viewportScreen.y = 0; 
-	_viewportScreen.w = screen_width(); 
-	_viewportScreen.h = screen_height(); 
+	_viewportScreen.x = 0;
+	_viewportScreen.y = 0;
+	_viewportScreen.w = screen_width();
+	_viewportScreen.h = screen_height();
 
 	_scene = NULL;
 	_sceneNext = NULL;
@@ -161,7 +161,7 @@ void Engine::close() {
 }
 
 void Engine::resetViewport() {
-	SDL_RenderSetViewport(_renderer, &_viewportScreen); 
+	SDL_RenderSetViewport(_renderer, &_viewportScreen);
 }
 
 bool Engine::loadResources(ResourceItem resources[], unsigned int size) {
@@ -190,6 +190,8 @@ bool Engine::loadAudioResources(AudioResource resources[], unsigned int size) {
 		case AUDIO_TYPE_MUSIC:
 			resources[i].res.music = _audio->loadMusic(resources[i].path);
 			break;
+		default:
+			assert(0);
 		}
 		result &= resources[i].res.sound != NULL;
 	}
@@ -199,17 +201,17 @@ bool Engine::loadAudioResources(AudioResource resources[], unsigned int size) {
 void Engine::unloadAudioResources(AudioResource resources[], unsigned int size) {
 }
 
-/* 
- * Load image at specified path 
+/*
+ * Load image at specified path
  */
-bool Engine::loadTexture(ResourceItem &resItem) 
-{ 
+bool Engine::loadTexture(ResourceItem &resItem)
+{
 	SDL_assert(resItem.surface == NULL && resItem.texture == NULL);
-	bool success = true; 
-	SDL_Surface* loadedSurface = IMG_Load(resItem.path); 
-	
-	if (loadedSurface == NULL) { 
-		printf("Unable to load image %s! SDL Error: %s\n", resItem.path, SDL_GetError()); 
+	bool success = true;
+	SDL_Surface* loadedSurface = IMG_Load(resItem.path);
+
+	if (loadedSurface == NULL) {
+		printf("Unable to load image %s! SDL Error: %s\n", resItem.path, SDL_GetError());
 		success = false;
 		PAUSE();
 	} else {
@@ -219,25 +221,25 @@ bool Engine::loadTexture(ResourceItem &resItem)
 		if (resItem.optLoadTexture) {
 
 			if(resItem.optTextureColorKeyRGB) {
-				//Color key image 
+				//Color key image
 				SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, (resItem.optTextureColorKeyRGB&0xFF0000)>>16, (resItem.optTextureColorKeyRGB&0xFF00)>>8, resItem.optTextureColorKeyRGB & 0xFF ) );
 			}
 
-			//Create texture from surface pixels 
-			resItem.texture = SDL_CreateTextureFromSurface(_renderer, loadedSurface); 
+			//Create texture from surface pixels
+			resItem.texture = SDL_CreateTextureFromSurface(_renderer, loadedSurface);
 			if (resItem.texture  == NULL) {
-				printf("Unable to create texture from %s! SDL Error: %s\n", resItem.path, SDL_GetError()); 
+				printf("Unable to create texture from %s! SDL Error: %s\n", resItem.path, SDL_GetError());
 				success = false;
 				PAUSE();
-			} 
+			}
 		}
 
 		if (resItem.optLoadSurface) {
 			if(resItem.optOptymalize) {
-				//Convert surface to screen format, optimized image 
-				resItem.surface = SDL_ConvertSurface(loadedSurface, _screenSurface->format, NULL);
-				if (resItem.surface == NULL) { 
-					printf("Unable to optimize image %s! SDL Error: %s\n", resItem.path, SDL_GetError()); 
+				//Convert surface to screen format, optimized image
+				resItem.surface = SDL_ConvertSurface(loadedSurface, _screenSurface->format, 0);
+				if (resItem.surface == NULL) {
+					printf("Unable to optimize image %s! SDL Error: %s\n", resItem.path, SDL_GetError());
 					success = false;
 					PAUSE();
 				}
@@ -251,7 +253,7 @@ bool Engine::loadTexture(ResourceItem &resItem)
 		}
 	}
 
-	return success; 
+	return success;
 }
 
 void Engine::unLoadTexture(ResourceItem &resItem) {
@@ -267,16 +269,16 @@ void Engine::unLoadTexture(ResourceItem &resItem) {
 
 bool Engine::loadGlobalFont(const char *pathTTF, int ptSize) {
 	SDL_assert(_font == NULL);
-	bool success = true; 
+	bool success = true;
 	TTF_Font* font = TTF_OpenFont(pathTTF, ptSize);
 
 	if (font == NULL) {
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError()); 
-		success = false; 
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		success = false;
 		PAUSE();
-	} else { 
+	} else {
 		_font = new RFont(font);
-	} 
+	}
 	return success;
 }
 
@@ -312,7 +314,7 @@ void Engine::setStatusLine( const char * l)
 }
 void Engine::mainLoop() {
 	_quitMainLoop = false;
-	
+
 	if (_scene == NULL) {
 		if (_sceneNext != NULL) {
 			_scene = _sceneNext;
@@ -325,7 +327,7 @@ void Engine::mainLoop() {
 	}
 
 	Uint32 time = SDL_GetTicks();
-	int frame_ticks;
+	//int frame_ticks;
 	//While application is running
 	while (!_quitMainLoop)
 	{
@@ -364,7 +366,7 @@ void Engine::mainLoop() {
 			SDL_FillRect( _screenSurface, NULL, SDL_MapRGB( _screenSurface->format, 0x00, 0x00, 0x00 ) );
 
 			_scene->OnPaint(_screenSurface);
-	
+
 			if (_font) {
 				_font->OnPaint(_screenSurface);
 			}
@@ -372,10 +374,10 @@ void Engine::mainLoop() {
 			SDL_UpdateWindowSurface( _window );
 		} else {
 			//Draw 3D Accl
-			//Clear screen 
+			//Clear screen
 			resetViewport();
-			SDL_SetRenderDrawColor( _renderer, 0x20, 0x20, 0x20, 0xFF ); 
-			SDL_RenderClear( _renderer ); //Render texture to screen 
+			SDL_SetRenderDrawColor( _renderer, 0x20, 0x20, 0x20, 0xFF );
+			SDL_RenderClear( _renderer ); //Render texture to screen
 
 			_scene->OnRender(_renderer);
 
@@ -387,7 +389,7 @@ void Engine::mainLoop() {
 			SDL_RenderPresent( _renderer );
 
 			//In the main loop after the event loop, we call SDL_RenderClear. This function fills the screen with the color that was last set with SDL_SetRenderDrawColor.
-			//With the screen cleared, we render the texture with SDL_RenderCopy. With the texture rendered, we still have to update the screen, but since we're not using SDL_Surfaces to render we can't use SDL_UpdateWindowSurface. Instead we have to use SDL_RenderPresent. 
+			//With the screen cleared, we render the texture with SDL_RenderCopy. With the texture rendered, we still have to update the screen, but since we're not using SDL_Surfaces to render we can't use SDL_UpdateWindowSurface. Instead we have to use SDL_RenderPresent.
 		}
 		//if ((frame_ticks = SDL_GetTicks() - timeNew) < TICKS_PER_FRAME)
 		//	SDL_Delay(TICKS_PER_FRAME - frame_ticks);
@@ -402,17 +404,17 @@ void Engine::eventDebug(SDL_Event *e)
 	if (e->type == SDL_QUIT) {
 		printf("Recive event SDL_QUIT !!! Bye!\n");
 	} else if (e->type == SDL_KEYDOWN || e->type == SDL_KEYUP) {
-		printf("Recive SDL_KeyboardEvent: Type: %s ", (e->type == SDL_KEYDOWN)? "SDL_KEYDOWN":"SDL_KEYUP"); 
+		printf("Recive SDL_KeyboardEvent: Type: %s ", (e->type == SDL_KEYDOWN)? "SDL_KEYDOWN":"SDL_KEYUP");
 		printf("State: %s ", (e->key.state == SDL_PRESSED)? "SDL_PRESSED":"SDL_RELEASED");
 		printf("Repeat: %i ", e->key.repeat);
-		if( e->key.keysym.sym == SDLK_UP ) { printf("Key: SDLK_UP");} 
-		else if( e->key.keysym.sym == SDLK_DOWN ) { printf("Key: SDLK_DOWN"); } 
-		else if( e->key.keysym.sym == SDLK_LEFT ) { printf("Key: SDLK_LEFT"); } 
+		if( e->key.keysym.sym == SDLK_UP ) { printf("Key: SDLK_UP");}
+		else if( e->key.keysym.sym == SDLK_DOWN ) { printf("Key: SDLK_DOWN"); }
+		else if( e->key.keysym.sym == SDLK_LEFT ) { printf("Key: SDLK_LEFT"); }
 		else if( e->key.keysym.sym == SDLK_RIGHT ) { printf("Key: SDLK_RIGHT");	}
 		else {
-			printf("Key: %i",e->key.keysym.sym);  
+			printf("Key: %i",e->key.keysym.sym);
 		}
-			
+
 		printf("\n");
 	} else {
 		printf("Recive Unknown Event: Type: %i Key: %i, Text: %i\n", e->type, e->key,  e->text);

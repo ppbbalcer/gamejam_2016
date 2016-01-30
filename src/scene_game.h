@@ -21,7 +21,7 @@ private:
 
 	std::list<Fireball *> fireballs;
 //	RTexture *_background;
-	Player *_player1, *_player2;
+	Player *_player1;
 	std::vector<Enemy*> _enemys;
 	RTexture *_tiles;
 	int _arrayShadowW;
@@ -57,5 +57,3 @@ public:
 bool IMap_isObstacle(int x, int y, void* objMap);
 
 #endif
-
-
