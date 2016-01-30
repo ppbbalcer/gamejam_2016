@@ -26,6 +26,85 @@ int Enemy::crucio(int howMuchCrucio)
 	}
 	return hpRem;
 }
+/* looking for obstacles*/
+bool I_Map_isObstacle(int x, int y, void* objMap)
+{
+	if (((IMap*)objMap)->GetFieldAt(x, y)->IsOccupied())
+		return false;
+	return ((IMap*)objMap)->GetFieldAt(x, y)->IsObstacle();
+}
+
+void Enemy::Chase(Character * ch)
+{
+
+	if(getWay().size() > 0) {
+		if ( canSee(ch->getPosBeforeX(),
+			    ch->getPosBeforeY()))
+		{
+			if (getWayAge() < 1) {
+				return;
+			} else {
+				puts("He runs away!");
+			}
+		} else {
+			return;
+		}
+	} else if (!canSee(ch->getPosBeforeX(),
+			   ch->getPosBeforeY())
+		)
+	{
+		if (getWayAge() >1) {
+			//Where is he?
+			if (getPosBeforeY() == getPosAfterY()
+			    &&
+			    getPosBeforeX() == getPosAfterX()) {
+				DIRECT d = getRandomDirection();
+				if (d != DIRECT_NO_WAY) { 
+					updateDirection(d);
+				}
+			}
+		}
+		return;
+	}	
+	puts("It's him!");
+	
+	
+	int startX = getPosAfterX();
+	int startY = getPosAfterY();
+	AStarWay_t way1;
+	
+	int maxSteps = 0;
+	DIRECT destBest = DIRECT_NO_WAY;
+	int distX = ch->getPosX() - getPosX();
+	int distY = ch->getPosY() - getPosY();
+	
+	
+	if (ch->GetState() == Character::DEAD) {
+		return;
+	} else {
+		destBest =
+			findAstar(way1, maxSteps,
+				  startX, startY,
+				  ch->getPosBeforeX(),
+				  ch->getPosBeforeY(),
+				  _map->GetWidth(),
+				  _map->GetHeight(),
+				  I_Map_isObstacle, _map);
+	}
+	
+	if (destBest != DIRECT_NO_WAY) {
+		if (destBest == DIRECT_DOWN) {
+			updateDirection(DIRECT_DOWN);
+		} else if (destBest == DIRECT_UP) {
+			updateDirection(DIRECT_UP);
+		} else if (destBest == DIRECT_LEFT) {
+			updateDirection(DIRECT_LEFT);
+		} else if (destBest == DIRECT_RIGHT) {
+			updateDirection(DIRECT_RIGHT);
+		}
+		setWay(way1);
+	}
+}
 
 void Enemy::OnUpdate(int time_ms)
 {

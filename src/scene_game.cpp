@@ -21,13 +21,6 @@ using namespace std;
 // Global
 IMap *gCurrentMap = NULL;
 
-/* looking for obstacles*/
-bool IMap_isObstacle(int x, int y, void* objMap)
-{
-	if (((IMap*)objMap)->GetFieldAt(x, y)->IsOccupied())
-		return false;
-	return ((IMap*)objMap)->GetFieldAt(x, y)->IsObstacle();
-}
 
 SceneGame::SceneGame(Level *level, int room_id)
 {
@@ -223,127 +216,21 @@ void SceneGame::updateEnemies(int timems)
 	/* update behaviors for each of enemies */
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
 		(*enemy)->OnUpdate(timems);
-		if ((*enemy)->getAI() == ENEMY_AI_OFF)
-			continue;
+		(*enemy)->Chase(_player1);
 
-		if((*enemy)->getWay().size() > 0) {
-			if ( (*enemy)->canSee(_player1->getPosBeforeX(),
-					      _player1->getPosBeforeY()))
-			{
-				if ((*enemy)->getWayAge() < 1) {
-					continue;
-				} else {
-					puts("He runs away!");
-				}
-			} else {
-				continue;
-			}
-		} else if (!(*enemy)->canSee(_player1->getPosBeforeX(),
-					    _player1->getPosBeforeY())
-			    )
-		{
-			if ((*enemy)->getWayAge() >1) {
-			//Where is he?
-			if ((*enemy)->getPosBeforeY() == (*enemy)->getPosAfterY()
-			    &&
-			    (*enemy)->getPosBeforeX() == (*enemy)->getPosAfterX()) {
-			DIRECT d = (*enemy)->getRandomDirection();
-			if (d != DIRECT_NO_WAY) { 
-				(*enemy)->updateDirection(d);
-			}
-			}
-			}
-			continue;
-		}
-		puts("It's him!");
+		const AStarWay_t & way1 = (*enemy)->getWay();
 
-
-		int startX = (*enemy)->getPosAfterX();
-		int startY = (*enemy)->getPosAfterY();
-		AStarWay_t way1;
-		AStarWay_t way2;
-
-		int maxSteps = 0;
-		DIRECT destBest = DIRECT_NO_WAY;
-		DIRECT direct1 = DIRECT_NO_WAY;
-		DIRECT direct2 = DIRECT_NO_WAY;
-
-		int distQuad = EngineInst->getTileSize()
-			* EngineInst->getTileSize() * 6 * 6;
-		int distX = _player1->getPosX() - (*enemy)->getPosX();
-		int distY = _player1->getPosY() - (*enemy)->getPosY();
-
-
-		if (_player1->GetState() == Character::DEAD) {
-			direct1 = DIRECT_NO_WAY;
-		} else if ( ((*enemy)->getAI() != ENEMY_AI_DISTANCE
-			     || distX*distX + distY*distY <= distQuad ))
-		{
-			direct1 =
-				findAstar(way1, maxSteps,
-					  startX, startY,
-					  _player1->getPosBeforeX(),
-					  _player1->getPosBeforeY(),
-					  map->GetWidth(),
-					  map->GetHeight(),
-					  IMap_isObstacle, map);
-		}
-
-		#ifdef TWO_PLAYER_MODE
-		distX = _player2->getPosX() - (*enemy)->getPosX();
-		distY = _player2->getPosY() - (*enemy)->getPosY();
-
-		if (_player2->GetState()==Character::DEAD) {
-			direct2 = DIRECT_NO_WAY;
-		} else if ((*enemy)->getAI() != ENEMY_AI_DISTANCE || distX*distX + distY*distY <= distQuad ) {
-			direct2 = findAstar(way2, maxSteps,
-					    startX, startY,
-					    _player2->getPosBeforeX(),
-					    _player2->getPosBeforeY(),
-					    map->GetWidth(),
-					    map->GetHeight(),
-					    IMap_isObstacle, map);
-		}
-		#endif
-		if (heartbeat_tempo == 0 && ((way1.size() != 0 && way1.size() < 10 ) || (way2.size() != 0 && way2.size() < 10))) {
+		if (heartbeat_tempo == 0 && ((way1.size() != 0 && way1.size() < 10 ))){
 			heartbeat_tempo = 50;
 			globalAudios[HEARTBEAT].res.sound->setDelay(HEARTBEAT_MIN_INTERVAL);
 		} else if (heartbeat_tempo != 0) {
 			heartbeat_tempo--;
 			if (heartbeat_tempo == 0)
-				globalAudios[HEARTBEAT].res.sound->setDelay(HEARTBEAT_BASE_INTERVAL);
+				globalAudios[HEARTBEAT].res.
+					sound->setDelay(HEARTBEAT_BASE_INTERVAL);
 		}
 
-		if (direct1 != DIRECT_NO_WAY && direct2 == DIRECT_NO_WAY) {
-			destBest = direct1;
-			(*enemy)->setWay(way1);
-		} else if (direct1 == DIRECT_NO_WAY && direct2 != DIRECT_NO_WAY) {
-			destBest = direct2;
-			(*enemy)->setWay(way2);
-		} else if (direct1 != DIRECT_NO_WAY && direct2 != DIRECT_NO_WAY) {
-			if (way1.size() > way2.size()) {
-				destBest = direct2;
-				(*enemy)->setWay(way2);
-			} else {
-				destBest = direct1;
-				(*enemy)->setWay(way1);
-			}
-		} else {
-			destBest = (*enemy)->getRandomDirection();
-		}
-
-		if (destBest != DIRECT_NO_WAY) {
-			if (destBest == DIRECT_DOWN) {
-				(*enemy)->updateDirection(DIRECT_DOWN);
-			} else if (destBest == DIRECT_UP) {
-				(*enemy)->updateDirection(DIRECT_UP);
-			} else if (destBest == DIRECT_LEFT) {
-				(*enemy)->updateDirection(DIRECT_LEFT);
-			} else if (destBest == DIRECT_RIGHT) {
-				(*enemy)->updateDirection(DIRECT_RIGHT);
-			}
-		}
-
+		
 	}
 }
 
