@@ -535,40 +535,39 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 			target_level1=level->getId();
 			target_map1=dor->GetTargetBoard();
 		}
+#ifdef TWO_PLAYER_MODE
 		dor = dynamic_cast <Door*>(
 			map->GetFieldAt(_player2->getPosAfterX(),
 					_player2->getPosAfterY()));
 		if (dor) {
 			target_level2=level->getId();
 			target_map2=dor->GetTargetBoard();
-		} else {
+		} else 
+
+#endif
+		{
 			Stairs * sta = dynamic_cast <Stairs*>(
 				map->GetFieldAt(_player1->getPosAfterX(),
 						_player1->getPosAfterY()));
-			if (sta->GetVictory()) {
+			if (sta && sta->GetVictory()) {
 				game_end=true;
 				EngineInst->clearStatusLine();
 			}
 		}
 		
-		if (target_level2==target_level1 &&
-			target_map2==target_map1) {
-			EngineInst->font()->printfLT(100,
-						     map->GetHeight()*tileSize, "Both players won");
-			if (game_end) {
-				level->SetVictoryScene();
-			} else {
-				level->setId(target_level1);
-				level->setCurrentScene(target_map1);
-			}
+		EngineInst->font()->printfLT(100,
+					     map->GetHeight()*tileSize, "Both players won");
+		if (game_end) {
+			level->SetVictoryScene();
 		} else {
-			EngineInst->setStatusLine("You lost - you have left level through different doors. Press R to try again");
-			
+			level->setId(target_level1);
+			level->setCurrentScene(target_map1);
 		}
+
+#ifdef TWO_PLAYER_MODE
 	} else if (_player1->GetState() == Character::WON) {
 
 		EngineInst->setStatusLine( "Player 1 has left the screen. Player 2 must join him so you can win the level together.");
-#ifdef TWO_PLAYER_MODE
 	} else if (_player2->GetState() == Character::WON) {
 		
 		EngineInst->setStatusLine( "Player 2 has left the screen. Player 2 must join him so you can win the level together.");

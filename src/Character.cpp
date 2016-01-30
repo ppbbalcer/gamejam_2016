@@ -84,19 +84,14 @@ bool Character::canSeeHlp(int x0, int y0, int radius) const
 	int sign = negative ? -1 : +1;
 	bool secondobstacle = false;
 	int x, y;
-	printf("%d, %d\n", abs(x1 - x0) , abs(y1 - y0));
-	// iterate from (x0, y0 to x1, y1)
 	for (int i = num_fields - 1 ; i >= 0; --i) {
 		if (landscape) {
-			puts("K");
 			x = x0 + i * sign;
 			y = y0 + i * sign * ( y1 - y0 ) / (x1 - x0);
 		} else {
-			puts("Z");
 			y = y0 + i * sign;
 			x = x0 + i * sign * ( x1 - x0 ) / (y1 - y0);
 		}
-		printf("xy %d %d ", x, y);
 		if (x >= 0 && y >= 0 && x < _map->GetWidth()
 		    && y < _map->GetHeight()) {
 			IField * f = _map->GetFieldAt(x,y);
