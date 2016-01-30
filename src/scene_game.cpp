@@ -234,9 +234,13 @@ void SceneGame::updateEnemies(int timems)
 			    )
 		{
 			//Where is he?
+			if ((*enemy)->getPosBeforeY() == (*enemy)->getPosAfterY()
+			    &&
+			    (*enemy)->getPosBeforeX() == (*enemy)->getPosAfterX()) {
 			DIRECT d = (*enemy)->getRandomDirection();
 			if (d != DIRECT_NO_WAY) { 
 				(*enemy)->updateDirection(d);
+			}
 			}
 			continue;
 		}
@@ -385,7 +389,7 @@ void SceneGame::updateShadows()
 	memset(_arrayShadow, 00, _arrayShadowW * _arrayShadowH
 	       * sizeof(_arrayShadowH));
 	updateShadowsChr(_player1);
-
+	
 
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
@@ -413,7 +417,11 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 				alfa = map->getParams()->alpha;
 			}
 			if (!_arrayVisibility[y*_arrayShadowW + x]) {
+				#ifdef SEMI_TRANSP_INVISIBLE_AREAS
+				_tiles->setAlpha(190);
+				#else
 				_tiles->setAlpha(255);
+				#endif
 
 			} else {
 				_tiles->setAlpha(alfa);
