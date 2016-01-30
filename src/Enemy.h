@@ -30,7 +30,7 @@ class Enemy : public Character
 public:
 	Enemy(RTexture* texture, IMap * map, int hp, int ai);
 	virtual ~Enemy(void);
-	virtual void OnRender(SDL_Renderer *renderer);
+	virtual void OnRender(SDL_Renderer *renderer, SDL_Point *camera);
 	float getWayAge() {return wayAge;}
 	virtual void OnUpdate(int time_ms);
 	enemy_ai getAI() { return _ai; }

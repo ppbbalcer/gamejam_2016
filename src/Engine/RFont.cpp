@@ -113,7 +113,6 @@ void  RFont::printTextBuff(int x, int y, SDL_Color colorText, SDL_Color colorBor
 	printTextRAW(_font, /*_frameSurface*/NULL, x, y, colorText, colorBorder, border, alignment, scale, text);
 }
 
-
 void RFont::printTextRAW(TTF_Font *font, SDL_Surface* surface, int x, int y, SDL_Color colorText, SDL_Color colorBorder, int border, int alignment, float scale, const char *text)
 {
 	//Render text surface
@@ -128,7 +127,7 @@ void RFont::printTextRAW(TTF_Font *font, SDL_Surface* surface, int x, int y, SDL
 		PAUSE();
 	} else {
 		SDL_Rect stretchRect = {x, y, textSurface->w, textSurface->h};
-		//Scale Widrth size in quads there?
+		//Scale Width size in quads there?
 		if (alignment & ALIGN_LEFT) {
 			SDL_assert((alignment & ALIGN_RIGHT) == 0);
 		} else if (alignment & ALIGN_RIGHT) {
@@ -146,6 +145,9 @@ void RFont::printTextRAW(TTF_Font *font, SDL_Surface* surface, int x, int y, SDL
 		} else {
 			stretchRect.y -= textSurface->h / 2;
 		}
+
+		stretchRect.h *= scale;
+		stretchRect.w *= scale;
 
 		if (textSurfaceBorder) {
 			SDL_Rect stretchRectCpy;

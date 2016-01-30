@@ -15,7 +15,8 @@ using namespace std;
 #define MAX_ROOM_PATH 255
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
-#define DEBUG_BOTS
+#define MAX_TILE_PER_SCREEN 12
+
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -32,6 +33,7 @@ SceneGame::SceneGame(Level *level, int room_id)
 	this->room_id = room_id;
 	this->level = level;
 	this->heartbeat_tempo = 0;
+	this->_camera.x = this->_camera.y = 0;
 	char buff[MAX_ROOM_PATH];
 	sprintf(buff, "Resources/levels/%u/%u.txt", level->getId(), room_id);
 	map = IMap::Factory(IMap::LOADED, buff);
@@ -69,8 +71,8 @@ void SceneGame::OnLoad()
 	SDL_Rect dvp=GetDefaultViewport();
 	/* scale entire board
 	 */
-	int tile_size = std::min<int>(dvp.w / map->GetWidth(),
-				 dvp.h/map->GetHeight());
+	int tile_size = std::min<int>(dvp.w / MAX_TILE_PER_SCREEN,
+				 dvp.h / MAX_TILE_PER_SCREEN);
 
 	EngineInst->setTileSize(tile_size);
 	bool success = EngineInst->loadResources(texturesScene_game, texturesScene_gameSize);
@@ -183,55 +185,36 @@ void SceneGame::updatePlayers(int timems)
 
 	//const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 	/*react on keys for both players*/
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_DOWN)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_DOWN)) {
 		_player1->updateDirection(DIRECT_DOWN);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_UP)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_UP)) {
 		_player1->updateDirection(DIRECT_UP);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_LEFT)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_LEFT)) {
 		_player1->updateDirection(DIRECT_LEFT);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_RIGHT)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_RIGHT)) {
 		_player1->updateDirection(DIRECT_RIGHT);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_SHOOT)) {
+	if (EngineInst->input()->getState(INPUT_SHOOT)) {
 		Fireball * fb = _player1->Shoot();
 		if (fb)
 			fireballs.push_back(fb);
 	}
 
-#ifdef TWO_PLAYER_MODE
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_DOWN)) {
-		_player2->updateDirection(DIRECT_DOWN);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_UP)) {
-		_player2->updateDirection(DIRECT_UP);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_LEFT)) {
-		_player2->updateDirection(DIRECT_LEFT);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_RIGHT)) {
-		_player2->updateDirection(DIRECT_RIGHT);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_SHOOT)) {
-		Fireball * fb = _player2->Shoot();
-		if (fb)
-			fireballs.push_back(fb);
-	}
-#endif
 	_player1->OnUpdate(timems);
-	#ifdef TWO_PLAYER_MODE
-	_player2->OnUpdate(timems);
-	#endif
+
+}
+
+void SceneGame::updateCamera()
+{
+	_camera.x = _player1->getPosX() - GetDefaultViewport().w / 2;
+	_camera.y = _player1->getPosY() - GetDefaultViewport().h / 2;
 }
 
 void SceneGame::updateEnemies(int timems)
@@ -363,11 +346,7 @@ void SceneGame::updateEnemies(int timems)
 
 void SceneGame::OnUpdate(int timems)
 {
-	if (EngineInst->input()->getState(GAME_QUIT)) {
-		EngineInst->breakMainLoop();
-		return;
-	}
-	if (EngineInst->input()->getState(GAME_RESET)) {
+	if (EngineInst->input()->getState(INPUT_GAME_RESET)) {
 		level->resetCurrent();
 		return;
 	}
@@ -377,6 +356,7 @@ void SceneGame::OnUpdate(int timems)
 	updateFireballs(timems);
 	updateEnemies(timems);
 	updateShadows();
+	updateCamera();
 }
 #include<math.h>
 
@@ -439,7 +419,7 @@ void SceneGame::updateShadows()
 
 }
 
-void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
+void SceneGame::renderShadow(SDL_Renderer* renderer) {
 
 	int tileSize = EngineInst->getTileSize();
 	int alfa;
@@ -462,7 +442,7 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 				_tiles->setAlpha(alfa);
 			}
 			_tiles->renderTile(renderer,
-					   x*tileSize, y*tileSize,
+					   x*tileSize - _camera.x, y*tileSize - _camera.y,
 					   35, SDL_FLIP_NONE);
 		}
 	}
@@ -483,23 +463,24 @@ void _srand(unsigned seed) {
 	_next = seed;
 }
 
-void SceneGame::OnRenderMap(SDL_Renderer* renderer) {
+void SceneGame::renderMap(SDL_Renderer* renderer) {
+	
 	int tileSize = EngineInst->getTileSize();
-	//int tilesNums = _tiles->getTilesNums();
 
 	_srand(1);
 
 	/*Render background*/
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
-			int px_left = j * tileSize;
-			int px_top  = i * tileSize;
+			int px_left = j * tileSize - _camera.x;
+			int px_top  = i * tileSize - _camera.y;
 			_tiles->renderTile(renderer,
 			                   px_left,
 			                   px_top,
 			                   18 + _rand() % 5, SDL_FLIP_NONE);
 		}
 	}
+
 	/*Render actual mapiles*/
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
@@ -507,175 +488,64 @@ void SceneGame::OnRenderMap(SDL_Renderer* renderer) {
 			int tile =  map->GetFieldAt(j, i)->GetTileId();
 			if (field == IField::FLOOR)
 				continue;
-			int col = j * tileSize;
-			int row = i * tileSize;
+			int col = j * tileSize - _camera.x;
+			int row = i * tileSize - _camera.y;
 			_tiles->renderTile(renderer, col , row, tile, SDL_FLIP_NONE);
 
 		}
 	}
-	// #define MARGIN_TOP 41
-	// #define MARGIN_CORNER 42
-	// #define MARGIN_LEFT 43
 }
 
 
 void SceneGame::OnRender(SDL_Renderer* renderer)
 {
-	// _background->render(renderer);
+	renderGameplay(renderer);
+	renderGUI(renderer);
+}
 
+void SceneGame::renderGameplay(SDL_Renderer *renderer)
+{
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect topLeftViewport=GetDefaultViewport();
-	int map_width=map->GetWidth()*EngineInst->getTileSize();
+	SDL_Rect topLeftViewport = GetDefaultViewport();
+	int map_width = map->GetWidth()*EngineInst->getTileSize();
 	if (topLeftViewport.w>map_width) {
-		int excess_width = topLeftViewport.w-map_width;
-		topLeftViewport.w-=excess_width;
-		topLeftViewport.x+=excess_width/2;
+		int excess_width = topLeftViewport.w - map_width;
+		topLeftViewport.w -= excess_width;
+		topLeftViewport.x += excess_width / 2;
 	}
+
 	SDL_RenderSetViewport(renderer, &topLeftViewport);
-	OnRenderMap(renderer);
+	
+	renderMap(renderer);
 
 	/* render enemies */
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
 		if ((*enemy)->GetState() == Character::ALIVE)
-			(*enemy)->OnRender(renderer);
+			(*enemy)->OnRender(renderer, &_camera);
 	}
 
 	/* render fireballs */
 	for (std::list<Fireball*>::iterator it = fireballs.begin();
-	                it != fireballs.end(); ++it) {
+	it != fireballs.end(); ++it) {
 		int sprite;
 		if ((*it)->GetPowerLevel() > 30)
 			sprite = 29;
 		else
 			sprite = 28;
-		_tiles->renderTile(renderer, (*it)->getPosX(), (*it)->getPosY(), sprite, SDL_FLIP_NONE);
-	}
-	/* check loss condition */
-	if (_player1->GetState() == Character::DEAD
-#ifdef TWO_PLAYER_MODE
-	    ||
-	    _player2->GetState() == Character::DEAD
-#endif
-		) {
-		EngineInst->setStatusLine(  "You lost! "
-					    "Press R to try again");
-	}
-	/*Check victory condition*/
-	else if (_player1->GetState() == Character::WON
-#ifdef TWO_PLAYER_MODE
-		 &&
-		 _player2->GetState() == Character::WON
-#endif
-		) {
 
-
-		int target_level1=level->getId()+1;
-		int target_map1=0;
-#ifdef TWO_PLAYER_MODE
-		int target_level2=level->getId()+1;
-		int target_map2=0;
-#endif
-		/* game ended with victory ? */
-		bool game_end=false;
-		Door * dor = dynamic_cast <Door*>(
-			map->GetFieldAt(_player1->getPosAfterX(),
-					_player1->getPosAfterY()));
-		if (dor) {
-			target_level1=level->getId();
-			target_map1=dor->GetTargetBoard();
-		}
-#ifdef TWO_PLAYER_MODE
-		dor = dynamic_cast <Door*>(
-			map->GetFieldAt(_player2->getPosAfterX(),
-					_player2->getPosAfterY()));
-		if (dor) {
-			target_level2=level->getId();
-			target_map2=dor->GetTargetBoard();
-		} else
-
-#endif
-		{
-			Stairs * sta = dynamic_cast <Stairs*>(
-				map->GetFieldAt(_player1->getPosAfterX(),
-						_player1->getPosAfterY()));
-			if (sta && sta->GetVictory()) {
-				game_end=true;
-				EngineInst->clearStatusLine();
-			}
-		}
-
-		EngineInst->font()->printfLT(100,
-					     map->GetHeight()*tileSize, "Both players won");
-		if (game_end) {
-			level->SetVictoryScene();
-		} else {
-			level->setId(target_level1);
-			level->setCurrentScene(target_map1);
-		}
-
-#ifdef TWO_PLAYER_MODE
-	} else if (_player1->GetState() == Character::WON) {
-
-		EngineInst->setStatusLine( "Player 1 has left the screen. Player 2 must join him so you can win the level together.");
-	} else if (_player2->GetState() == Character::WON) {
-
-		EngineInst->setStatusLine( "Player 2 has left the screen. Player 2 must join him so you can win the level together.");
-#endif
+		_tiles->renderTile(renderer, (*it)->getPosX() - _camera.x, (*it)->getPosY() - _camera.y, sprite, SDL_FLIP_NONE);
 	}
 
-	_player1->OnRender(renderer);
-#ifdef TWO_PLAYER_MODE
-	_player2->OnRender(renderer);
-#endif
+	_player1->OnRender(renderer, &_camera);
 
-	OnRenderShadow(renderer);
-
-
-
-	/* PLAYER 1 */
-	renderGUI(renderer, tileSize);
-#ifdef TWO_PLAYER_MODE
-	/* PLAYER 2 */
-	{
-		_player2->renderAvatar(renderer, playerBarXPadding, 0, SDL_FLIP_NONE);
-		EngineInst->font()->printf( playerBarXPadding + tileSize +210, playerBarYPadding + veryTopBar.y + playerBarHeight +paddingBetweenBars, ALIGN_LEFT | ALIGN_TOP, "Player controls WSAD F-Fire");
-
-		SDL_Rect p2_hp_rect = { playerBarXPadding + tileSize, playerBarYPadding, _player2->getHealth() * 2, playerBarHeight};
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderFillRect(renderer, &p2_hp_rect);
-
-		//Frame
-		SDL_SetRenderDrawColor(renderer, 200, 0, 30, SDL_ALPHA_OPAQUE);
-		p2_hp_rect.w = 200;
-		SDL_RenderDrawRect( renderer, &p2_hp_rect );
-		p2_hp_rect.x++;
-		p2_hp_rect.y++;
-		p2_hp_rect.w -= 2;
-		p2_hp_rect.h -= 2;
-		SDL_RenderDrawRect( renderer, &p2_hp_rect );
-
-		SDL_Rect p2_mana_rect = { playerBarXPadding + tileSize, playerBarHeight + paddingBetweenBars + playerBarYPadding, _player2->getMana() * 2, playerBarHeight};
-		SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderFillRect(renderer, &p2_mana_rect);
-
-		//Frame
-		SDL_SetRenderDrawColor(renderer, 20, 20, 180, SDL_ALPHA_OPAQUE);
-		p2_mana_rect.w = 200;
-		SDL_RenderDrawRect( renderer, &p2_mana_rect );
-		p2_mana_rect.x++;
-		p2_mana_rect.y++;
-		p2_mana_rect.w -= 2;
-		p2_mana_rect.h -= 2;
-		SDL_RenderDrawRect( renderer, &p2_mana_rect );
-
-	}
-#endif
+	renderShadow(renderer);
 }
 
-void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize) const {
+void SceneGame::renderGUI(SDL_Renderer *renderer) const {
 	// Render top bar
 	int screenWidth = EngineInst->screen_width();
+	int tileSize = EngineInst->getTileSize();
 
 	SDL_Rect veryTopBar;
 	veryTopBar.x = 0;
@@ -702,6 +572,49 @@ void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize) const {
 	playerBarYPadding+=playerBarHeight;
 	drawBar(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
 
+	/* check loss condition */
+	if (_player1->GetState() == Character::DEAD) 
+	{
+		EngineInst->setStatusLine("You lost! "
+			"Press R to try again");
+	}
+	/*Check victory condition*/
+	else if (_player1->GetState() == Character::WON) 
+	{
+		int target_level1 = level->getId() + 1;
+		int target_map1 = 0;
+		//int target_level2=level->getId()+1;
+		//int target_map2=0;
+		/* game ended with victory ? */
+		bool game_end = false;
+		Door * dor = dynamic_cast <Door*>(
+			map->GetFieldAt(_player1->getPosAfterX(),
+				_player1->getPosAfterY()));
+		if (dor) {
+			target_level1 = level->getId();
+			target_map1 = dor->GetTargetBoard();
+		}
+
+		Stairs * sta = dynamic_cast <Stairs*>(
+			map->GetFieldAt(_player1->getPosAfterX(),
+			_player1->getPosAfterY())
+		);
+
+		if (sta && sta->GetVictory()) {
+			game_end = true;
+			EngineInst->clearStatusLine();
+		}
+
+		EngineInst->font()->printfLT(100,
+			map->GetHeight()*tileSize, "Both players won");
+		if (game_end) {
+			level->SetVictoryScene();
+		}
+		else {
+			level->setId(target_level1);
+			level->setCurrentScene(target_map1);
+		}
+	}
 }
 
 void SceneGame::drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const {

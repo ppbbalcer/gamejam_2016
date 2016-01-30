@@ -34,11 +34,13 @@ void Level::setCurrentScene(int scene_id) {
 	current_scene = scene_id;
 	EngineInst->setNextScene(getCurrentScene());
 }
+
 void Level::SetVictoryScene()
 {
 	Scene * victory = new VictoryScene;
 	EngineInst->setNextScene(victory);
 }
+
 void Level::resetCurrent() {
 	scenes[current_scene]->OnFreeBase();
 	delete scenes[current_scene];

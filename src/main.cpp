@@ -5,6 +5,7 @@
 #include "Engine/RTexture.h"
 #include "SceneExamples.h"
 #include "SceneFont.h"
+#include "menuscene.h"
 #include "level.h"
 #include <stdio.h>
 #include <string>
@@ -68,12 +69,17 @@ bool loadMedia() {
 int main( int argc, char* args[] )
 {
 	printf("argc %d\n", argc);
-	Level *level = NULL;
+
+	int world = 1;
+	int level = 0;
+
 	if (argc == 3) {
-		level = new Level(atoi(args[1]), atoi(args[2]));
-	} else {
-		level = new Level(1, 13);
+		world = atoi(args[1]);
+		level = atoi(args[2]);
 	}
+
+	MenuScene *scene = new MenuScene(world, level);
+
 	if( !Engine::Create() )
 	{
 		printf( "Failed to initialize!\n" );
@@ -89,7 +95,7 @@ int main( int argc, char* args[] )
 		}
 		else
 		{	
-			EngineInst->setNextScene(level->getCurrentScene());
+			EngineInst->setNextScene(scene);
 			EngineInst->mainLoop();
 		}
 	}
@@ -98,6 +104,6 @@ int main( int argc, char* args[] )
 	EngineInst->unLoadGlobalFont();
 	Engine::Destroy();
 
-	delete level;
+	delete scene;
 	return 0;
 }

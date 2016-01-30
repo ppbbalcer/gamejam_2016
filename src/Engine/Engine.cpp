@@ -342,8 +342,15 @@ void Engine::mainLoop() {
 			_font->OnUpdate();
 		}
 
-		_input->update();
+		_input->update(delta);
+
+		if (EngineInst->input()->getState(INPUT_GAME_QUIT)) {
+			EngineInst->breakMainLoop();
+			return;
+		}
+
 		_scene->OnUpdate(delta);
+		_input->reset();
 
 		//Change scene
 		if (_sceneNext) {

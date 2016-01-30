@@ -173,9 +173,8 @@ const AStarWay_t& Enemy::getWay()
 {
 	return way;
 }
-#define DEBUG_BOTS
 
-void Enemy::OnRender(SDL_Renderer *renderer)
+void Enemy::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
 {
 	//For debug A*
 #ifdef DEBUG_BOTS
@@ -190,5 +189,5 @@ void Enemy::OnRender(SDL_Renderer *renderer)
 		}
 	}
 #endif
-	Character::OnRender(renderer);
+	Character::OnRender(renderer, camera);
 }

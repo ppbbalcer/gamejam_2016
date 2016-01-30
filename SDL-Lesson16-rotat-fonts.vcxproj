@@ -33,6 +33,7 @@
     <ClCompile Include="src\MapLogic\spikes.cpp" />
     <ClCompile Include="src\MapLogic\stairs.cpp" />
     <ClCompile Include="src\MapLogic\switch.cpp" />
+    <ClCompile Include="src\menuscene.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\scene_game.cpp" />
     <ClCompile Include="src\victoryscene.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="src\MapLogic\spikes.h" />
     <ClInclude Include="src\MapLogic\stairs.h" />
     <ClInclude Include="src\MapLogic\switch.h" />
+    <ClInclude Include="src\menuscene.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\SceneExamples.h" />
     <ClInclude Include="src\SceneFont.h" />
