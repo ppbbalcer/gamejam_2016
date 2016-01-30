@@ -15,6 +15,7 @@
     <ClCompile Include="src\Engine\AStar.cpp" />
     <ClCompile Include="src\Engine\Audio.cpp" />
     <ClCompile Include="src\Engine\Engine.cpp" />
+    <ClCompile Include="src\Engine\PlayerInput.cpp" />
     <ClCompile Include="src\Engine\RFont.cpp" />
     <ClCompile Include="src\Engine\RTexture.cpp" />
     <ClCompile Include="src\Equipment.cpp" />
@@ -42,6 +43,7 @@
     <ClInclude Include="src\Engine\AStar.h" />
     <ClInclude Include="src\Engine\Audio.h" />
     <ClInclude Include="src\Engine\Engine.h" />
+    <ClInclude Include="src\Engine\PlayerInput.h" />
     <ClInclude Include="src\Engine\RFont.h" />
     <ClInclude Include="src\Engine\RTexture.h" />
     <ClInclude Include="src\Engine\Scene.h" />
@@ -71,12 +73,13 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F4CBED84-EE5D-4375-A743-9CFF692D691B}</ProjectGuid>
     <RootNamespace>SDLgame</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

@@ -28,11 +28,13 @@ public:
 	void update();
 
 	int getState(enum input_type type);
-	void setBinding(enum input_type type, unsigned char key);
+	void setKeyboardBinding(enum input_type type, unsigned char key);
+	void setControllerBinding(enum input_type type, SDL_GameControllerButton btn);
 
 private:
 	int input_state[MAX_INPUT_TYPE];
-	unsigned char input_bindings[MAX_INPUT_TYPE];
+	unsigned char keyboard_input_bindings[MAX_INPUT_TYPE];
+	SDL_GameControllerButton controller_input_bindings[MAX_INPUT_TYPE];
 
 	std::map<int, SDL_GameController*> controllers;
 
