@@ -31,13 +31,18 @@ public:
 	Enemy(RTexture* texture, IMap * map, int hp, int ai);
 	virtual ~Enemy(void);
 	virtual void OnRender(SDL_Renderer *renderer);
-
+	float getWayAge() {return wayAge;}
 	virtual void OnUpdate(int time_ms);
 	enemy_ai getAI() { return _ai; }
 	virtual int crucio(int howMuchCrucio);
 	DIRECT getRandomDirection();
 	void				setWay(AStarWay_t& pway);
 	const AStarWay_t&	getWay();
+	virtual void updateDirection(DIRECT directMove);
+
+private:
+	int default_dir_x;
+	int default_dir_y;
 };
 
 #endif

@@ -19,7 +19,7 @@ Character::Character(RTexture* texture, IMap * map)
 				_pos_before_y = 0;
 	last_dir_x = 1;
 	last_dir_y = 0;
-	viewangle = 360;
+	viewangle = 0.25*M_PI;
 }
 
 Character::~Character()
@@ -74,7 +74,35 @@ int Character::SetPowerLevel(int x)
 {
 	return (power_level = x);
 }
+float angle(int x0, int y0, int x1, int y1)
+{
+	float atf = atan2f(x1 - x0 , y1 - y0); 
+	while (atf < 0)
+		atf += 2 * M_PI;
+	while (atf > 2* M_PI)
+		atf -= 2 * M_PI;
 
+	return atf;
+}
+#include <cassert>
+float angledist(float a1, float a2) {
+	if (a1 > a2) {
+		float tmp;
+		tmp = a2;
+		a2 = a1;
+		a1 = tmp;
+	}
+	// a2 > a1 now.	
+	float adl = a1 - a2 + 2 * M_PI;
+	float adr = a2 - a1;
+	assert(adl >= 0);
+	assert(adr >= 0);
+	if (adl < adr) {
+		return adl;
+	} else {
+		return adr;
+	}
+}
 bool Character::canSeeHlp(int x0, int y0, int radius) const
 {
 	int x1 = getPosAfterX();
@@ -85,6 +113,11 @@ bool Character::canSeeHlp(int x0, int y0, int radius) const
 	int sign = negative ? -1 : +1;
 	bool secondobstacle = false;
 	int x, y;
+	float angle_vec = angle(x1, y1, x0, y0);
+	float angle_dir = angle(0, 0, view_dir_x, view_dir_y);
+	if (angledist(angle_dir,angle_vec) > viewangle) {
+		return false;
+	}
 	for (int i = num_fields - 1 ; i >= 0; --i) {
 		if (landscape) {
 			x = x0 + i * sign;
@@ -175,8 +208,14 @@ bool Character::canSee(int x, int y) const
 {
 	int x1 = getPosAfterX();
 	int y1 = getPosAfterY();
-	return visibility[x1 - x + visibility.size()/2]
-		[y1 - y + visibility.size()/2];
+	int xcs = x1 - x + visibility.size()/2;
+	int ycs = y1 - y + visibility.size()/2;
+	if (xcs < 0 || ycs < 0 || xcs >= visibility.size()
+	    || ycs >= visibility.size()) {
+		return false;
+	} else {
+		return visibility[xcs][ycs];
+	}
 }
 
 
@@ -256,6 +295,8 @@ void Character::updateDirection(DIRECT directMove)
 			_pos_after_x = closeTileX;
 			_pos_after_y = closeTileY + 1;
 		}
+		view_dir_x = 0;
+		view_dir_y = 1;
 		break;
 	case DIRECT_UP:
 		if ((closeTileY > 0) 
@@ -267,6 +308,8 @@ void Character::updateDirection(DIRECT directMove)
 			_pos_after_x = closeTileX;
 			_pos_after_y = closeTileY - 1;
 		}
+		view_dir_x = 0;
+		view_dir_y = -1;
 		break;
 
 	case DIRECT_RIGHT:
@@ -279,6 +322,8 @@ void Character::updateDirection(DIRECT directMove)
 			_pos_after_x = closeTileX + 1;
 		}
 		_texture->setFlip(SDL_FLIP_NONE);
+		view_dir_x = 1;
+		view_dir_y = 0;
 		break;
 
 	case DIRECT_LEFT:
@@ -291,6 +336,8 @@ void Character::updateDirection(DIRECT directMove)
 			_pos_after_x = closeTileX - 1;
 		}
 		_texture->setFlip(SDL_FLIP_HORIZONTAL);
+		view_dir_x = -1;
+		view_dir_y = 0;
 		break;
 
 	default:
