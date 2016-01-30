@@ -13,7 +13,9 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 	_mana = mana;
 	_health = hp;
 	printf("PLAYER: %u %u\n", _health, _mana);
-	_time_to_shot=0;
+	_time_to_shot = 0;
+	_time_to_arm = 0;
+	arming = 0;
 	viewangle = M_PI;
 
 	for (int i = 0; i < MAX_INVENTORY_ITEM; ++i) {
@@ -25,14 +27,21 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 
 Player::~Player(void) {};
 
+void Player::onDirectionUpdate()
+{
+	arming = 0;
+	_time_to_arm = 0;
+}
+
 void Player::placeTrap()
 {
 	if (inventory[ITEM_TRAP].available <= 0)
 		return;
 
-	modInventoryItemCount(ITEM_TRAP, -1);
-
-	_map->placeObstruction(getPosAfterX(), getPosAfterY(), OBSTRUCTION_TRAP);
+	if (arming == 0) {
+		arming = 1;
+		_time_to_arm = TRAP_ARM_TIME;
+	}
 }
 
 void Player::modInventoryItemCount(inventory_item item, int mod)
@@ -52,7 +61,6 @@ void Player::Win()
 	printf("WIN");
 	SetState(WON);
 	_map->GetFieldAt(getPosBeforeX(), getPosBeforeY())->LeftField();
-
 }
 
 void Player::restoreMana(int howMuchMana)
@@ -66,6 +74,17 @@ void Player::OnUpdate(int time_ms)
 {
 	_time_to_shot=max<int>(_time_to_shot-time_ms,
 			       0);
+
+	if (arming) {
+		_time_to_arm -= time_ms;
+		if (_time_to_arm <= 0) {
+			_time_to_arm = 0;
+			modInventoryItemCount(ITEM_TRAP, -1);
+			_map->placeObstruction(getPosAfterX(), getPosAfterY(), OBSTRUCTION_TRAP);
+			arming = 0;
+		}
+	}
+
 	Character::OnUpdate(time_ms);
 }
 
@@ -91,6 +110,33 @@ Fireball * Player::Shoot()
 	                    getPosBeforeY(),
 	                    last_dir_x, last_dir_y,
 			    GetPowerLevel(),this);
+}
+
+void drawBar(SDL_Renderer *renderer, float pct, int x, int  y, int r, int g, int b) {
+	SDL_Rect rect = { x, y, 100*pct, 10 };
+
+	SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_RenderFillRect(renderer, &rect);
+	//Frame
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+//	rect.x = defaultX - 200;
+	rect.w = 100;
+	SDL_RenderDrawRect(renderer, &rect);
+	rect.x++;
+	rect.y++;
+	rect.w -= 2;
+	rect.h -= 2;
+	SDL_RenderDrawRect(renderer, &rect);
+}
+
+void Player::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
+{
+	Character::OnRender(renderer, camera);
+
+	if (arming && _time_to_arm > 0) {
+		drawBar(renderer, (float)_time_to_arm / (float)TRAP_ARM_TIME, getPosX() - camera->x - 30, getPosY() - camera->y - 10, 200, 200, 200);
+	}
+
 }
 
 int Player::crucio(int howMuchCrucio)

@@ -49,7 +49,7 @@ void MenuScene::handleNormalModeInput() {
 
 #define WORLDS 3
 int worlds_levels[WORLDS] = {
-	5, 14, 9
+	5, 15, 9
 };
 
 void MenuScene::handleSelectModeInput() {

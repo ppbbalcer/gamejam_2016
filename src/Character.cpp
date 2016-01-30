@@ -221,7 +221,6 @@ bool Character::canSee(int x, int y) const
 	}
 }
 
-
 void Character::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
 {
 	if (GetState() == DEAD) {
@@ -266,10 +265,16 @@ int Character::getPosAfterY() const
 	return _pos_after_y;
 }
 
+void Character::onDirectionUpdate()
+{
+}
+
 void Character::updateDirection(DIRECT directMove)
 {
 	if (_state != ALIVE)
 		return;
+
+	onDirectionUpdate();
 
 	int prev_target_x = _pos_after_x;
 	int prev_target_y = _pos_after_y;
@@ -285,8 +290,6 @@ void Character::updateDirection(DIRECT directMove)
 		distX = 0;
 		distY = 0;
 	}
-
-
 
 	switch (directMove) {
 	case DIRECT_DOWN:
