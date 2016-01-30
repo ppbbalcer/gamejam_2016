@@ -9,14 +9,38 @@ using namespace std;
 
 class BossScreen
 {
+public:
+	enum State
+	{
+		SHOWING,
+		DANCING,
+		HIDING,
+		IDLE
+	};
+
 private:
+	SDL_Rect	_screenRect;
+
 	RTexture	*_background;
+	RTexture	*_boss;
+
+	State		_state;
+
+	float		_timer;
+
+	float		_bossPosX;
+	float		_bossPosY;
+
+	float		_bossDiePosY;
+
 public:
 
-	BossScreen(RTexture *background);
+	BossScreen(RTexture *background, RTexture *boss, SDL_Rect screenRect);
 	~BossScreen();
 	void OnUpdate(int delta);
-	void OnRender(SDL_Renderer* renderer, SDL_Rect screenRect);
+	void OnRender(SDL_Renderer* renderer);
+
+	void Kill();
 };
 
 #endif
