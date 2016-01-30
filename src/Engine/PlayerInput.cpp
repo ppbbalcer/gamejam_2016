@@ -11,6 +11,7 @@ PlayerInput::PlayerInput() {
 	setKeyboardBinding(INPUT_MENU_DOWN, SDL_SCANCODE_DOWN);
 	setKeyboardBinding(INPUT_MENU_ENTER, SDL_SCANCODE_RETURN);
 	setKeyboardBinding(INPUT_MENU_BACK, SDL_SCANCODE_BACKSPACE);
+
 	setControllerBinding(INPUT_MENU_UP, SDL_CONTROLLER_BUTTON_DPAD_UP);
 	setControllerBinding(INPUT_MENU_DOWN, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
 	setControllerBinding(INPUT_MENU_ENTER, SDL_CONTROLLER_BUTTON_A);
@@ -93,10 +94,23 @@ void PlayerInput::update(int time) {
 	}
 
 	for (int i = 0; i < MAX_INPUT_TYPE; ++i) {
+		if (input_state[i])
+			continue;
+
 		for (std::pair<int, SDL_GameController *> gc : controllers) {
-			input_state[i] = SDL_GameControllerGetButton(gc.second, controller_input_bindings[i]);
+			if (input_delay[i].delay != -1) {
+				input_delay[i].current -= time;
+				if (input_delay[i].current < 0) {
+					input_state[i] = SDL_GameControllerGetButton(gc.second, controller_input_bindings[i]);
+					input_delay[i].current = input_delay[i].delay;
+				}
+			}
+			else {
+				input_state[i] = SDL_GameControllerGetButton(gc.second, controller_input_bindings[i]);
+			}
 		}
 	}
+
 
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) ) {
