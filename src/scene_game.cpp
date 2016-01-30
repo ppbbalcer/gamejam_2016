@@ -15,7 +15,7 @@ using namespace std;
 #define MAX_ROOM_PATH 255
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
-
+#define DEBUG_BOTS
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -417,8 +417,14 @@ void SceneGame::updateShadows()
 {
 	memset(_arrayShadow, 00, _arrayShadowW * _arrayShadowH
 	       * sizeof(_arrayShadowH));
+#ifdef DEBUG_BOTS
+	for (auto enemy : _enemys) {
+		updateShadowsChr(enemy);
+	}
+#else
 	updateShadowsChr(_player1);
-	
+#endif
+
 
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
@@ -446,7 +452,7 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 				alfa = map->getParams()->alpha;
 			}
 			if (!_arrayVisibility[y*_arrayShadowW + x]) {
-				#ifdef SEMI_TRANSP_INVISIBLE_AREAS
+				#ifdef DEBUG_BOTS
 				_tiles->setAlpha(190);
 				#else
 				_tiles->setAlpha(255);

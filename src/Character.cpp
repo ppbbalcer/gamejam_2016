@@ -22,7 +22,7 @@ Character::Character(RTexture* texture, IMap * map)
 	view_dir_x = 1;
 	view_dir_y = 0;
 	
-	viewangle = 0.25*M_PI;
+	viewangle = 0.50*M_PI;
 }
 
 Character::~Character()

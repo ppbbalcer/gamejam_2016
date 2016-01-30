@@ -124,7 +124,7 @@ DIRECT Enemy::getRandomDirection()
 	    ->IsObstacle()) {
 		default_dir_x = default_dir_y = 0;
 	}
-	if (default_dir_y || default_dir_x) {
+	if ((default_dir_y || default_dir_x) && (rand() % 10 > 3)) {
 		if (default_dir_y > 0) {
 			return DIRECT_DOWN;
 		} else if (default_dir_y < 0) {
@@ -134,9 +134,32 @@ DIRECT Enemy::getRandomDirection()
 		} else {
 			return DIRECT_RIGHT;
 		}
+	} else {
+		DIRECT result = (static_cast<DIRECT>((rand() % (DIRECT_END - 1)) + 1));
+		if (result == DIRECT_LEFT
+		    && !_map->GetFieldAt(getPosAfterX()-1,
+			     getPosAfterY())
+		    ->IsObstacle()) {
+			return result;
+		} else if (result == DIRECT_RIGHT
+		    && !_map->GetFieldAt(getPosAfterX()+1,
+			     getPosAfterY())
+		    ->IsObstacle()) {
+			return result;
+		} else if (result == DIRECT_DOWN
+		    && !_map->GetFieldAt(getPosAfterX(),
+			     getPosAfterY()+1)
+		    ->IsObstacle()) {
+			return result;
+		} else if (result == DIRECT_UP
+		    && !_map->GetFieldAt(getPosAfterX(),
+			     getPosAfterY()-1)
+		    ->IsObstacle()) {
+			return result;
+		} else {
+			return getRandomDirection();
+		}
 	}
-	_time_to_random_direction= RANDOM_DIRECTION_CHANGE_TIME_MS;
-	return (static_cast<DIRECT>((rand() % (DIRECT_END - 1)) + 1));
 }
 
 void Enemy::setWay(AStarWay_t& pway)
@@ -150,19 +173,22 @@ const AStarWay_t& Enemy::getWay()
 {
 	return way;
 }
+#define DEBUG_BOTS
 
 void Enemy::OnRender(SDL_Renderer *renderer)
 {
 	//For debug A*
+#ifdef DEBUG_BOTS
 	{ //Astar Example
 		int tileSize = EngineInst->getTileSize();
 		for(std::list<AStartPoint_t>::iterator step = way.begin(); step != way.end(); ++step) {
 			int x = (*step).first;
 			int y = (*step).second;
-			//EngineInst->font()->printfLT(x*tileSize, y*tileSize, "X");
+			EngineInst->font()->printfLT(x*tileSize, y*tileSize, "X");
 			_texture->renderTile(renderer, x*tileSize, y*tileSize);
 
 		}
 	}
+#endif
 	Character::OnRender(renderer);
 }
