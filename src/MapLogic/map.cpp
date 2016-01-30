@@ -139,7 +139,17 @@ LoadedMap::LoadedMap(const char * path) {
 			case 'E':
 				new_field= new EvilComputer;
 				break;
-				
+			case '!':{
+				enemy_definition *enemy = new enemy_definition();
+				enemy->x =j;
+				enemy->y = i;
+				enemy->hp = 1;
+				enemy->ai =1;
+				enemies.push_back(enemy);
+
+				new_field= new Field(IField::EMPTY);
+			}
+				break;
 			default:
 				new_field= new Field(IField::EMPTY);
 			}
