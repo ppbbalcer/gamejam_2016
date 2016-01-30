@@ -17,6 +17,8 @@ using namespace std;
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
 
+// Uncomment following to enable structures supporting 
+//#define TWO_PLAYER_MODE
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -95,13 +97,16 @@ void SceneGame::OnLoad()
 	tmpTexture->setTileSizeSrc(tileSizeSrc);
 	tmpTexture->setTileSizeDst(tile_size);
 	tmpTexture->setTileIdx(27);
+	#ifdef TWO_PLAYER_MODE
 	_player2 = new Player(tmpTexture, map, map->getParams()->start_hp, map->getParams()->start_mana);
+	#endif
 	/* starting location is loaded from map configuration file */
 	_player1->setPosTiles(map->GetPlayer1Start().first,
 			      map->GetPlayer1Start().second);
+	#ifdef TWO_PLAYER_MODE
 	_player2->setPosTiles(map->GetPlayer2Start().first,
 			      map->GetPlayer2Start().second);
-
+	#endif TWO_PLAYER_MODE
 
 	EngineInst->setStatusLine(map->GetTitleString());
 
@@ -109,8 +114,9 @@ void SceneGame::OnLoad()
 	if (!is_loaded) {
 		const enemies_list &ens = map->GetEnemies();
 
-		for (enemies_list::const_iterator it=ens.begin() ; it!=ens.end();
-			 ++it)
+		for (enemies_list::const_iterator it=ens.begin()
+			     ;it!=ens.end();
+		     ++it)
 		{
 			tmpTexture = new RTexture(texturesScene_game[3]);
 			tmpTexture->setTileSizeSrc(tileSizeSrc);
@@ -200,7 +206,7 @@ void SceneGame::updatePlayers(int timems)
 		if (fb)
 			fireballs.push_back(fb);
 	}
-
+#ifdef TWO_PLAYER_MODE
 	if (currentKeyStates[PLAYER_2_MOVE_DOWN]) {
 		_player2->updateDirection(DIRECT_DOWN);
 	}
@@ -222,9 +228,11 @@ void SceneGame::updatePlayers(int timems)
 		if (fb)
 			fireballs.push_back(fb);
 	}
-
+#endif
 	_player1->OnUpdate(timems);
+	#ifdef TWO_PLAYER_MODE
 	_player2->OnUpdate(timems);
+	#endif
 }
 
 void SceneGame::updateEnemies(int timems)
@@ -260,6 +268,7 @@ void SceneGame::updateEnemies(int timems)
 			direct1 = findAstar(way1, maxSteps, startX, startY, _player1->getPosBeforeX(), _player1->getPosBeforeY(), map->GetWidth(), map->GetHeight(), IMap_isObstacle, map);
 		}
 
+		#ifdef TWO_PLAYER_MODE
 		distX = _player2->getPosX() - (*enemy)->getPosX();
 		distY = _player2->getPosY() - (*enemy)->getPosY();
 
@@ -268,7 +277,7 @@ void SceneGame::updateEnemies(int timems)
 		} else if ((*enemy)->getAI() != ENEMY_AI_DISTANCE || distX*distX + distY*distY <= distQuad ) {
 			direct2 = findAstar(way2, maxSteps,  startX, startY, _player2->getPosBeforeX(), _player2->getPosBeforeY(), map->GetWidth(), map->GetHeight(), IMap_isObstacle, map);
 		}
-
+		#endif 
 		if (heartbeat_tempo == 0 && ((way1.size() != 0 && way1.size() < 10 ) || (way2.size() != 0 && way2.size() < 10))) {
 			heartbeat_tempo = 50;
 			globalAudios[HEARTBEAT].res.sound->setDelay(HEARTBEAT_MIN_INTERVAL);
@@ -496,14 +505,22 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 		_tiles->renderTile(renderer, (*it)->getPosX(), (*it)->getPosY(), sprite, SDL_FLIP_NONE);
 	}
 	/* check loss condition */
-	if (_player1->GetState() == Character::DEAD ||
-	                _player2->GetState() == Character::DEAD) {
+	if (_player1->GetState() == Character::DEAD
+#ifdef TWO_PLAYER_MODE
+	    ||
+	    _player2->GetState() == Character::DEAD
+#endif 
+		) {
 		EngineInst->setStatusLine(  "You lost! "
 					    "Press R to try again");
 	}
 	/*Check victory condition*/
-	else if (_player1->GetState() == Character::WON &&
-	                _player2->GetState() == Character::WON) {
+	else if (_player1->GetState() == Character::WON
+#ifdef TWO_PLAYER_MODE
+		 &&
+		 _player2->GetState() == Character::WON
+#endif
+		) {
 
 
 		int target_level1=level->getId()+1;
@@ -552,14 +569,17 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 	} else if (_player1->GetState() == Character::WON) {
 
 		EngineInst->setStatusLine( "Player 1 has left the screen. Player 2 must join him so you can win the level together.");
+#ifdef TWO_PLAYER_MODE
 	} else if (_player2->GetState() == Character::WON) {
 		
 		EngineInst->setStatusLine( "Player 2 has left the screen. Player 2 must join him so you can win the level together.");
+#endif
 	}
 
 	_player1->OnRender(renderer);
+#ifdef TWO_PLAYER_MODE
 	_player2->OnRender(renderer);
-
+#endif
 
 	OnRenderShadow(renderer);
 
@@ -614,7 +634,7 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 		SDL_RenderDrawRect( renderer, &p1_mana_rect );
 
 	}
-
+#ifdef TWO_PLAYER_MODE
 	/* PLAYER 2 */
 	{
 		_player2->renderAvatar(renderer, playerBarXPadding, 0, SDL_FLIP_NONE);
@@ -649,5 +669,5 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 		SDL_RenderDrawRect( renderer, &p2_mana_rect );
 
 	}
-
+#endif 
 }
