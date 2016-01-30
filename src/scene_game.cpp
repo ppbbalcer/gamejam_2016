@@ -18,6 +18,10 @@ using namespace std;
 //#define DEBUG_BOTS
 #define MAX_TILE_PER_SCREEN 12
 
+#define UI_HEIGHT	0.15f
+#define GP_HEIGHT	1.0f - UI_HEIGHT
+#define GP_START_Y	UI_HEIGHT
+
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -43,8 +47,8 @@ SceneGame::~SceneGame()
 }
 SDL_Rect SceneGame::GetDefaultViewport()
 {
-#define MARGIN_TOP 100
-#define MARGIN_BOTTOM 60
+#define MARGIN_TOP 5
+#define MARGIN_BOTTOM 5
 #define MARGIN_LEFT 5
 #define MARGIN_RIGHT 5
 
@@ -55,6 +59,27 @@ SDL_Rect SceneGame::GetDefaultViewport()
 	topLeftViewport.h = EngineInst->screen_height()-MARGIN_TOP-MARGIN_BOTTOM;
 	return topLeftViewport;
 }
+
+SDL_Rect SceneGame::GetGameplayViewport()
+{
+	SDL_Rect topLeftViewport = GetDefaultViewport();
+	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
+	topLeftViewport.h *= GP_HEIGHT;
+	topLeftViewport.x = topLeftViewport.w - topLeftViewport.h;
+	topLeftViewport.w = topLeftViewport.h;
+	return topLeftViewport;
+}
+
+SDL_Rect SceneGame::GetUIViewport()
+{
+	SDL_Rect veryTopBar;
+	veryTopBar.x = 0;
+	veryTopBar.y = 0;
+	veryTopBar.w = EngineInst->screen_width();
+	veryTopBar.h = EngineInst->screen_height() * UI_HEIGHT;
+	return veryTopBar;
+}
+
 void SceneGame::OnLoad()
 {
 	/* command generating set of tiles found in Resources/tiles/walls.png
@@ -207,8 +232,8 @@ void SceneGame::updatePlayers(int timems)
 
 void SceneGame::updateCamera()
 {
-	_camera.x = _player1->getPosX() - GetDefaultViewport().w / 2;
-	_camera.y = _player1->getPosY() - GetDefaultViewport().h / 2;
+	_camera.x = _player1->getPosX() - GetGameplayViewport().w / 2 + EngineInst->getTileSize() / 2;
+	_camera.y = _player1->getPosY() - GetGameplayViewport().h / 2 + EngineInst->getTileSize() / 2;
 }
 
 void SceneGame::updateEnemies(int timems)
@@ -401,14 +426,7 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 {
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect topLeftViewport = GetDefaultViewport();
-	int map_width = map->GetWidth()*EngineInst->getTileSize();
-	if (topLeftViewport.w>map_width) {
-		int excess_width = topLeftViewport.w - map_width;
-		topLeftViewport.w -= excess_width;
-		topLeftViewport.x += excess_width / 2;
-	}
-
+	SDL_Rect topLeftViewport = GetGameplayViewport();
 	SDL_RenderSetViewport(renderer, &topLeftViewport);
 	
 	renderMap(renderer);
@@ -436,17 +454,14 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 	renderShadow(renderer);
 }
 
-void SceneGame::renderGUI(SDL_Renderer *renderer) const {
+void SceneGame::renderGUI(SDL_Renderer *renderer) {
 	// Render top bar
 	int screenWidth = EngineInst->screen_width();
+	int screenHeight = EngineInst->screen_width();
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect veryTopBar;
-	veryTopBar.x = 0;
-	veryTopBar.y = 20;
-	veryTopBar.w = screenWidth;
-	veryTopBar.h = 50;
-
+	SDL_Rect veryTopBar = GetUIViewport();
+	
 	int playerBarYPadding = 5;
 	int playerBarXPadding = 20;
 	int playerBarHeight = 20;
@@ -465,6 +480,9 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) const {
 	playerBarYPadding+=paddingBetweenBars;
 	playerBarYPadding+=playerBarHeight;
 	drawBar(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
+
+	veryTopBar.h = screenHeight;
+	SDL_RenderSetViewport(renderer, &veryTopBar);
 
 	/* check loss condition */
 	if (_player1->GetState() == Character::DEAD) 

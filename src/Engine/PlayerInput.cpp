@@ -9,11 +9,15 @@ PlayerInput::PlayerInput() {
 
 	setKeyboardBinding(INPUT_MENU_UP, SDL_SCANCODE_UP);
 	setKeyboardBinding(INPUT_MENU_DOWN, SDL_SCANCODE_DOWN);
+	setKeyboardBinding(INPUT_MENU_LEFT, SDL_SCANCODE_LEFT);
+	setKeyboardBinding(INPUT_MENU_RIGHT, SDL_SCANCODE_RIGHT);
 	setKeyboardBinding(INPUT_MENU_ENTER, SDL_SCANCODE_RETURN);
 	setKeyboardBinding(INPUT_MENU_BACK, SDL_SCANCODE_BACKSPACE);
 
 	setControllerBinding(INPUT_MENU_UP, SDL_CONTROLLER_BUTTON_DPAD_UP);
 	setControllerBinding(INPUT_MENU_DOWN, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+	setControllerBinding(INPUT_MENU_LEFT, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+	setControllerBinding(INPUT_MENU_RIGHT, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
 	setControllerBinding(INPUT_MENU_ENTER, SDL_CONTROLLER_BUTTON_A);
 	setControllerBinding(INPUT_MENU_BACK, SDL_CONTROLLER_BUTTON_B);
 
@@ -37,6 +41,10 @@ PlayerInput::PlayerInput() {
 
 	setInputDelay(INPUT_MENU_DOWN, 100);
 	setInputDelay(INPUT_MENU_UP, 100);
+	setInputDelay(INPUT_MENU_LEFT, 100);
+	setInputDelay(INPUT_MENU_RIGHT, 100);
+	setInputDelay(INPUT_MENU_ENTER, 100);
+	setInputDelay(INPUT_MENU_BACK, 100);
 }
 
 void PlayerInput::reset() {

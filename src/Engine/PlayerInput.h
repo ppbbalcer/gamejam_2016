@@ -12,6 +12,8 @@ enum input_type {
 	/* menu scene inputs */
 	INPUT_MENU_UP,
 	INPUT_MENU_DOWN,
+	INPUT_MENU_LEFT,
+	INPUT_MENU_RIGHT,
 	INPUT_MENU_ENTER,
 	INPUT_MENU_BACK,
 
