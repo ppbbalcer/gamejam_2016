@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include "MapLogic/map.h"
 #include "fireball.h"
+#include "Equipment.h"
+
 #define MAX_HEALTH 100
 #define MAX_MANA 100
 #define DEFAULT_POWER_LEVEL 25;
@@ -118,6 +120,8 @@ protected:
 	 * valid values: 360, 180, 90. 
 	 */
 	int viewangle;
+public:
+	Equipment equipment;
 
 };
 

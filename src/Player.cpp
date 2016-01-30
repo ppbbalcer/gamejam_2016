@@ -1,11 +1,13 @@
 #include "Player.h"
 #include "GlobalData.h"
 #include "Engine/RTexture.h"
+#include "Equipment.h"
 
 using namespace std;
 
 Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(texture, map)
 {
+	equipment = Equipment();
 	_type = TYPE_PLAYER;
 	_mana = mana;
 	_health = hp;

@@ -33,7 +33,7 @@ set(client_src
 	scene_game.h
 	victoryscene.cpp
 	victoryscene.h
-)
+		Equipment.cpp Equipment.h Item.cpp Item.h)
 
 add_subdirectory(Engine)
 add_subdirectory(MapLogic)
