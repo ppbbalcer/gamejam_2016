@@ -23,6 +23,8 @@ class SceneGame: public Scene
 {
 private:
 	SDL_Rect GetDefaultViewport();
+	SDL_Rect GetGameplayViewport();
+	SDL_Rect GetUIViewport();
 
 	std::list<Fireball *> fireballs;
 //	RTexture *_background;
@@ -52,7 +54,7 @@ private:
 	void renderGameplay(SDL_Renderer* renderer);
 	void renderMap(SDL_Renderer* renderer);
 	void renderShadow(SDL_Renderer* renderer);
-	void renderGUI(SDL_Renderer *renderer) const;
+	void renderGUI(SDL_Renderer *renderer);
 	void drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const;
 	int dull(int) const;
 

@@ -39,6 +39,7 @@ public:
 	void				setWay(AStarWay_t& pway);
 	const AStarWay_t&	getWay();
 	virtual void updateDirection(DIRECT directMove);
+	void Chase(Character * ch);
 
 private:
 	int default_dir_x;

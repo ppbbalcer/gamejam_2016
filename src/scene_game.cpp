@@ -25,13 +25,6 @@ using namespace std;
 // Global
 IMap *gCurrentMap = NULL;
 
-/* looking for obstacles*/
-bool IMap_isObstacle(int x, int y, void* objMap)
-{
-	if (((IMap*)objMap)->GetFieldAt(x, y)->IsOccupied())
-		return false;
-	return ((IMap*)objMap)->GetFieldAt(x, y)->IsObstacle();
-}
 
 SceneGame::SceneGame(Level *level, int room_id)
 {
@@ -66,6 +59,27 @@ SDL_Rect SceneGame::GetDefaultViewport()
 	topLeftViewport.h = EngineInst->screen_height()-MARGIN_TOP-MARGIN_BOTTOM;
 	return topLeftViewport;
 }
+
+SDL_Rect SceneGame::GetGameplayViewport()
+{
+	SDL_Rect topLeftViewport = GetDefaultViewport();
+	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
+	topLeftViewport.h *= GP_HEIGHT;
+	topLeftViewport.x = topLeftViewport.w - topLeftViewport.h;
+	topLeftViewport.w = topLeftViewport.h;
+	return topLeftViewport;
+}
+
+SDL_Rect SceneGame::GetUIViewport()
+{
+	SDL_Rect veryTopBar;
+	veryTopBar.x = 0;
+	veryTopBar.y = 0;
+	veryTopBar.w = EngineInst->screen_width();
+	veryTopBar.h = EngineInst->screen_height() * UI_HEIGHT;
+	return veryTopBar;
+}
+
 void SceneGame::OnLoad()
 {
 	/* command generating set of tiles found in Resources/tiles/walls.png
@@ -222,8 +236,8 @@ void SceneGame::updatePlayers(int timems)
 
 void SceneGame::updateCamera()
 {
-	_camera.x = _player1->getPosX() - GetDefaultViewport().w / 2;
-	_camera.y = _player1->getPosY() - GetDefaultViewport().h / 2;
+	_camera.x = _player1->getPosX() - GetGameplayViewport().w / 2 + EngineInst->getTileSize() / 2;
+	_camera.y = _player1->getPosY() - GetGameplayViewport().h / 2 + EngineInst->getTileSize() / 2;
 }
 
 void SceneGame::updateEnemies(int timems)
@@ -231,127 +245,21 @@ void SceneGame::updateEnemies(int timems)
 	/* update behaviors for each of enemies */
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
 		(*enemy)->OnUpdate(timems);
-		if ((*enemy)->getAI() == ENEMY_AI_OFF)
-			continue;
+		(*enemy)->Chase(_player1);
 
-		if((*enemy)->getWay().size() > 0) {
-			if ( (*enemy)->canSee(_player1->getPosBeforeX(),
-					      _player1->getPosBeforeY()))
-			{
-				if ((*enemy)->getWayAge() < 1) {
-					continue;
-				} else {
-					puts("He runs away!");
-				}
-			} else {
-				continue;
-			}
-		} else if (!(*enemy)->canSee(_player1->getPosBeforeX(),
-					    _player1->getPosBeforeY())
-			    )
-		{
-			if ((*enemy)->getWayAge() >1) {
-			//Where is he?
-			if ((*enemy)->getPosBeforeY() == (*enemy)->getPosAfterY()
-			    &&
-			    (*enemy)->getPosBeforeX() == (*enemy)->getPosAfterX()) {
-			DIRECT d = (*enemy)->getRandomDirection();
-			if (d != DIRECT_NO_WAY) { 
-				(*enemy)->updateDirection(d);
-			}
-			}
-			}
-			continue;
-		}
-		puts("It's him!");
+		const AStarWay_t & way1 = (*enemy)->getWay();
 
-
-		int startX = (*enemy)->getPosAfterX();
-		int startY = (*enemy)->getPosAfterY();
-		AStarWay_t way1;
-		AStarWay_t way2;
-
-		int maxSteps = 0;
-		DIRECT destBest = DIRECT_NO_WAY;
-		DIRECT direct1 = DIRECT_NO_WAY;
-		DIRECT direct2 = DIRECT_NO_WAY;
-
-		int distQuad = EngineInst->getTileSize()
-			* EngineInst->getTileSize() * 6 * 6;
-		int distX = _player1->getPosX() - (*enemy)->getPosX();
-		int distY = _player1->getPosY() - (*enemy)->getPosY();
-
-
-		if (_player1->GetState() == Character::DEAD) {
-			direct1 = DIRECT_NO_WAY;
-		} else if ( ((*enemy)->getAI() != ENEMY_AI_DISTANCE
-			     || distX*distX + distY*distY <= distQuad ))
-		{
-			direct1 =
-				findAstar(way1, maxSteps,
-					  startX, startY,
-					  _player1->getPosBeforeX(),
-					  _player1->getPosBeforeY(),
-					  map->GetWidth(),
-					  map->GetHeight(),
-					  IMap_isObstacle, map);
-		}
-
-		#ifdef TWO_PLAYER_MODE
-		distX = _player2->getPosX() - (*enemy)->getPosX();
-		distY = _player2->getPosY() - (*enemy)->getPosY();
-
-		if (_player2->GetState()==Character::DEAD) {
-			direct2 = DIRECT_NO_WAY;
-		} else if ((*enemy)->getAI() != ENEMY_AI_DISTANCE || distX*distX + distY*distY <= distQuad ) {
-			direct2 = findAstar(way2, maxSteps,
-					    startX, startY,
-					    _player2->getPosBeforeX(),
-					    _player2->getPosBeforeY(),
-					    map->GetWidth(),
-					    map->GetHeight(),
-					    IMap_isObstacle, map);
-		}
-		#endif
-		if (heartbeat_tempo == 0 && ((way1.size() != 0 && way1.size() < 10 ) || (way2.size() != 0 && way2.size() < 10))) {
+		if (heartbeat_tempo == 0 && ((way1.size() != 0 && way1.size() < 10 ))){
 			heartbeat_tempo = 50;
 			globalAudios[HEARTBEAT].res.sound->setDelay(HEARTBEAT_MIN_INTERVAL);
 		} else if (heartbeat_tempo != 0) {
 			heartbeat_tempo--;
 			if (heartbeat_tempo == 0)
-				globalAudios[HEARTBEAT].res.sound->setDelay(HEARTBEAT_BASE_INTERVAL);
+				globalAudios[HEARTBEAT].res.
+					sound->setDelay(HEARTBEAT_BASE_INTERVAL);
 		}
 
-		if (direct1 != DIRECT_NO_WAY && direct2 == DIRECT_NO_WAY) {
-			destBest = direct1;
-			(*enemy)->setWay(way1);
-		} else if (direct1 == DIRECT_NO_WAY && direct2 != DIRECT_NO_WAY) {
-			destBest = direct2;
-			(*enemy)->setWay(way2);
-		} else if (direct1 != DIRECT_NO_WAY && direct2 != DIRECT_NO_WAY) {
-			if (way1.size() > way2.size()) {
-				destBest = direct2;
-				(*enemy)->setWay(way2);
-			} else {
-				destBest = direct1;
-				(*enemy)->setWay(way1);
-			}
-		} else {
-			destBest = (*enemy)->getRandomDirection();
-		}
-
-		if (destBest != DIRECT_NO_WAY) {
-			if (destBest == DIRECT_DOWN) {
-				(*enemy)->updateDirection(DIRECT_DOWN);
-			} else if (destBest == DIRECT_UP) {
-				(*enemy)->updateDirection(DIRECT_UP);
-			} else if (destBest == DIRECT_LEFT) {
-				(*enemy)->updateDirection(DIRECT_LEFT);
-			} else if (destBest == DIRECT_RIGHT) {
-				(*enemy)->updateDirection(DIRECT_RIGHT);
-			}
-		}
-
+		
 	}
 }
 
@@ -522,11 +430,7 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 {
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect topLeftViewport = GetDefaultViewport();
-	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
-	topLeftViewport.h *= GP_HEIGHT;
-	
-
+	SDL_Rect topLeftViewport = GetGameplayViewport();
 	SDL_RenderSetViewport(renderer, &topLeftViewport);
 	
 	renderMap(renderer);
@@ -554,18 +458,14 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 	renderShadow(renderer);
 }
 
-void SceneGame::renderGUI(SDL_Renderer *renderer) const {
+void SceneGame::renderGUI(SDL_Renderer *renderer) {
 	// Render top bar
 	int screenWidth = EngineInst->screen_width();
-	int screenHeight = EngineInst->screen_height();
+	int screenHeight = EngineInst->screen_width();
 	int tileSize = EngineInst->getTileSize();
 
-	SDL_Rect veryTopBar;
-	veryTopBar.x = 0;
-	veryTopBar.y = 0;
-	veryTopBar.w = screenWidth;
-	veryTopBar.h = screenHeight * UI_HEIGHT;
-
+	SDL_Rect veryTopBar = GetUIViewport();
+	
 	int playerBarYPadding = 5;
 	int playerBarXPadding = 20;
 	int playerBarHeight = 20;
