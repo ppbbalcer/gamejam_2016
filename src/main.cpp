@@ -78,7 +78,7 @@ int main( int argc, char* args[] )
 		level = atoi(args[2]);
 	}
 
-	MenuScene *scene = new MenuScene(1, 0);
+	MenuScene *scene = new MenuScene(world, level);
 
 	if( !Engine::Create() )
 	{
