@@ -651,7 +651,7 @@ void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize) const {
 
 	playerBarYPadding+=paddingBetweenBars;
 	playerBarYPadding+=playerBarHeight;
-	drawBar2(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
+	drawBar(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
 
 }
 
@@ -674,8 +674,8 @@ void SceneGame::drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding
 int SceneGame::dull(int n) const {
 	int dullOffset = 30;
 	if(n>128+dullOffset)
-		n+=dullOffset;
+		n-=dullOffset*4;
 	if(n<128-dullOffset)
-		n-=dullOffset;
+		n+=dullOffset;
 	return n;
 }
