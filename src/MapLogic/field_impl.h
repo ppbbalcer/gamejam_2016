@@ -38,13 +38,13 @@ public:
 
 class EvilComputer: public Field {
 	bool running;
-	bool time_to_next_fb;
+	//bool time_to_next_fb;
 public:
 	EvilComputer() : Field(EVIL_COMPUTER)
 		{
-			time_to_next_fb;
+			//time_to_next_fb;
 			running=false;
 		}
-	
+
 };
 #endif

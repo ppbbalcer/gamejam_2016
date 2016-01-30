@@ -4,6 +4,7 @@
 #include "Engine/Scene.h"
 #include "Engine/Engine.h"
 #include "Engine/RTexture.h"
+#include "Engine/PlayerInput.h"
 #include "Character.h"
 #include "Enemy.h"
 #include "Player.h"
@@ -11,6 +12,10 @@
 #include "MapLogic/map.h"
 class Fireball;
 class Level;
+
+// Uncomment following to enable structures supporting
+//#define TWO_PLAYER_MODE
+
 /**
  * scene that contains map and character
  */
@@ -21,7 +26,10 @@ private:
 
 	std::list<Fireball *> fireballs;
 //	RTexture *_background;
-	Player *_player1, *_player2;
+	Player *_player1;
+#ifdef TWO_PLAYER_MODE
+	Player *_player2;
+#endif
 	std::vector<Enemy*> _enemys;
 	RTexture *_tiles;
 	int _arrayShadowW;
@@ -57,5 +65,3 @@ public:
 bool IMap_isObstacle(int x, int y, void* objMap);
 
 #endif
-
-

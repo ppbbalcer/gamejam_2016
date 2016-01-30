@@ -17,8 +17,10 @@
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Engine\RFont.cpp" />
     <ClCompile Include="src\Engine\RTexture.cpp" />
+    <ClCompile Include="src\Equipment.cpp" />
     <ClCompile Include="src\fireball.cpp" />
     <ClCompile Include="src\GlobalData.cpp" />
+    <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MapLogic\controller_field.cpp" />
@@ -44,8 +46,10 @@
     <ClInclude Include="src\Engine\RTexture.h" />
     <ClInclude Include="src\Engine\Scene.h" />
     <ClInclude Include="src\Engine\StructsGlobal.h" />
+    <ClInclude Include="src\Equipment.h" />
     <ClInclude Include="src\fireball.h" />
     <ClInclude Include="src\GlobalData.h" />
+    <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\KeyMap.h" />
     <ClInclude Include="src\level.h" />
     <ClInclude Include="src\MapLogic\controller_field.h" />
@@ -72,7 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

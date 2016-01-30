@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include "Audio.h"
+#include "PlayerInput.h"
 #include "RFont.h"
 #include "StructsGlobal.h"
 #include <string>
@@ -28,7 +29,7 @@ public:
 	}
 	void setStatusLine(const char *line);
 	void clearStatusLine();
-	bool loadTexture(ResourceItem &resItem); 
+	bool loadTexture(ResourceItem &resItem);
 	void unLoadTexture(ResourceItem &resItem);
 	bool loadResources(ResourceItem resources[], unsigned int size);
 	void unLoadResources(ResourceItem resources[], unsigned int size);
@@ -43,6 +44,7 @@ public:
 	void mainLoop();
 	void showFPS(bool flag);
 	static void eventDebug(SDL_Event *e);
+	PlayerInput *input() { return _input; };
 
 private:
 	~Engine(){}
@@ -52,9 +54,9 @@ private:
 	int _tile_size;
 	/* Engine members */
 	std::string status_line;
-	SDL_Window* _window;		//The window we'll be rendering to 
-	SDL_Surface* _screenSurface;		//The surface contained by the window 
-	SDL_Renderer* _renderer;		//The window renderer 
+	SDL_Window* _window;		//The window we'll be rendering to
+	SDL_Surface* _screenSurface;		//The surface contained by the window
+	SDL_Renderer* _renderer;		//The window renderer
 	SDL_Rect _viewportScreen;	//Viewport all screen
 
 	RFont* _font;			//Global font
@@ -63,6 +65,7 @@ private:
 	bool _quitMainLoop;
 	bool _showFPS;
 	AudioEngine *_audio;
+	PlayerInput *_input;
 
 	bool init();
 	void close();

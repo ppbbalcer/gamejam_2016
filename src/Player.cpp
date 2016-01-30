@@ -2,6 +2,7 @@
 #include "GlobalData.h"
 #include "Engine/RTexture.h"
 #include "Equipment.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -52,7 +53,7 @@ Fireball * Player::Shoot()
 
 	if (_mana - FIREBALL_MANA_COST < 0)
 		return NULL;
-	
+
 	if (_time_to_shot)
 		return NULL;
 

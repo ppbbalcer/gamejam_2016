@@ -1,7 +1,9 @@
 #ifndef __FIELD_H
 #define __FIELD_H
+
 class Character;
 class IMap;
+
 class IField {
 public:
 
@@ -17,12 +19,12 @@ public:
 		WALL_RT,
 		WALL_LB,
 		WALL_RB, /* add T-shaped sections tooo.... */
-	
+
 		T_LEFT,
 		T_RIGHT,
 		T_TOP,
 		T_BOTTOM,
-	
+
 		FLOOR,
 		DESK,
 		DOOR,
@@ -48,7 +50,7 @@ public:
 		SWITCH_DOWN,
 		EVIL_COMPUTER, /*spawns fireballs everywhere*/
 		NUM_FIELD_TYPES
-  
+
 	};
 // as per enum FieldType
 	virtual int GetType() = 0;
