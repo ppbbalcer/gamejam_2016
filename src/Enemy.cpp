@@ -3,7 +3,9 @@
 #include "Player.h"
 #include "Engine/Engine.h"
 #include <algorithm>
+
 using namespace std;
+
 Enemy::Enemy(RTexture *texture, IMap *map, int hp, int ai) : Character(texture, map)
 {
 	_type = TYPE_ENEMY;

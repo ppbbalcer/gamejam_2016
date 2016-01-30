@@ -146,10 +146,10 @@ void SceneGame::OnLoad()
 			     ;it!=ens.end();
 		     ++it)
 		{
-			tmpTexture = new RTexture(texturesScene_game[3]);
+			tmpTexture = new RTexture(texturesScene_game[8]);
 			tmpTexture->setTileSizeSrc(tileSizeSrc);
 			tmpTexture->setTileSizeDst(tile_size);
-			tmpTexture->setTileIdx(23);
+			tmpTexture->setTileIdx(1);
 			Enemy* enemy = new Enemy(tmpTexture, map, (*it)->hp, (*it)->ai);
 			enemy->setPosTiles((*it)->x, (*it)->y);
 			_enemys.push_back(enemy);

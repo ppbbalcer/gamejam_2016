@@ -147,7 +147,7 @@ LoadedMap::LoadedMap(const char * path) {
 				enemy->ai =1;
 				enemies.push_back(enemy);
 
-				new_field= new Field(IField::EMPTY);
+				new_field = new Field(IField::FLOOR);
 			}
 				break;
 			default:
