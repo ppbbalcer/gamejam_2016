@@ -15,6 +15,7 @@ using namespace std;
 #define MAX_ROOM_PATH 255
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
+//#define DEBUG_BOTS
 #define MAX_TILE_PER_SCREEN 12
 
 // Global
@@ -241,6 +242,7 @@ void SceneGame::updateEnemies(int timems)
 					    _player1->getPosBeforeY())
 			    )
 		{
+			if ((*enemy)->getWayAge() >1) {
 			//Where is he?
 			if ((*enemy)->getPosBeforeY() == (*enemy)->getPosAfterY()
 			    &&
@@ -248,6 +250,7 @@ void SceneGame::updateEnemies(int timems)
 			DIRECT d = (*enemy)->getRandomDirection();
 			if (d != DIRECT_NO_WAY) { 
 				(*enemy)->updateDirection(d);
+			}
 			}
 			}
 			continue;

@@ -103,11 +103,9 @@ void Enemy::updateDirection(DIRECT directMove)
 	Character::updateDirection(directMove);
 	default_dir_x = view_dir_x;
 	default_dir_y = view_dir_y;
-	printf("DEFDIR SET %d %d \n", default_dir_x, default_dir_y);
 	if (_map->GetFieldAt(getPosAfterX()+default_dir_x,
 			     getPosAfterY()+default_dir_y)
 	    ->IsObstacle()) {
-		puts("ZERO SET");
 		default_dir_x = default_dir_y = 0;
 	}
 }
@@ -173,6 +171,7 @@ const AStarWay_t& Enemy::getWay()
 {
 	return way;
 }
+//#define DEBUG_BOTS
 
 void Enemy::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
 {
