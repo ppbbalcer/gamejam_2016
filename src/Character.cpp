@@ -122,6 +122,7 @@ int one_less_av(int x)
 	}
 	
 }
+
 void Character::OnRenderCircle(int radius) const
 {
 	visibility.assign(radius * 2 + 1,
@@ -145,8 +146,10 @@ void Character::OnRenderCircle(int radius) const
 
 	for (int i = radius ; i >= 0 ; --i) {
 		for (int j = radius ; j >= 0 ; --j) {
-			for (int y0 : {-i, i}) {
-				for (int x0 : {-j, j}) {
+			int arr_y0[2] = { -i, i };
+			for (int y0 : arr_y0) {
+				int arr_y1[2] = { -j, j };
+				for (int x0 : arr_y1) {
 					int x = x0 + getPosAfterX();
 					int y = y0 + getPosAfterY();
 					if (x >= 0 && y >= 0 && x < _map->GetWidth()
