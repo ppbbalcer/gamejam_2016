@@ -334,10 +334,6 @@ void SceneGame::updateEnemies(int timems)
 
 void SceneGame::OnUpdate(int timems)
 {
-	if (EngineInst->input()->getState(INPUT_GAME_QUIT)) {
-		EngineInst->breakMainLoop();
-		return;
-	}
 	if (EngineInst->input()->getState(INPUT_GAME_RESET)) {
 		level->resetCurrent();
 		return;

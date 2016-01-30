@@ -113,7 +113,6 @@ void  RFont::printTextBuff(int x, int y, SDL_Color colorText, SDL_Color colorBor
 	printTextRAW(_font, /*_frameSurface*/NULL, x, y, colorText, colorBorder, border, alignment, scale, text);
 }
 
-
 void RFont::printTextRAW(TTF_Font *font, SDL_Surface* surface, int x, int y, SDL_Color colorText, SDL_Color colorBorder, int border, int alignment, float scale, const char *text)
 {
 	//Render text surface

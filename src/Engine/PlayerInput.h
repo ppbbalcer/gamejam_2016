@@ -9,6 +9,12 @@ enum input_type {
 	INPUT_GAME_QUIT,
 	INPUT_GAME_RESET,
 
+	/* menu scene inputs */
+	INPUT_MENU_UP,
+	INPUT_MENU_DOWN,
+	INPUT_MENU_ENTER,
+	INPUT_MENU_BACK,
+
 	/* game scene inputs */
 	INPUT_MOVE_UP,
 	INPUT_MOVE_DOWN,
@@ -25,14 +31,20 @@ public:
 	PlayerInput();
 	~PlayerInput() {};
 
-	void update();
+	void update(int time);
+	void reset();
 
 	int getState(enum input_type type);
 	void setKeyboardBinding(enum input_type type, unsigned char key);
 	void setControllerBinding(enum input_type type, SDL_GameControllerButton btn);
+	void setInputDelay(enum input_type type, int time);
 
 private:
 	int input_state[MAX_INPUT_TYPE];
+	struct {
+		int current;
+		int delay;
+	} input_delay[MAX_INPUT_TYPE];
 	unsigned char keyboard_input_bindings[MAX_INPUT_TYPE];
 	SDL_GameControllerButton controller_input_bindings[MAX_INPUT_TYPE];
 

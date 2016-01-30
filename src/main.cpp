@@ -70,7 +70,15 @@ int main( int argc, char* args[] )
 {
 	printf("argc %d\n", argc);
 
-	MenuScene *scene = new MenuScene();
+	int world = 1;
+	int level = 0;
+
+	if (argc == 3) {
+		world = atoi(args[1]);
+		level = atoi(args[2]);
+	}
+
+	MenuScene *scene = new MenuScene(1, 0);
 
 	if( !Engine::Create() )
 	{
