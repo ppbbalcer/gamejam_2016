@@ -18,6 +18,10 @@ using namespace std;
 //#define DEBUG_BOTS
 #define MAX_TILE_PER_SCREEN 12
 
+#define UI_HEIGHT	0.15f
+#define GP_HEIGHT	1.0f - UI_HEIGHT
+#define GP_START_Y	UI_HEIGHT
+
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -50,8 +54,8 @@ SceneGame::~SceneGame()
 }
 SDL_Rect SceneGame::GetDefaultViewport()
 {
-#define MARGIN_TOP 100
-#define MARGIN_BOTTOM 60
+#define MARGIN_TOP 5
+#define MARGIN_BOTTOM 5
 #define MARGIN_LEFT 5
 #define MARGIN_RIGHT 5
 
@@ -515,12 +519,9 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 	int tileSize = EngineInst->getTileSize();
 
 	SDL_Rect topLeftViewport = GetDefaultViewport();
-	int map_width = map->GetWidth()*EngineInst->getTileSize();
-	if (topLeftViewport.w>map_width) {
-		int excess_width = topLeftViewport.w - map_width;
-		topLeftViewport.w -= excess_width;
-		topLeftViewport.x += excess_width / 2;
-	}
+	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
+	topLeftViewport.h *= GP_HEIGHT;
+	
 
 	SDL_RenderSetViewport(renderer, &topLeftViewport);
 	
@@ -552,13 +553,14 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 void SceneGame::renderGUI(SDL_Renderer *renderer) const {
 	// Render top bar
 	int screenWidth = EngineInst->screen_width();
+	int screenHeight = EngineInst->screen_height();
 	int tileSize = EngineInst->getTileSize();
 
 	SDL_Rect veryTopBar;
 	veryTopBar.x = 0;
-	veryTopBar.y = 20;
+	veryTopBar.y = 0;
 	veryTopBar.w = screenWidth;
-	veryTopBar.h = 50;
+	veryTopBar.h = screenHeight * UI_HEIGHT;
 
 	int playerBarYPadding = 5;
 	int playerBarXPadding = 20;
@@ -578,6 +580,9 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) const {
 	playerBarYPadding+=paddingBetweenBars;
 	playerBarYPadding+=playerBarHeight;
 	drawBar(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
+
+	veryTopBar.h = screenHeight;
+	SDL_RenderSetViewport(renderer, &veryTopBar);
 
 	/* check loss condition */
 	if (_player1->GetState() == Character::DEAD) 
