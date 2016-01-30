@@ -1,6 +1,8 @@
 #include "PlayerInput.h"
 #include <SDL.h>
 
+#define DEFAULT_INPUT_DELAY 50
+
 PlayerInput::PlayerInput() {
 	for (int i = 0; i < MAX_INPUT_TYPE; ++i) {
 		input_delay[i].current = 0;
@@ -39,13 +41,13 @@ PlayerInput::PlayerInput() {
 	setControllerBinding(INPUT_SHOOT, SDL_CONTROLLER_BUTTON_A);
 	setControllerBinding(INPUT_USE, SDL_CONTROLLER_BUTTON_B);
 
-	setInputDelay(INPUT_MENU_DOWN, 100);
-	setInputDelay(INPUT_MENU_UP, 100);
-	setInputDelay(INPUT_MENU_LEFT, 100);
-	setInputDelay(INPUT_MENU_RIGHT, 100);
-	setInputDelay(INPUT_MENU_ENTER, 100);
-	setInputDelay(INPUT_MENU_BACK, 100);
-	setInputDelay(INPUT_USE, 100);
+	setInputDelay(INPUT_MENU_DOWN, DEFAULT_INPUT_DELAY);
+	setInputDelay(INPUT_MENU_UP, DEFAULT_INPUT_DELAY);
+	setInputDelay(INPUT_MENU_LEFT, DEFAULT_INPUT_DELAY);
+	setInputDelay(INPUT_MENU_RIGHT, DEFAULT_INPUT_DELAY);
+	setInputDelay(INPUT_MENU_ENTER, DEFAULT_INPUT_DELAY);
+	setInputDelay(INPUT_MENU_BACK, DEFAULT_INPUT_DELAY);
+	setInputDelay(INPUT_USE, DEFAULT_INPUT_DELAY);
 }
 
 void PlayerInput::reset() {

@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "BossScreen.h"
 #include <SDL.h>
 #include "MapLogic/map.h"
 class Fireball;
@@ -25,6 +26,7 @@ private:
 	SDL_Rect GetDefaultViewport();
 	SDL_Rect GetGameplayViewport();
 	SDL_Rect GetUIViewport();
+	SDL_Rect GetBossViewport();
 
 	std::list<Fireball *> fireballs;
 //	RTexture *_background;
@@ -44,6 +46,7 @@ private:
 	int room_id;
 	int heartbeat_tempo;
 	SDL_Point _camera;
+	BossScreen *_boss;
 
 	void updateEnemies(int timems);
 	void updateFireballs(int timems);
@@ -52,6 +55,7 @@ private:
 	void updateShadowsChr(const Character *ch);
 	void updateShadows();
 	void renderGameplay(SDL_Renderer* renderer);
+	void renderBoss(SDL_Renderer* renderer);
 	void renderMap(SDL_Renderer* renderer);
 	void renderShadow(SDL_Renderer* renderer);
 	void renderGUI(SDL_Renderer *renderer);
