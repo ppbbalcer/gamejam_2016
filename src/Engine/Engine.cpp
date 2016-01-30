@@ -19,7 +19,7 @@ void PAUSE() {
 #define DEF_SCREEN_WIDTH 800
 #define DEF_SCREEN_HEIGHT 600
 
-#define FPS_CAP 600
+#define FPS_CAP 60
 #define TICKS_PER_FRAME (1000 / FPS_CAP)
 
 float Q_rsqrt( float number )
@@ -135,7 +135,7 @@ bool Engine::init() {
 	_scene = NULL;
 	_sceneNext = NULL;
 	_font = NULL;
-	_showFPS = false;
+	_showFPS = true;
 
 	_input = new PlayerInput();
 
@@ -327,7 +327,7 @@ void Engine::mainLoop() {
 	}
 
 	Uint32 time = SDL_GetTicks();
-	//int frame_ticks;
+	int frame_ticks;
 	//While application is running
 	while (!_quitMainLoop)
 	{
@@ -399,8 +399,8 @@ void Engine::mainLoop() {
 			//In the main loop after the event loop, we call SDL_RenderClear. This function fills the screen with the color that was last set with SDL_SetRenderDrawColor.
 			//With the screen cleared, we render the texture with SDL_RenderCopy. With the texture rendered, we still have to update the screen, but since we're not using SDL_Surfaces to render we can't use SDL_UpdateWindowSurface. Instead we have to use SDL_RenderPresent.
 		}
-		//if ((frame_ticks = SDL_GetTicks() - timeNew) < TICKS_PER_FRAME)
-		//	SDL_Delay(TICKS_PER_FRAME - frame_ticks);
+		if ((frame_ticks = SDL_GetTicks() - timeNew) < TICKS_PER_FRAME)
+			SDL_Delay(TICKS_PER_FRAME - frame_ticks);
 	}
 
 	_scene->OnFreeBase();
