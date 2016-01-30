@@ -46,6 +46,7 @@ public:
 		STAIRS,
 		SPIKES_ON,
 		SPIKES_OFF,
+		ROOT_TRAP,
 		TRAP,
 		SWITCH_DOWN,
 		EVIL_COMPUTER, /*spawns fireballs everywhere*/

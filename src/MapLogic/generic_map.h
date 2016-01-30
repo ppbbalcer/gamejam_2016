@@ -3,7 +3,7 @@
 #include "map.h"
 #include "field.h"
 #include "field_impl.h"
-#include "spikes.h"
+#include "root_trap.h"
 #include <cstring>
 
 class GenericMap: public IMap {
@@ -93,7 +93,7 @@ public:
 		Field *f;
 		switch (ob) {
 		case OBSTRUCTION_TRAP:
-			f = new Spikes(1);
+			f = new RootTrap();
 			break;
 		default:
 			assert(0);
