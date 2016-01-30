@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BossScreen.cpp" />
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Engine\AStar.cpp" />
     <ClCompile Include="src\Engine\Audio.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="src\victoryscene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BossScreen.h" />
     <ClInclude Include="src\Character.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Engine\AStar.h" />

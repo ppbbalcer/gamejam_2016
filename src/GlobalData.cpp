@@ -53,6 +53,7 @@ ResourceItem texturesScene_game[] = {
 	//{"Resources/ludek.png",				false, false, true, 0xFFFF,	NULL, NULL, 0, 0},
 		{NULL,		false, true, true, 0,		NULL, NULL, 0, 0}, //Alfa problem fixed
 	{"Resources/tiles/walls.png",			false, false, true, 0x0,	NULL, NULL, 0, 0},
+	{ "Resources/bosses/boss_01/boss_bg.png",		false, false, true, 0x0,	NULL, NULL, 0, 0 },
 };
 
 size_t texturesScene_gameSize = sizeof(texturesScene_game) / sizeof(texturesScene_game[0]);

@@ -13,6 +13,8 @@ include_directories(
 )
 
 set(client_src
+	BossScreen.cpp
+	BossScreen.h
 	Character.cpp
 	Character.h
 	Enemy.cpp

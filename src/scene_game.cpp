@@ -80,6 +80,16 @@ SDL_Rect SceneGame::GetUIViewport()
 	return veryTopBar;
 }
 
+SDL_Rect SceneGame::GetBossViewport()
+{
+	SDL_Rect topLeftViewport = GetDefaultViewport();
+	topLeftViewport.y = GP_START_Y * topLeftViewport.h;
+	topLeftViewport.h *= GP_HEIGHT;
+	topLeftViewport.x = 0;
+	topLeftViewport.w = topLeftViewport.w - topLeftViewport.h;
+	return topLeftViewport;
+}
+
 void SceneGame::OnLoad()
 {
 	/* command generating set of tiles found in Resources/tiles/walls.png
@@ -164,10 +174,14 @@ void SceneGame::OnLoad()
 	globalAudios[HEARTBEAT].res.sound->setVolume(0.2f);
 	globalAudios[HEARTBEAT].res.sound->play(-1, 0, HEARTBEAT_BASE_INTERVAL);
 	is_loaded = true;
+
+	_boss = new BossScreen(new RTexture(texturesScene_game[4]));
 }
 
 void SceneGame::OnFree()
 {
+	delete _boss;
+
 	/*deallocate assets*/
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
 		delete *enemy;
@@ -271,6 +285,7 @@ void SceneGame::OnUpdate(int timems)
 	}
 
 	globalAudios[HEARTBEAT].res.sound->update(timems);
+	_boss->OnUpdate(timems);
 	updatePlayers(timems);
 	updateFireballs(timems);
 	updateEnemies(timems);
@@ -423,6 +438,7 @@ void SceneGame::renderMap(SDL_Renderer* renderer) {
 void SceneGame::OnRender(SDL_Renderer* renderer)
 {
 	renderGameplay(renderer);
+	renderBoss(renderer);
 	renderGUI(renderer);
 }
 
@@ -456,6 +472,13 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 	_player1->OnRender(renderer, &_camera);
 
 	renderShadow(renderer);
+}
+
+void SceneGame::renderBoss(SDL_Renderer* renderer)
+{
+	SDL_Rect topLeftViewport = GetBossViewport();
+	SDL_RenderSetViewport(renderer, &topLeftViewport);
+	_boss->OnRender(renderer, topLeftViewport);
 }
 
 void SceneGame::renderGUI(SDL_Renderer *renderer) {

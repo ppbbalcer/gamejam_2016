@@ -13,6 +13,8 @@ public:
 	inline int		getPosY();
 	inline void		setScaleSize(float scale);
 	inline void		setFlip(SDL_RendererFlip flip);
+	inline void		setScaleWidth(int width);
+	inline void		setScaleHeight(int height);
 
 	inline void		render(SDL_Renderer* renderer);
 	void			renderAll(SDL_Renderer* renderer, int x, int y );
@@ -91,6 +93,16 @@ int RTexture::getScaleHeight() {
 
 void RTexture::render(SDL_Renderer* renderer) {
 	renderAll(renderer, _x, _y);
+}
+
+void RTexture::setScaleWidth(int width)
+{
+	_scaleWidth = width;
+}
+
+void RTexture::setScaleHeight(int height)
+{
+	_scaleHeight = height;
 }
 
 #endif /* __RENDER_TEXTURE_H__ */
