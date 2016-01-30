@@ -17,6 +17,8 @@ set(maplogic_src
 	stairs.h
 	switch.cpp
 	switch.h
+	root_trap.cpp
+	root_trap.h
 )
 
 include_directories(
