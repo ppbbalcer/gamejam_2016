@@ -265,7 +265,14 @@ void SceneGame::updateEnemies(int timems)
 		if (_player1->GetState()==Character::DEAD) {
 			direct1 = DIRECT_NO_WAY;
 		} else if ((*enemy)->getAI() != ENEMY_AI_DISTANCE || distX*distX + distY*distY <= distQuad ) {
-			direct1 = findAstar(way1, maxSteps, startX, startY, _player1->getPosBeforeX(), _player1->getPosBeforeY(), map->GetWidth(), map->GetHeight(), IMap_isObstacle, map);
+			direct1 =
+				findAstar(way1, maxSteps,
+					  startX, startY,
+					  _player1->getPosBeforeX(),
+					  _player1->getPosBeforeY(),
+					  map->GetWidth(),
+					  map->GetHeight(),
+					  IMap_isObstacle, map);
 		}
 
 		#ifdef TWO_PLAYER_MODE
@@ -378,8 +385,11 @@ void SceneGame::updateShadows()
 {
 	memset(_arrayShadow, 00, _arrayShadowW * _arrayShadowH
 	       * sizeof(_arrayShadowH));
-	updateShadowsChr(_player1);
-
+	//updateShadowsChr(_player1);
+	updateShadowsChr(*_enemys.begin());
+	for (auto enemy : _enemys) {
+		updateShadowsChr(enemy);
+	}
 
 	
 	for (int i = 0 ; i != map->GetHeight(); i++) {

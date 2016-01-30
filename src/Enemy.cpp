@@ -102,15 +102,15 @@ const AStarWay_t& Enemy::getWay()
 void Enemy::OnRender(SDL_Renderer *renderer)
 {
 	//For debug A*
-	//{ //Astar Example
-	//	int tileSize = EngineInst->getTileSize();
-	//	for(std::list<AStartPoint_t>::iterator step = way.begin(); step != way.end(); ++step) {
-	//		int x = (*step).first;
-	//		int y = (*step).second;
-	//		//EngineInst->font()->printfLT(x*tileSize, y*tileSize, "X");
-	//		_texture->renderTile(renderer, x*tileSize, y*tileSize);
+	{ //Astar Example
+		int tileSize = EngineInst->getTileSize();
+		for(std::list<AStartPoint_t>::iterator step = way.begin(); step != way.end(); ++step) {
+			int x = (*step).first;
+			int y = (*step).second;
+			//EngineInst->font()->printfLT(x*tileSize, y*tileSize, "X");
+			_texture->renderTile(renderer, x*tileSize, y*tileSize);
 
-	//	}
-	//}
+		}
+	}
 	Character::OnRender(renderer);
 }

@@ -13,6 +13,7 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 	_health = hp;
 	printf("PLAYER: %u %u\n", _health, _mana);
 	_time_to_shot=0;
+	viewangle = M_PI;
 };
 
 Player::~Player(void) {};

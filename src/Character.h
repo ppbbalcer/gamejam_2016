@@ -111,6 +111,8 @@ private:
 	int _pos_before_y;
 	int _pos_after_y;
 protected:
+	int view_dir_x;
+	int view_dir_y;
 	int last_dir_x;
 	int last_dir_y;
 	CharacterType _type;
@@ -119,7 +121,7 @@ protected:
 	 * visibility angle in degrees.
 	 * valid values: 360, 180, 90. 
 	 */
-	int viewangle;
+	float viewangle;
 public:
 	Equipment equipment;
 
