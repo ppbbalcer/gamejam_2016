@@ -65,7 +65,7 @@ public:
 	void OnRenderCircle(int radius) const;
 	/* return true if character can see a tile given map coordinates */
 	bool canSee(int x, int y) const;
-	virtual void OnRender(SDL_Renderer *renderer);
+	virtual void OnRender(SDL_Renderer *renderer, SDL_Point *camera);
 	void renderAvatar(SDL_Renderer *renderer,
 			  int x, int y,
 			  SDL_RendererFlip flip);
