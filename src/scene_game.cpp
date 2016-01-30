@@ -183,55 +183,30 @@ void SceneGame::updatePlayers(int timems)
 
 	//const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 	/*react on keys for both players*/
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_DOWN)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_DOWN)) {
 		_player1->updateDirection(DIRECT_DOWN);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_UP)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_UP)) {
 		_player1->updateDirection(DIRECT_UP);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_LEFT)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_LEFT)) {
 		_player1->updateDirection(DIRECT_LEFT);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_MOVE_RIGHT)) {
+	if (EngineInst->input()->getState(INPUT_MOVE_RIGHT)) {
 		_player1->updateDirection(DIRECT_RIGHT);
 	}
 
-	if (EngineInst->input()->getState(PLAYER_1_SHOOT)) {
+	if (EngineInst->input()->getState(INPUT_SHOOT)) {
 		Fireball * fb = _player1->Shoot();
 		if (fb)
 			fireballs.push_back(fb);
 	}
 
-#ifdef TWO_PLAYER_MODE
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_DOWN)) {
-		_player2->updateDirection(DIRECT_DOWN);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_UP)) {
-		_player2->updateDirection(DIRECT_UP);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_LEFT)) {
-		_player2->updateDirection(DIRECT_LEFT);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_MOVE_RIGHT)) {
-		_player2->updateDirection(DIRECT_RIGHT);
-	}
-
-	if (EngineInst->input()->getState(PLAYER_2_SHOOT)) {
-		Fireball * fb = _player2->Shoot();
-		if (fb)
-			fireballs.push_back(fb);
-	}
-#endif
 	_player1->OnUpdate(timems);
-	#ifdef TWO_PLAYER_MODE
-	_player2->OnUpdate(timems);
-	#endif
+
 }
 
 void SceneGame::updateEnemies(int timems)
@@ -321,11 +296,11 @@ void SceneGame::updateEnemies(int timems)
 
 void SceneGame::OnUpdate(int timems)
 {
-	if (EngineInst->input()->getState(GAME_QUIT)) {
+	if (EngineInst->input()->getState(INPUT_GAME_QUIT)) {
 		EngineInst->breakMainLoop();
 		return;
 	}
-	if (EngineInst->input()->getState(GAME_RESET)) {
+	if (EngineInst->input()->getState(INPUT_GAME_RESET)) {
 		level->resetCurrent();
 		return;
 	}
