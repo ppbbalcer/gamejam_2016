@@ -13,6 +13,13 @@ enum menu_option {
 	MAX_MENU_OPTION
 };
 
+enum menu_mode {
+	MENU_MODE_NORMAL,
+	MENU_MODE_SELECT,
+
+	MAX_MENU_MODE
+};
+
 class MenuScene: public Scene {
 public:
 	MenuScene(int world, int lvl);
@@ -26,10 +33,16 @@ public:
 	}
 
 	virtual void OnUpdate(int timems);
-
-	virtual void OnRender(SDL_Renderer* renderer) ;
+	virtual void OnRender(SDL_Renderer* renderer);
 private:
 	Level *level;
+	int world;
+	int lvl;
+
+	void handleNormalModeInput();
+	void handleSelectModeInput();
+
+	enum menu_mode mode;
 	enum menu_option current;
 };
 

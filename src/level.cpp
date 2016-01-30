@@ -5,6 +5,7 @@
 Level::Level(int id, int initial_scene) {
 	this->id = id;
 	this->initial_scene = initial_scene;
+	scenes.clear();
 	current_scene = -1;
 }
 
@@ -12,7 +13,6 @@ Level::~Level() {
 	for (scenes_map_t::iterator itr = scenes.begin(); itr != scenes.end(); ++itr) {
 		delete itr->second;
 	}
-	scenes.clear();
 }
 
 SceneGame* Level::getCurrentScene() {
