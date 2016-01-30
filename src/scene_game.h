@@ -49,8 +49,7 @@ public:
 	virtual void OnRenderShadow(SDL_Renderer* renderer);
 	virtual ~SceneGame();
 
-	void renderGUI(SDL_Renderer *renderer, int tileSize, const SDL_Rect &veryTopBar, int playerBarYPadding,
-				   int playerBarXPadding, int playerBarHeight, int paddingBetweenBars) const;
+	void renderGUI(SDL_Renderer *renderer, int tileSize) const;
 };
 
 bool IMap_isObstacle(int x, int y, void* objMap);
