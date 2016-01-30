@@ -2,14 +2,23 @@
 #include <SDL.h>
 
 PlayerInput::PlayerInput() {
-	setBinding(GAME_QUIT, SDL_SCANCODE_ESCAPE);
-	setBinding(GAME_RESET, SDL_SCANCODE_R);
-	setBinding(PLAYER_1_MOVE_UP, SDL_SCANCODE_UP);
-	setBinding(PLAYER_1_MOVE_DOWN, SDL_SCANCODE_DOWN);
-	setBinding(PLAYER_1_MOVE_LEFT, SDL_SCANCODE_LEFT);
-	setBinding(PLAYER_1_MOVE_RIGHT, SDL_SCANCODE_RIGHT);
-	setBinding(PLAYER_1_SHOOT, SDL_SCANCODE_RCTRL);
-	setBinding(PLAYER_1_USE, SDL_SCANCODE_RALT);
+	setKeyboardBinding(GAME_QUIT, SDL_SCANCODE_ESCAPE);
+	setKeyboardBinding(GAME_RESET, SDL_SCANCODE_R);
+	setKeyboardBinding(PLAYER_1_MOVE_UP, SDL_SCANCODE_UP);
+	setKeyboardBinding(PLAYER_1_MOVE_DOWN, SDL_SCANCODE_DOWN);
+	setKeyboardBinding(PLAYER_1_MOVE_LEFT, SDL_SCANCODE_LEFT);
+	setKeyboardBinding(PLAYER_1_MOVE_RIGHT, SDL_SCANCODE_RIGHT);
+	setKeyboardBinding(PLAYER_1_SHOOT, SDL_SCANCODE_RCTRL);
+	setKeyboardBinding(PLAYER_1_USE, SDL_SCANCODE_RALT);
+
+	setControllerBinding(GAME_QUIT, SDL_CONTROLLER_BUTTON_INVALID);
+	setControllerBinding(GAME_RESET, SDL_CONTROLLER_BUTTON_INVALID);
+	setControllerBinding(PLAYER_1_MOVE_UP, SDL_CONTROLLER_BUTTON_DPAD_UP);
+	setControllerBinding(PLAYER_1_MOVE_DOWN, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+	setControllerBinding(PLAYER_1_MOVE_LEFT, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+	setControllerBinding(PLAYER_1_MOVE_RIGHT, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+	setControllerBinding(PLAYER_1_SHOOT, SDL_CONTROLLER_BUTTON_A);
+	setControllerBinding(PLAYER_1_USE, SDL_CONTROLLER_BUTTON_B);
 }
 
 void PlayerInput::addController(int id) {
@@ -32,20 +41,25 @@ void PlayerInput::removeController(int id) {
 }
 
 void PlayerInput::handleControllerButton(const SDL_ControllerButtonEvent sdlEvent) {
-	printf("gc button press\n");
+	// unused
 }
 
 void PlayerInput::handleControllerAxis(const SDL_ControllerAxisEvent sdlEvent) {
-	printf("gc axis move\n");
+	// unused
 }
 
 void PlayerInput::update() {
 	const unsigned char *currentKeyStates = SDL_GetKeyboardState(NULL);
 
 	for (int i = 0; i < MAX_INPUT_TYPE; ++i) {
-		input_state[i] = currentKeyStates[input_bindings[i]];
+		input_state[i] = currentKeyStates[keyboard_input_bindings[i]];
 	}
 
+	for (int i = 0; i < MAX_INPUT_TYPE; ++i) {
+		for (std::pair<int, SDL_GameController *> gc : controllers) {
+			input_state[i] = SDL_GameControllerGetButton(gc.second, controller_input_bindings[i]);
+		}
+	}
 
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) ) {
@@ -76,6 +90,10 @@ int PlayerInput::getState(enum input_type type) {
 	return input_state[type];
 }
 
-void PlayerInput::setBinding(enum input_type type, unsigned char key) {
-	input_bindings[type] = key;
+void PlayerInput::setKeyboardBinding(enum input_type type, unsigned char key) {
+	keyboard_input_bindings[type] = key;
+}
+
+void PlayerInput::setControllerBinding(enum input_type type, SDL_GameControllerButton btn) {
+	controller_input_bindings[type] = btn;
 }
