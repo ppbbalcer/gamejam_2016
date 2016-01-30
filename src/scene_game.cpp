@@ -583,24 +583,10 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 
 	OnRenderShadow(renderer);
 
-	// Render top bar
-	SDL_Rect veryTopBar;
-	int playerBarYPadding = 5;
-	int playerBarXPadding = 20;
-	int playerBarHeight = 20;
-	int paddingBetweenBars = 5;
 
-
-	veryTopBar.x = 0;
-	veryTopBar.y = 20;
-	veryTopBar.w = EngineInst->screen_width();
-	veryTopBar.h = 50;
-
-	SDL_RenderSetViewport(renderer, &veryTopBar);
 
 	/* PLAYER 1 */
-	renderGUI(renderer, tileSize, veryTopBar, playerBarYPadding, playerBarXPadding, playerBarHeight,
-			  paddingBetweenBars);
+	renderGUI(renderer, tileSize);
 #ifdef TWO_PLAYER_MODE
 	/* PLAYER 2 */
 	{
@@ -639,8 +625,22 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 #endif 
 }
 
-void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize, const SDL_Rect &veryTopBar, int playerBarYPadding,
-						  int playerBarXPadding, int playerBarHeight, int paddingBetweenBars) const {
+void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize) const {
+	// Render top bar
+	SDL_Rect veryTopBar;
+	int playerBarYPadding = 5;
+	int playerBarXPadding = 20;
+	int playerBarHeight = 20;
+	int paddingBetweenBars = 5;
+
+
+	veryTopBar.x = 0;
+	veryTopBar.y = 20;
+	veryTopBar.w = EngineInst->screen_width();
+	veryTopBar.h = 50;
+
+	SDL_RenderSetViewport(renderer, &veryTopBar);
+
 		_player1->renderAvatar(renderer, EngineInst->screen_width() - tileSize - playerBarXPadding, 0, SDL_FLIP_HORIZONTAL);
 		EngineInst->font()->printf(EngineInst->screen_width()  - tileSize - playerBarXPadding - 210, playerBarYPadding + veryTopBar.y, ALIGN_RIGHT | ALIGN_TOP, "Player controls UP, DOWN, LEFT, RIGHT CTRL-Fire");
 
