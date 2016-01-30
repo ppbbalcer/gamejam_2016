@@ -77,12 +77,14 @@ void MenuScene::handleSelectModeInput() {
 	}
 	if (EngineInst->input()->getState(INPUT_MENU_LEFT)) {
 		world--;
+		level = 0;
 		if (world < 0)
 			world = 0;
 	}
 
 	if (EngineInst->input()->getState(INPUT_MENU_RIGHT)) {
 		world++;
+		level = 0;
 		if (world == WORLDS)
 			world = WORLDS - 1;
 	}
