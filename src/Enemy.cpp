@@ -151,7 +151,7 @@ const AStarWay_t& Enemy::getWay()
 	return way;
 }
 
-void Enemy::OnRender(SDL_Renderer *renderer)
+void Enemy::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
 {
 	//For debug A*
 	{ //Astar Example
@@ -164,5 +164,5 @@ void Enemy::OnRender(SDL_Renderer *renderer)
 
 		}
 	}
-	Character::OnRender(renderer);
+	Character::OnRender(renderer, camera);
 }

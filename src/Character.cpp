@@ -222,12 +222,12 @@ bool Character::canSee(int x, int y) const
 }
 
 
-void Character::OnRender(SDL_Renderer *renderer)
+void Character::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
 {
 	if (GetState() == DEAD) {
-		_texture->renderTile(renderer, (int)getPosX(), (int)getPosY(), 30, SDL_FLIP_NONE);
+		_texture->renderTile(renderer, (int)getPosX() - camera->x, (int)getPosY() - camera->y, 30, SDL_FLIP_NONE);
 	} else if (GetState() == ALIVE) {
-		_texture->renderTile(renderer, (int)getPosX(), (int)getPosY());
+		_texture->renderTile(renderer, (int)getPosX() - camera->x, (int)getPosY() - camera->y);
 	}
 }
 

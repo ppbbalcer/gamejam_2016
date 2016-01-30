@@ -41,25 +41,28 @@ private:
 	Level *level;
 	int room_id;
 	int heartbeat_tempo;
+	SDL_Point _camera;
+
 	void updateEnemies(int timems);
 	void updateFireballs(int timems);
 	void updatePlayers(int timems);
+	void updateCamera();
 	void updateShadowsChr(const Character *ch);
-
 	void updateShadows();
+	void renderGameplay(SDL_Renderer* renderer);
+	void renderMap(SDL_Renderer* renderer);
+	void renderShadow(SDL_Renderer* renderer);
+	void renderGUI(SDL_Renderer *renderer) const;
+	void drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const;
+	int dull(int) const;
+
 public:
 	SceneGame(Level *level, int room_id);
 	virtual void OnLoad();
 	virtual void OnFree();
 	virtual void OnUpdate(int timems);
 	virtual void OnRender(SDL_Renderer* renderer);
-	virtual void OnRenderMap(SDL_Renderer* renderer);
-	virtual void OnRenderShadow(SDL_Renderer* renderer);
 	virtual ~SceneGame();
-
-	void renderGUI(SDL_Renderer *renderer, int tileSize) const;
-	void drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const;
-	int dull(int) const;
 };
 
 bool IMap_isObstacle(int x, int y, void* objMap);
