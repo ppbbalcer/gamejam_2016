@@ -57,12 +57,12 @@ public:
 	void heal(int howMuchHeal);
 	virtual void Win();
 private:
-	bool canSeeHlp(int x, int y, int radius);
+	bool canSeeHlp(int x, int y, int radius) const;
 public:
 	/* precalc for rendering circle; */
-	void OnRenderCircle(int radius);
+	void OnRenderCircle(int radius) const;
 	/* return true if character can see a tile given map coordinates */
-	bool canSee(int x, int y);
+	bool canSee(int x, int y) const;
 	virtual void OnRender(SDL_Renderer *renderer);
 	void renderAvatar(SDL_Renderer *renderer,
 			  int x, int y,
@@ -73,15 +73,15 @@ public:
 	int SetPowerLevel(int x);
 
 	/* in pixels */
-	float getPosX();
-	float getPosY();
+	float getPosX() const;
+	float getPosY() const;
 	/* following four routines return position in TILES */
 	/* position FROM which character is moving */
-	int getPosBeforeX();
-	int getPosAfterX();
+	int getPosBeforeX() const;
+	int getPosAfterX() const;
 	/* position to which character is moving */
-	int getPosBeforeY();
-	int getPosAfterY();
+	int getPosBeforeY() const;
+	int getPosAfterY() const;
 	/* if position TO equals FROM, character is NOT moving */
 
 	void updateDirection(DIRECT directMove);
@@ -98,7 +98,7 @@ protected:
 		_state=state;
 	}
 private:
-	std::vector<std::vector<bool>> visibility;
+	mutable std::vector<std::vector<bool>> visibility;
 	void setPos(float x, float y);
 	int _speed;
 	int _state;
@@ -108,15 +108,16 @@ private:
 	int _pos_after_x;
 	int _pos_before_y;
 	int _pos_after_y;
-	/**
-	 * visibility angle in degrees
-	 */
-	int viewangle;
 protected:
 	int last_dir_x;
 	int last_dir_y;
 	CharacterType _type;
 	int _health;
+	/**
+	 * visibility angle in degrees.
+	 * valid values: 360, 180, 90. 
+	 */
+	int viewangle;
 
 };
 

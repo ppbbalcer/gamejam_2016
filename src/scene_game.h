@@ -36,7 +36,7 @@ private:
 	void updateEnemies(int timems);
 	void updateFireballs(int timems);
 	void updatePlayers(int timems);
-	void updateShadowsChr(Character *ch);
+	void updateShadowsChr(const Character *ch);
 
 	void updateShadows();
 public:
