@@ -100,24 +100,31 @@ void Enemy::OnUpdate(int time_ms)
 }
 void Enemy::updateDirection(DIRECT directMove)
 {
+	Character::updateDirection(directMove);
 	default_dir_x = view_dir_x;
 	default_dir_y = view_dir_y;
+	printf("DEFDIR SET %d %d \n", default_dir_x, default_dir_y);
 	if (_map->GetFieldAt(getPosAfterX()+default_dir_x,
 			     getPosAfterY()+default_dir_y)
 	    ->IsObstacle()) {
-		puts("ZERO");
+		puts("ZERO SET");
 		default_dir_x = default_dir_y = 0;
 	}
-	Character::updateDirection(directMove);
 }
 
 DIRECT Enemy::getRandomDirection()
 {
 	//clock_t now = clock();
+	wayAge = 0.0f;
 	if (_time_to_random_direction) {
 		return DIRECT_NO_WAY;
 	}
-	if (default_dir_y || default_dir_y) {
+	if (_map->GetFieldAt(getPosAfterX()+default_dir_x,
+			     getPosAfterY()+default_dir_y)
+	    ->IsObstacle()) {
+		default_dir_x = default_dir_y = 0;
+	}
+	if (default_dir_y || default_dir_x) {
 		if (default_dir_y > 0) {
 			return DIRECT_DOWN;
 		} else if (default_dir_y < 0) {
