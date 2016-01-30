@@ -130,7 +130,8 @@ void SceneGame::OnLoad()
 	_arrayShadowW = map->GetWidth();
 	_arrayShadowH = map->GetHeight();
 	_arrayShadow = new int[_arrayShadowW*_arrayShadowH*sizeof(_arrayShadowH)];
-
+	_arrayVisibility = new bool[_arrayShadowW*_arrayShadowH*sizeof(bool)];
+	memset(_arrayVisibility, 0, _arrayShadowW*_arrayShadowH*sizeof(bool));
 	//Load media
 	if (!success) {
 		printf("Failed to load media Scene02Renderer !\n");
@@ -148,7 +149,8 @@ void SceneGame::OnFree()
 		delete *enemy;
 	}
 	_enemys.clear();
-	delete _arrayShadow;
+	delete[] _arrayShadow;
+	delete[] _arrayVisibility;
 	_arrayShadow = NULL;
 
 	//Destroy textures???
@@ -340,7 +342,7 @@ void SceneGame::updateShadowsChr(Character *ch)
 	int idx;
 	int centerTiltX = ch->getPosAfterX();
 	int centerTiltY = ch->getPosAfterY();
-
+	ch->OnRenderCircle(radius);
 	for(int y=-radius; y<=radius; ++y) {
 		for(int x=-radius; x<=radius; ++x) {
 			alfa = 255*(1-sqrf(
@@ -353,6 +355,7 @@ void SceneGame::updateShadowsChr(Character *ch)
 				   && yy >= 0 && yy < _arrayShadowH) {
 					idx = yy*_arrayShadowW + xx;
 					_arrayShadow[idx] += alfa;
+					_arrayVisibility[idx] = true;
 					if(_arrayShadow[idx] > 255) {
 						_arrayShadow[idx] = 255;
 					}
@@ -396,7 +399,12 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 			{
 				alfa = map->getParams()->alpha;
 			}
-			_tiles->setAlpha(alfa);
+			if (!_arrayVisibility[y*_arrayShadowW + x]) {
+				_tiles->setAlpha(255);
+
+			} else {
+				_tiles->setAlpha(alfa);
+			}
 			_tiles->renderTile(renderer,
 					   x*tileSize, y*tileSize,
 					   35, SDL_FLIP_NONE);

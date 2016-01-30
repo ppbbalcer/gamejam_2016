@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include "MapLogic/map.h"
 #include "fireball.h"
-
 #define MAX_HEALTH 100
 #define MAX_MANA 100
 #define DEFAULT_POWER_LEVEL 25;
@@ -57,8 +56,11 @@ public:
 	virtual int crucio(int howMuchCrucio);
 	void heal(int howMuchHeal);
 	virtual void Win();
+private:
+	bool canSeeHlp(int x, int y, int radius);
+public:
 	/* precalc for rendering circle; */
-	void OnRenderCircle();
+	void OnRenderCircle(int radius);
 	/* return true if character can see a tile given map coordinates */
 	bool canSee(int x, int y);
 	virtual void OnRender(SDL_Renderer *renderer);
@@ -96,6 +98,7 @@ protected:
 		_state=state;
 	}
 private:
+	std::vector<std::vector<bool>> visibility;
 	void setPos(float x, float y);
 	int _speed;
 	int _state;

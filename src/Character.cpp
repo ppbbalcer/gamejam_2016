@@ -73,41 +73,110 @@ int Character::SetPowerLevel(int x)
 	return (power_level = x);
 }
 
-
-void Character::OnRenderCircle()
-{
-	// precalc
-}
-
-bool Character::canSee(int x0, int y0)
+bool Character::canSeeHlp(int x0, int y0, int radius)
 {
 	int x1 = getPosAfterX();
 	int y1 = getPosAfterY();
-	bool landscape = abs(x1 - x0) > abs(y1 - y0);
+	bool landscape = abs(x1 - x0) >= abs(y1 - y0);
 	int num_fields = std::max<int>(abs(x1 - x0) , abs(y1 - y0));
 	bool negative = landscape ? ( x0 > x1) : (y0 > y1);
 	int sign = negative ? -1 : +1;
+	bool secondobstacle = false;
 	int x, y;
+	printf("%d, %d\n", abs(x1 - x0) , abs(y1 - y0));
 	// iterate from (x0, y0 to x1, y1)
-	for (int i = 0 ; i != num_fields; ++i) {
+	for (int i = num_fields - 1 ; i >= 0; --i) {
 		if (landscape) {
+			puts("K");
 			x = x0 + i * sign;
 			y = y0 + i * sign * ( y1 - y0 ) / (x1 - x0);
 		} else {
+			puts("Z");
 			y = y0 + i * sign;
 			x = x0 + i * sign * ( x1 - x0 ) / (y1 - y0);
 		}
-		if (x<0 || y<0 || x>= _map->GetWidth()
-		    || y>= _map->GetHeight()) {
-
-		} else {
+		printf("xy %d %d ", x, y);
+		if (x >= 0 && y >= 0 && x < _map->GetWidth()
+		    && y < _map->GetHeight()) {
 			IField * f = _map->GetFieldAt(x,y);
-			if (!f) return false;
-			if (f->IsObstacle() && ! f->WhoIsHere()) return false;
+			//continue;
+			if (f->IsObstacle() && ! f->WhoIsHere()) {	
+				visibility[x1 - x + radius][y1 - y + radius] = false;
+				secondobstacle = true;
+			}
+			if (secondobstacle) {
+				visibility[x1 - x + radius][y1 - y + radius] = false;
+			} else {
+				visibility[x1 - x + radius][y1 - y + radius] = true;
+			}
 		}
-
 	}
 	return true;
+}
+// one less than x in terms of absolute value
+int one_less_av(int x)
+{
+	if (x > 0) {
+		return x - 1;
+	} else if (x < 0) {
+		return x + 1;
+	} else {
+		return 0;
+	}
+	
+}
+void Character::OnRenderCircle(int radius)
+{
+	visibility.assign(radius * 2 + 1,
+			  std::vector<bool>(radius * 2 + 1 , false));
+	for (int i = 0 ; i != radius * 2 + 1 ; ++i) {
+		// left edge
+		canSeeHlp(getPosAfterX() - radius,
+			  getPosAfterY() - radius + i, radius);
+		// right edge
+		canSeeHlp(getPosAfterX() + radius,
+			  getPosAfterY() - radius + i, radius);
+		// top edge
+		canSeeHlp(getPosAfterX() - radius + i,
+			  getPosAfterY() - radius, radius);
+		// bottom edge
+		canSeeHlp(getPosAfterX() - radius + i,
+			  getPosAfterY() + radius, radius);
+	}
+	visibility[radius][radius] = true;
+	/* second pass - set visibility to discovered obstacles */
+
+	for (int i = radius ; i >= 0 ; --i) {
+		for (int j = radius ; j >= 0 ; --j) {
+			for (int y0 : {-i, i}) {
+				for (int x0 : {-j, j}) {
+					int x = x0 + getPosAfterX();
+					int y = y0 + getPosAfterY();
+					if (x >= 0 && y >= 0 && x < _map->GetWidth()
+					    && y < _map->GetHeight()) {
+						IField * f = _map->GetFieldAt(x, y);
+						// continue;
+						if (f->IsObstacle() && ! f->WhoIsHere()) {	
+							if (visibility[-one_less_av(x0) + radius][-y0 + radius] ||
+							    visibility[-one_less_av(x0) + radius][-one_less_av(y0) + radius] ||
+							    visibility[-x0 + radius][-one_less_av(y0) + radius]) {
+								visibility[-x0 + radius][-y0 + radius] = true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+bool Character::canSee(int x, int y)
+{
+	int x1 = getPosAfterX();
+	int y1 = getPosAfterY();
+	return visibility[x1 - x + visibility.size()/2]
+		[y1 - y + visibility.size()/2];
 }
 
 

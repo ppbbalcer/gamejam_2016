@@ -27,6 +27,7 @@ private:
 	int _arrayShadowW;
 	int _arrayShadowH;
 	int *_arrayShadow;
+	bool *_arrayVisibility;
 	IMap *map;
 	bool is_loaded;
 	Level *level;
