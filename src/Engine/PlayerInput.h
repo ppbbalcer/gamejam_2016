@@ -1,7 +1,14 @@
 #ifndef __PLAYER_INPUT_H
 #define __PLAYER_INPUT_H
 
+#include <map>
+#include <SDL.h>
+
 enum input_type {
+	/* general inputs */
+	GAME_QUIT,
+	GAME_RESET,
+
 	/* game scene inputs */
 	PLAYER_1_MOVE_UP,
 	PLAYER_1_MOVE_DOWN,
@@ -26,6 +33,13 @@ public:
 private:
 	int input_state[MAX_INPUT_TYPE];
 	unsigned char input_bindings[MAX_INPUT_TYPE];
+
+	std::map<int, SDL_GameController*> controllers;
+
+	void addController(int id);
+	void removeController(int id);
+	void handleControllerButton(const SDL_ControllerButtonEvent sdlEvent);
+	void handleControllerAxis(const SDL_ControllerAxisEvent sdlEvent);
 };
 
 #endif

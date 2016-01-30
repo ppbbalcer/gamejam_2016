@@ -321,17 +321,15 @@ void SceneGame::updateEnemies(int timems)
 
 void SceneGame::OnUpdate(int timems)
 {
-	SDL_Event e;
-	while (SDL_PollEvent(&e) != 0) {
-		if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN  && e.key.keysym.sym == SDLK_ESCAPE)) {
-			EngineInst->breakMainLoop();
-			return;
-		}
-		if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_r) {
-			level->resetCurrent();
-			return;
-		}
+	if (EngineInst->input()->getState(GAME_QUIT)) {
+		EngineInst->breakMainLoop();
+		return;
 	}
+	if (EngineInst->input()->getState(GAME_RESET)) {
+		level->resetCurrent();
+		return;
+	}
+
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	updatePlayers(timems);
 	updateFireballs(timems);
