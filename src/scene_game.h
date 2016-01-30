@@ -50,6 +50,8 @@ public:
 	virtual ~SceneGame();
 
 	void renderGUI(SDL_Renderer *renderer, int tileSize) const;
+	void drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const;
+	int dull(int) const;
 };
 
 bool IMap_isObstacle(int x, int y, void* objMap);

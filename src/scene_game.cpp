@@ -646,34 +646,36 @@ void SceneGame::renderGUI(SDL_Renderer *renderer, int tileSize) const {
 		_player1->renderAvatar(renderer, defaultX, 0, SDL_FLIP_HORIZONTAL);
 		EngineInst->font()->printf(defaultX - 210, playerBarYPadding + veryTopBar.y, ALIGN_RIGHT | ALIGN_TOP, "Player controls UP, DOWN, LEFT, RIGHT CTRLl-Fire");
 
-		SDL_Rect p1_hp_rect = { defaultX - _player1->getHealth() * 2, playerBarYPadding, _player1->getHealth() * 2, playerBarHeight};
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderFillRect(renderer, &p1_hp_rect);
-		EngineInst->font()->printf(0, 0, ALIGN_LEFT | ALIGN_TOP, "Room %u-%u", level->getId(), room_id);
-		//Frame
-		SDL_SetRenderDrawColor(renderer, 200, 0, 30, SDL_ALPHA_OPAQUE);
-		p1_hp_rect.x = defaultX - 200;
-		p1_hp_rect.w = 200;
-		SDL_RenderDrawRect( renderer, &p1_hp_rect );
-		p1_hp_rect.x++;
-		p1_hp_rect.y++;
-		p1_hp_rect.w -= 2;
-		p1_hp_rect.h -= 2;
-		SDL_RenderDrawRect( renderer, &p1_hp_rect );
+	drawBar(renderer, _player1->getHealth(), playerBarYPadding, playerBarHeight, defaultX, 255, 0, 0);
+	EngineInst->font()->printf(0, 0, ALIGN_LEFT | ALIGN_TOP, "Room %u-%u", level->getId(), room_id);
 
-		SDL_Rect p1_mana_rect = { defaultX - _player1->getMana() * 2, playerBarHeight + paddingBetweenBars + playerBarYPadding, _player1->getMana() * 2, playerBarHeight};
-		SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderFillRect(renderer, &p1_mana_rect);
+	playerBarYPadding+=paddingBetweenBars;
+	playerBarYPadding+=playerBarHeight;
+	drawBar2(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
 
-		//Frame
-		SDL_SetRenderDrawColor(renderer, 20, 20, 180, SDL_ALPHA_OPAQUE);
-		p1_mana_rect.x = defaultX - 200;
-		p1_mana_rect.w = 200;
-		SDL_RenderDrawRect( renderer, &p1_mana_rect );
-		p1_mana_rect.x++;
-		p1_mana_rect.y++;
-		p1_mana_rect.w -= 2;
-		p1_mana_rect.h -= 2;
-		SDL_RenderDrawRect( renderer, &p1_mana_rect );
+}
 
-	}
+void SceneGame::drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const {
+	SDL_Rect rect = {defaultX - value * 2, playerBarYPadding, value * 2, playerBarHeight};
+	SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_RenderFillRect(renderer, &rect);
+	//Frame
+	SDL_SetRenderDrawColor(renderer, dull(r), dull(g), dull(b), SDL_ALPHA_OPAQUE);
+	rect.x = defaultX - 200;
+	rect.w = 200;
+	SDL_RenderDrawRect( renderer, &rect );
+	rect.x++;
+	rect.y++;
+	rect.w -= 2;
+	rect.h -= 2;
+	SDL_RenderDrawRect( renderer, &rect );
+}
+
+int SceneGame::dull(int n) const {
+	int dullOffset = 30;
+	if(n>128+dullOffset)
+		n+=dullOffset;
+	if(n<128-dullOffset)
+		n-=dullOffset;
+	return n;
+}
