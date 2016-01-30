@@ -32,8 +32,8 @@ void Enemy::OnUpdate(int time_ms)
 //	time_ms = 9;
 
 	Character::OnUpdate(time_ms);
-
-	wayAge += time_ms;
+	
+	wayAge += time_ms*0.001;
 	
 	if (!way.empty()) {
 		AStartPoint_t & next = *way.begin();

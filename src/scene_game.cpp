@@ -405,6 +405,10 @@ void SceneGame::updateShadows()
 		updateShadowsChr(enemy);
 	}
 #else
+	for (auto enemy : _enemys) {
+		enemy->OnRenderCircle(9);
+	}
+	
 	updateShadowsChr(_player1);
 #endif
 
