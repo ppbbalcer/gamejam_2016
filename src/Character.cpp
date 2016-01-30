@@ -360,13 +360,12 @@ void Character::updateDirection(DIRECT directMove)
 		      prev_target_x==_pos_before_x))
 			_map->GetFieldAt(prev_target_x, prev_target_y)
 				->LeftField();
-		if (!_map->GetFieldAt(_pos_after_x, _pos_after_y)
-		    ->IsOccupied())
-			
-			_map->GetFieldAt(_pos_after_x, _pos_after_y)
+
+		if (!_map->GetFieldAt(_pos_before_x, _pos_before_y)
+		    ->IsOccupied())			
+			_map->GetFieldAt(_pos_before_x, _pos_before_y)
 				->SteppedOver(this);
 	}
-
 }
 
 void Character::OnUpdate(int time_ms)

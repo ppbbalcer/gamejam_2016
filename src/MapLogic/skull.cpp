@@ -35,6 +35,7 @@ Skull::Skull(bool golden, bool _enabled):
 {
 	enabled=_enabled;
 }
+
 //extern int doskey_active;
 void Skull::SteppedOver(Character * who)
 {
@@ -48,6 +49,7 @@ void Skull::SteppedOver(Character * who)
 	}
 	globalAudios[BUTTON_ON].res.sound->play();
 }
+
 void Skull::LeftField()
 {
 	Field::LeftField();
