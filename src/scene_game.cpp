@@ -344,7 +344,7 @@ void SceneGame::OnUpdate(int timems)
 float sqrf(float a) {
 	return a * a;
 }
-void SceneGame::updateShadowsChr(Character *ch) 
+void SceneGame::updateShadowsChr(const Character *ch) 
 {
 	int radius = 9;
 	int alfa,xx,yy;
@@ -376,10 +376,9 @@ void SceneGame::updateShadowsChr(Character *ch)
 
 void SceneGame::updateShadows()
 {
-	memset(_arrayShadow, 00, _arrayShadowW*_arrayShadowH*sizeof(_arrayShadowH));
-
+	memset(_arrayShadow, 00, _arrayShadowW * _arrayShadowH
+	       * sizeof(_arrayShadowH));
 	updateShadowsChr(_player1);
-	//updateShadowsChr(_player2);
 
 
 	
@@ -409,7 +408,7 @@ void SceneGame::OnRenderShadow(SDL_Renderer* renderer) {
 				alfa = map->getParams()->alpha;
 			}
 			if (!_arrayVisibility[y*_arrayShadowW + x]) {
-				_tiles->setAlpha(255);
+				_tiles->setAlpha(180);
 
 			} else {
 				_tiles->setAlpha(alfa);

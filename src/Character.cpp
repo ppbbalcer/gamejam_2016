@@ -18,6 +18,7 @@ Character::Character(RTexture* texture, IMap * map)
 				_pos_before_y = 0;
 	last_dir_x = 1;
 	last_dir_y = 0;
+	viewangle = 360;
 }
 
 Character::~Character()
@@ -73,7 +74,7 @@ int Character::SetPowerLevel(int x)
 	return (power_level = x);
 }
 
-bool Character::canSeeHlp(int x0, int y0, int radius)
+bool Character::canSeeHlp(int x0, int y0, int radius) const
 {
 	int x1 = getPosAfterX();
 	int y1 = getPosAfterY();
@@ -125,7 +126,7 @@ int one_less_av(int x)
 	}
 	
 }
-void Character::OnRenderCircle(int radius)
+void Character::OnRenderCircle(int radius) const
 {
 	visibility.assign(radius * 2 + 1,
 			  std::vector<bool>(radius * 2 + 1 , false));
@@ -171,7 +172,7 @@ void Character::OnRenderCircle(int radius)
 	
 }
 
-bool Character::canSee(int x, int y)
+bool Character::canSee(int x, int y) const
 {
 	int x1 = getPosAfterX();
 	int y1 = getPosAfterY();
@@ -195,31 +196,31 @@ void Character::setPos(float x, float y)
 	_posY = y;
 }
 
-float Character::getPosX()
+float Character::getPosX() const
 {
 	return _posX;
 }
-float Character::getPosY()
+float Character::getPosY() const
 {
 	return _posY;
 }
 
-int Character::getPosBeforeX()
+int Character::getPosBeforeX() const
 {
 	return _pos_before_x;
 }
 
-int Character::getPosAfterX()
+int Character::getPosAfterX() const
 {
 	return _pos_after_x;
 }
 
-int Character::getPosBeforeY()
+int Character::getPosBeforeY() const
 {
 	return _pos_before_y;
 }
 
-int Character::getPosAfterY()
+int Character::getPosAfterY() const
 {
 	return _pos_after_y;
 }

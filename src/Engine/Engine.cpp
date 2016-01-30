@@ -15,11 +15,11 @@ void PAUSE() {
 }
 
 #ifndef FULLSCREEN
-#define FULLSCREEN
+//#define FULLSCREEN
 #endif
 
-#define DEF_SCREEN_WIDTH 1200
-#define DEF_SCREEN_HEIGHT 900
+#define DEF_SCREEN_WIDTH 800
+#define DEF_SCREEN_HEIGHT 600
 
 #define FPS_CAP 600
 #define TICKS_PER_FRAME (1000 / FPS_CAP)
