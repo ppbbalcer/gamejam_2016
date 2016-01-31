@@ -45,11 +45,12 @@ void BossScreen::OnUpdate(int delta)
 			_timer = 0;
 		}
 		
-		_bossPosY = _screenRect.h - _screenRect.h * _boss_ratio + _screenRect.h * 0.2f;
+		_bossPosY = _screenRect.h 
+					     - _boss->getHeight() * _boss_ratio;
 		break;
 	case BossScreen::DANCING:
-		_bossPosY = (sin((_timer / 250.0f)/ M_PI) * _screenRect.h * 0.15f) + _screenRect.h * 0.2f;
-		_bossPosX = (sin((_timer / 100.0f) / M_PI) * _screenRect.w * 0.2f);
+		// _bossPosY = (sin((_timer / 250.0f)/ M_PI) * _screenRect.h * 0.15f) + _screenRect.h * 0.2f;
+		// _bossPosX = (sin((_timer / 100.0f) / M_PI) * _screenRect.w * 0.2f);
 		break;
 	case BossScreen::HIDING:
 		_boss_ratio = _timer / HIDING_TIME;
