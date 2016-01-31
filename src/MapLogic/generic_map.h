@@ -8,6 +8,7 @@
 
 class GenericMap: public IMap {
 private:
+	/* array to pointers to fields (each individually allocated) */
 	Field** fields;
 	int width;
 	int height;
@@ -49,8 +50,9 @@ protected:
 	void DeallocateFields() {
 		for (int i = 0 ; i!=width*height; ++i ) {
 			if (fields[i])
-				delete[] fields[i];
+				delete fields[i];
 		}
+
 		delete[] fields;
 	}
 	bool HasWallAt(int x, int y)

@@ -1,4 +1,5 @@
 set(maplogic_src
+  artifact.cpp
 	controller_field.cpp
 	controller_field.h
 	door.cpp

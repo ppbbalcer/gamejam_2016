@@ -7,6 +7,7 @@ include_directories(
 
 set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
 
+# why do you incluide SDL parts in repository?
 include_directories(
 	"/usr/include/SDL2/"
 	${SDL2_INCLUDE_DIR}

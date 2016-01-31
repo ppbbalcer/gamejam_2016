@@ -117,7 +117,7 @@ void Enemy::OnUpdate(int time_ms)
 	wayAge += time_ms*0.001;
 	
 	if (!way.empty()) {
-		AStartPoint_t & next = *way.begin();
+		AStartPoint_t next = *way.begin();
 		if (getPosAfterX() == getPosBeforeX()
 		    && getPosAfterY() == getPosBeforeY())
 		{

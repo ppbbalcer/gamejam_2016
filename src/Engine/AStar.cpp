@@ -114,8 +114,8 @@ STEP_FIND:
 
 END:
 
-	delete obs;
-	delete map;
+	delete[] obs;
+	delete[] map;
 	return (DIRECT) result;
 }
 
