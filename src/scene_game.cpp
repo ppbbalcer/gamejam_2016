@@ -28,7 +28,7 @@ using namespace std;
 
 // Global
 IMap *gCurrentMap = NULL;
-#define LAST_LEVEL 1
+#define LAST_LEVEL 6
 SceneGame::SceneGame(Level *level, int room_id)
 {
 	this->room_id = room_id;
