@@ -23,6 +23,9 @@ using namespace std;
 #define GP_START_Y	UI_HEIGHT
 #define GP_WIDTH_RATIO	1.3f
 
+#define SUN_ANIM_PERIOD		200
+#define SUN_ANIM_PERIOD_2	100
+
 // Global
 IMap *gCurrentMap = NULL;
 
@@ -36,7 +39,7 @@ SceneGame::SceneGame(Level *level, int room_id)
 	char buff[MAX_ROOM_PATH];
 	sprintf(buff, "Resources/levels/%u/%u.txt", level->getId(), room_id);
 	map = IMap::Factory(IMap::LOADED, buff);
-
+	_sunAnimFrame = 0;
 	gCurrentMap = map;
 
 	is_loaded = false;
@@ -294,7 +297,14 @@ void SceneGame::OnUpdate(int timems)
 		return;
 	}
 
-	float day_velocity = 1.f/map->getParams()->day_seconds; //  seconds till dawn
+	if (_sunAnimFrame > SUN_ANIM_PERIOD)
+	{
+		_sunAnimFrame = 0;
+	}
+	_sunAnimFrame += timems;
+
+	float day_velocity = 1.f / map->getParams()->day_seconds; //  seconds till dawn
+
 	map->ProgressDay( timems * 0.001 * day_velocity);
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);
@@ -533,7 +543,7 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 	SDL_SetRenderDrawColor(renderer, 112, 193, 244, 255);
 	SDL_RenderFillRect(renderer, &veryTopBar);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, 23, 30, 85, (float)255 * (1.0f - map->GetDayProgress()));
+	SDL_SetRenderDrawColor(renderer, 20, 25, 55, (float)255 * (1.0f - map->GetDayProgress()));
 	SDL_RenderFillRect(renderer, &veryTopBar);
 
 	int defaultX = screenWidth - tileSize - playerBarXPadding;
@@ -546,7 +556,7 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 
 
 	_sunMoon->renderTile(renderer, 0, (veryTopBar.h - tileSize) * 0.5f, 1, SDL_FLIP_NONE);
-	_sunMoon->renderTile(renderer, veryTopBar.w - tileSize, (veryTopBar.h - tileSize) * 0.5f, 2, SDL_FLIP_NONE);
+	_sunMoon->renderTile(renderer, veryTopBar.w - tileSize, (veryTopBar.h - tileSize) * 0.5f, _sunAnimFrame < SUN_ANIM_PERIOD_2 ? 2 : 3, SDL_FLIP_NONE);
 
 	veryTopBar.h = screenHeight;
 	SDL_RenderSetViewport(renderer, &veryTopBar);

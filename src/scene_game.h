@@ -39,6 +39,7 @@ private:
 	RTexture *_forrestbg;
 	RTexture *_forresttrees;
 	RTexture *_sunMoon;
+	int _sunAnimFrame;
 	int _arrayShadowW;
 	int _arrayShadowH;
 	int *_arrayShadow;
