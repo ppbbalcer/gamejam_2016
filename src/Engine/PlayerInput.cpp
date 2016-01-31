@@ -48,6 +48,10 @@ PlayerInput::PlayerInput() {
 	setInputDelay(INPUT_MENU_ENTER, DEFAULT_INPUT_DELAY);
 	setInputDelay(INPUT_MENU_BACK, DEFAULT_INPUT_DELAY);
 	setInputDelay(INPUT_USE, DEFAULT_INPUT_DELAY);
+
+	if (SDL_GameControllerAddMappingsFromFile("Resources/gamecontrollerdb.txt") == -1) {
+		printf("failed adding controller mappings %s\n", SDL_GetError());
+	}
 }
 
 void PlayerInput::reset() {
@@ -65,7 +69,7 @@ void PlayerInput::addController(int id) {
 			//int instance = SDL_JoystickInstanceID(j);
 			controllers[id] = gc;
 		}
-		printf("add gc\n");
+		printf("add gc %s\n", SDL_GameControllerNameForIndex(id));
 	}
 }
 
@@ -76,11 +80,11 @@ void PlayerInput::removeController(int id) {
 }
 
 void PlayerInput::handleControllerButton(const SDL_ControllerButtonEvent sdlEvent) {
-	// unused
+	//printf("handleControllerButton\n");
 }
 
 void PlayerInput::handleControllerAxis(const SDL_ControllerAxisEvent sdlEvent) {
-	// unused
+	//printf("handleControllerAxis\n");
 }
 
 void PlayerInput::setInputDelay(enum input_type type, int time)
@@ -104,10 +108,10 @@ void PlayerInput::update(int time) {
 	}
 
 	for (int i = 0; i < MAX_INPUT_TYPE; ++i) {
-		if (input_state[i])
-			continue;
-
 		for (std::pair<int, SDL_GameController *> gc : controllers) {
+			if (input_state[i])
+				continue;
+
 			if (input_delay[i].delay != -1) {
 				input_delay[i].current -= time;
 				if (input_delay[i].current < 0) {
