@@ -7,7 +7,6 @@
 enum menu_option {
 	MENU_PLAY,
 	MENU_MAP_SELECT,
-	MENU_OPTIONS,
 	MENU_EXIT,
 
 	MAX_MENU_OPTION
