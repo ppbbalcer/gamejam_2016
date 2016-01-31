@@ -6,8 +6,10 @@
 class Field: public IField {
 	int type;
 	Character* someone_is_here;
-	static int assigned_field[NUM_FIELD_TYPES];
+	static int assigned_fieldID[NUM_FIELD_TYPES];
+	static int assigned_fieldGroupId[NUM_FIELD_TYPES];
 	static void EnsureFieldIdsInitialized();
+	static void EnsureFieldGroupIdsInitialized();
 protected:
 	IMap *assoc_map;
 public:
@@ -21,6 +23,7 @@ public:
 	virtual int GetType();
 	virtual bool IsObstacle();
 	virtual int GetTileId();
+	virtual int GetTileGroupId();
 	virtual void SetType(int f)
 	{
 		type=f;

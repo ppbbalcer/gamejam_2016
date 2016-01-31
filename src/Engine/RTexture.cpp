@@ -115,3 +115,4 @@ void RTexture::renderTile(SDL_Renderer* renderer, int x, int y, int tileIdx, SDL
 	}
 }
 
+

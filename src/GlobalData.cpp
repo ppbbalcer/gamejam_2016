@@ -54,9 +54,10 @@ ResourceItem texturesScene_game[] = {
 	{ "Resources/bosses/boss_01/boss_bg.png",		false, false, true, 0x0,	NULL, NULL, 0, 0 },
 	{ "Resources/bosses/boss_01/Snake.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
 	{ "Resources/tiles/artifact_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
-	{ "Resources/tiles/ground_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
-	{ "Resources/tiles/player_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
+	{ "Resources/tiles/ground_ss.png",				false, false, true, 0x0,	NULL, NULL, 0, 0 },
+	{ "Resources/tiles/player_ss.png",				false, false, true, 0x0,	NULL, NULL, 0, 0 },
 	{ "Resources/tiles/ritualist_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
+	{ "Resources/tiles/wall_ss.png",				false, false, true, 0x0,	NULL, NULL, 0, 0 },
 };
 
 size_t texturesScene_gameSize = sizeof(texturesScene_game) / sizeof(texturesScene_game[0]);

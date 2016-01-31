@@ -157,10 +157,22 @@ void SceneGame::OnLoad()
 		}
 	}
 
-	/* tiles for map */
-	_tiles = new RTexture(texturesScene_game[3]);
-	_tiles->setTileSizeSrc(tileSizeSrc);
-	_tiles->setTileSizeDst(tile_size);
+	/* tiles for map will hold the array of textures used in map 
+	(there can be more than one texture files)*/
+	int tilesAmt = 3;
+	_tiles = new RTexture*[tilesAmt];
+
+	// order is important, will be called as group id
+	_tiles[0] = new RTexture(texturesScene_game[3]);
+	_tiles[1] = new RTexture(texturesScene_game[7]);
+	_tiles[2] = new RTexture(texturesScene_game[10]);
+	
+	// For every tiles texture do...
+	for(int i=0; i<tilesAmt; i++){
+		_tiles[i]->setTileSizeSrc(tileSizeSrc);
+		_tiles[i]->setTileSizeDst(tile_size);
+	}
+	
 	/* lighting setup */
 	_arrayShadowW = map->GetWidth();
 	_arrayShadowH = map->GetHeight();
@@ -377,19 +389,29 @@ void SceneGame::renderShadow(SDL_Renderer* renderer) {
 				#ifdef DEBUG_BOTS
 				_tiles->setAlpha(190);
 				#else
-				_tiles->setAlpha(255);
+				_tiles[0]->setAlpha(255);
+				_tiles[1]->setAlpha(255);
+				_tiles[2]->setAlpha(255);
 				#endif
 
 			} else {
-				_tiles->setAlpha(alfa);
+				_tiles[0]->setAlpha(alfa);
+				_tiles[1]->setAlpha(alfa);
+				_tiles[2]->setAlpha(alfa);
 			}
-			_tiles->renderTile(renderer,
+
+			int tilesAmt = 3;
+			for(int i=0; i<tilesAmt; i++){
+			_tiles[i]->renderTile(renderer,
 					   x*tileSize - _camera.x, y*tileSize - _camera.y,
 					   35, SDL_FLIP_NONE);
+			}
 		}
 	}
 
-	_tiles->setAlpha(255);
+	_tiles[0]->setAlpha(255);
+	_tiles[1]->setAlpha(255);
+	_tiles[2]->setAlpha(255);
 
 }
 
@@ -411,15 +433,15 @@ void SceneGame::renderMap(SDL_Renderer* renderer) {
 
 	_srand(1);
 
-	/*Render background*/
+	/*Render ground*/
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
 			int px_left = j * tileSize - _camera.x;
 			int px_top  = i * tileSize - _camera.y;
-			_tiles->renderTile(renderer,
+			_tiles[1]->renderTile(renderer,
 			                   px_left,
 			                   px_top,
-			                   18 + _rand() % 5, SDL_FLIP_NONE);
+							   1 + _rand() % 4, SDL_FLIP_NONE);
 		}
 	}
 
@@ -427,12 +449,16 @@ void SceneGame::renderMap(SDL_Renderer* renderer) {
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {
 			int field = map->GetFieldAt(j, i)->GetType();
+			int tileGroupID = map->GetFieldAt(j, i)->GetTileGroupId();
 			int tile =  map->GetFieldAt(j, i)->GetTileId();
 			if (field == IField::FLOOR)
 				continue;
 			int col = j * tileSize - _camera.x;
 			int row = i * tileSize - _camera.y;
-			_tiles->renderTile(renderer, col , row, tile, SDL_FLIP_NONE);
+			
+			/** If there are more than one tile files, then more than one textures are created 
+			We pick the appropriate texture using the tileGroupID info from map item*/
+			_tiles[tileGroupID]->renderTile(renderer, col , row, tile, SDL_FLIP_NONE);
 
 		}
 	}
@@ -470,7 +496,7 @@ void SceneGame::renderGameplay(SDL_Renderer *renderer)
 		else
 			sprite = 28;
 
-		_tiles->renderTile(renderer, (*it)->getPosX() - _camera.x, (*it)->getPosY() - _camera.y, sprite, SDL_FLIP_NONE);
+		_tiles[0]->renderTile(renderer, (*it)->getPosX() - _camera.x, (*it)->getPosY() - _camera.y, sprite, SDL_FLIP_NONE);
 	}
 
 	_player1->OnRender(renderer, &_camera);

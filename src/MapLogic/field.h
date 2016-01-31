@@ -61,6 +61,8 @@ public:
 	 * Get id of tile on corresponding bitmap
 	 */
 	virtual int GetTileId()=0;
+	// get the id of tile group
+	virtual int GetTileGroupId()=0;
 	// other methods will be specific to certain types
 	virtual void SteppedOver(Character *who)=0;
 	virtual void LeftField()=0;

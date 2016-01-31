@@ -5,7 +5,8 @@
 #include "../GlobalData.h"
 #include "skull.h"
 
-int Field::assigned_field[NUM_FIELD_TYPES];
+int Field::assigned_fieldID[NUM_FIELD_TYPES];
+int Field::assigned_fieldGroupId[NUM_FIELD_TYPES];
 
 void Field::EnsureFieldIdsInitialized()
 {
@@ -13,51 +14,84 @@ void Field::EnsureFieldIdsInitialized()
 	if (initialized) {
 		return;
 	}
-	assigned_field[WALL_HORIZONTAL] = 5;
+	assigned_fieldID[WALL_HORIZONTAL] = 5;
 
-	assigned_field[WALL_VERTICAL] = 13;
-	assigned_field[WALL_CROSS] =  02;
-	assigned_field[WALL_LT] = 3;
-	assigned_field[WALL_RT] = 9;
-	assigned_field[WALL_LB] = 1;
-	assigned_field[WALL_RB] = 4;
-	assigned_field[T_LEFT] =  6;
-	assigned_field[T_RIGHT] = 11;
-	assigned_field[T_TOP] =  12;
-	assigned_field[T_BOTTOM] =  10;
-	assigned_field[FLOOR] = 7;
-	assigned_field[DESK] = 7;
-	assigned_field[DOOR] = 7;
-	assigned_field[DOOR_VERTICAL_CLOSED] = 17;
-	assigned_field[DOOR_VERTICAL_OPEN] = 16;
-	assigned_field[DOOR_HORIZONTAL_CLOSED] = 14;
-	assigned_field[DOOR_HORIZONTAL_OPEN] = 15;
-	assigned_field[MEDKIT] = 25;
-	assigned_field[INACTIVE_SKULL] = 26;
-	assigned_field[SILVER_SKULL] = 45;
-	assigned_field[GOLDEN_SKULL] = 44;
-	assigned_field[POWERUP] = 31;
-	assigned_field[SMALL_MANA_FLASK] = 36;
-	assigned_field[LARGE_MANA_FLASK] = 40;
-	assigned_field[SMALL_HEALTH_FLASK] = 34;
-	assigned_field[LARGE_HEALTH_FLASK] = 33;
-	assigned_field[EMPTY_FLASK] = 32;
-	assigned_field[SWITCH_DOWN] = 38;
-	assigned_field[SWITCH_UP] = 37;
-	assigned_field[ROOT_TRAP] = 30;
-	assigned_field[TRAP] = 30;
-	assigned_field[STAIRS] = 46;
-	assigned_field[SPIKES_ON] = 47;
-	assigned_field[SPIKES_OFF] = 48;
-	assigned_field[EVIL_COMPUTER] = 39;
-	assigned_field[ARTIFACT] = 39;
+	assigned_fieldID[WALL_VERTICAL] = 13;
+	assigned_fieldID[WALL_CROSS] =  02;
+	assigned_fieldID[WALL_LT] = 3;
+	assigned_fieldID[WALL_RT] = 9;
+	assigned_fieldID[WALL_LB] = 1;
+	assigned_fieldID[WALL_RB] = 4;
+	assigned_fieldID[T_LEFT] =  6;
+	assigned_fieldID[T_RIGHT] = 11;
+	assigned_fieldID[T_TOP] =  12;
+	assigned_fieldID[T_BOTTOM] =  10;
+	assigned_fieldID[FLOOR] = 7;
+	assigned_fieldID[DESK] = 7;
+	assigned_fieldID[DOOR] = 7;
+	assigned_fieldID[DOOR_VERTICAL_CLOSED] = 17;
+	assigned_fieldID[DOOR_VERTICAL_OPEN] = 16;
+	assigned_fieldID[DOOR_HORIZONTAL_CLOSED] = 14;
+	assigned_fieldID[DOOR_HORIZONTAL_OPEN] = 15;
+	assigned_fieldID[MEDKIT] = 25;
+	assigned_fieldID[INACTIVE_SKULL] = 26;
+	assigned_fieldID[SILVER_SKULL] = 45;
+	assigned_fieldID[GOLDEN_SKULL] = 44;
+	assigned_fieldID[POWERUP] = 31;
+	assigned_fieldID[SMALL_MANA_FLASK] = 36;
+	assigned_fieldID[LARGE_MANA_FLASK] = 40;
+	assigned_fieldID[SMALL_HEALTH_FLASK] = 34;
+	assigned_fieldID[LARGE_HEALTH_FLASK] = 33;
+	assigned_fieldID[EMPTY_FLASK] = 32;
+	assigned_fieldID[SWITCH_DOWN] = 38;
+	assigned_fieldID[SWITCH_UP] = 37;
+	assigned_fieldID[ROOT_TRAP] = 30;
+	assigned_fieldID[TRAP] = 30;
+	assigned_fieldID[STAIRS] = 46;
+	assigned_fieldID[SPIKES_ON] = 47;
+	assigned_fieldID[SPIKES_OFF] = 48;
+	assigned_fieldID[EVIL_COMPUTER] = 39;
+	assigned_fieldID[ARTIFACT] = 39;
 	initialized = true;
+}
+
+void Field::EnsureFieldGroupIdsInitialized(){
+	
+	static bool initializedGroupIds = false;
+	if (initializedGroupIds) {
+		return;
+	}
+	
+	// assign all to 0th group first
+	for(int i=0; i<NUM_FIELD_TYPES; i++){
+		assigned_fieldGroupId[i] = 0;
+	}
+
+	assigned_fieldGroupId[WALL] = 2;
+	assigned_fieldID[WALL_HORIZONTAL] = 2;
+	assigned_fieldID[WALL_VERTICAL] = 2;
+	assigned_fieldID[WALL_CROSS] =  2;
+	assigned_fieldID[WALL_LT] = 2;
+	assigned_fieldID[WALL_RT] = 2;
+	assigned_fieldID[WALL_LB] = 2;
+	assigned_fieldID[WALL_RB] = 2;
+
+	initializedGroupIds = true;
+
 }
 
 int Field::GetTileId()
 {
 	EnsureFieldIdsInitialized();
-	return assigned_field[GetType()];
+	return assigned_fieldID[GetType()];
+}
+
+/** this is necessary since there are more than one tile textures (groups) which are used */
+int Field::GetTileGroupId()
+{
+	EnsureFieldGroupIdsInitialized();
+
+	return assigned_fieldGroupId[GetType()];
 }
 
 bool Field::IsObstacle()

@@ -35,7 +35,7 @@ private:
 	Player *_player2;
 #endif
 	std::vector<Enemy*> _enemys;
-	RTexture *_tiles;
+	RTexture **_tiles;
 	int _arrayShadowW;
 	int _arrayShadowH;
 	int *_arrayShadow;
