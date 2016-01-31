@@ -66,6 +66,23 @@ public:
 	virtual void SetDoorsOpen(bool open) = 0;
 	virtual bool GetDoorsOpen() = 0;
 
+	/**
+	 * retrieve current progress of dawn
+	 * (0 means start of the game, 1 means it's bright out there)
+	 */
+	virtual float GetDayProgress() = 0;
+	
+	/**
+	 * retrieve current progress of monster summoning
+	 * (0 means, monster is NOT present, 1 means, he is summoned
+	 * fully and cultists won */
+	virtual float GetMonsterProgress() = 0;
+	
+	/**
+	 * advance progress of monster summoning by a fraction
+	 */
+	virtual void ProgressMonster(float prog) = 0;
+	virtual void ProgressDay(float prog) = 0;
 	virtual ~IMap() {};
 
 };

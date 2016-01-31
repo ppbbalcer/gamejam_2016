@@ -13,6 +13,8 @@ private:
 	int width;
 	int height;
 	int _all_doors_open;
+	float monster_progress;
+	float day_progress;
 protected:
 	starting_pos p1_start;
 	starting_pos p2_start;
@@ -90,6 +92,43 @@ protected:
 
 
 public:
+	/**
+	 * retrieve current progress of dawn
+	 * (0 means start of the game, 1 means it's bright out there)
+	 */
+	virtual float GetDayProgress()
+	{
+		return day_progress;
+	}
+	
+	/**
+	 * retrieve current progress of monster summoning
+	 * (0 means, monster is NOT present, 1 means, he is summoned
+	 * fully and cultists won */
+	virtual float GetMonsterProgress()
+	{
+		return monster_progress;
+	}
+	
+	/**
+	 * advance progress of monster summoning by a fraction
+	 */
+	virtual void ProgressMonster(float prog)
+	{
+		day_progress += prog;
+		if (day_progress > 1) {
+			day_progress = 1;
+		}
+	}
+
+	virtual void ProgressDay(float prog)
+	{
+		monster_progress += prog;
+		if (monster_progress > 1) {
+			monster_progress = 1;
+		}
+	}
+
 	int placeObstruction(int x, int y, map_obstruction ob)
 	{
 		Field *f;
@@ -131,6 +170,8 @@ public:
 		width = 0;
 		height = 0;
 		fields = 0;
+		monster_progress = 0;
+		day_progress = 0;
 	}
 	int GetWidth() {
 		return width;

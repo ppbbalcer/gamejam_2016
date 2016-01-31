@@ -54,7 +54,7 @@ private:
 	void updateFireballs(int timems);
 	void updatePlayers(int timems);
 	void updateCamera();
-	void updateShadowsChr(const Character *ch);
+	void updateShadowsChr(const Character *ch, int radius);
 	void updateShadows();
 	void renderGameplay(SDL_Renderer* renderer);
 	void renderBoss(SDL_Renderer* renderer);

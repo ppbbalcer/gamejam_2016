@@ -103,7 +103,6 @@ void SceneGame::OnLoad()
 	 */
 	int tile_size = std::min<int>(dvp.w / MAX_TILE_PER_SCREEN,
 				 dvp.h / MAX_TILE_PER_SCREEN);
-
 	EngineInst->setTileSize(tile_size);
 	bool success = EngineInst->loadResources(texturesScene_game, texturesScene_gameSize);
 	/* slightly bigger than usually displayed, for small maps on large resolutions*/
@@ -290,7 +289,9 @@ void SceneGame::OnUpdate(int timems)
 		level->resetCurrent();
 		return;
 	}
-
+	float day_velocity = 0.1; // 10 seconds till dawn
+	map->ProgressDay( timems * 0.001 * day_velocity);
+	
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);
 	updatePlayers(timems);
@@ -304,9 +305,8 @@ void SceneGame::OnUpdate(int timems)
 float sqrf(float a) {
 	return a * a;
 }
-void SceneGame::updateShadowsChr(const Character *ch)
+void SceneGame::updateShadowsChr(const Character *ch, int radius)
 {
-	int radius = 9;
 	int alfa,xx,yy;
 	int idx;
 	int centerTiltX = ch->getPosAfterX();
@@ -336,18 +336,19 @@ void SceneGame::updateShadowsChr(const Character *ch)
 
 void SceneGame::updateShadows()
 {
+	int radius = 4 + map->GetDayProgress() * 4;
 	memset(_arrayShadow, 00, _arrayShadowW * _arrayShadowH
 	       * sizeof(_arrayShadowH));
 #ifdef DEBUG_BOTS
 	for (auto enemy : _enemys) {
-		updateShadowsChr(enemy);
+		updateShadowsChr(enemy, radius);
 	}
 #else
 	for (auto enemy : _enemys) {
-		enemy->OnRenderCircle(9);
+		enemy->OnRenderCircle(radius);
 	}
 	
-	updateShadowsChr(_player1);
+	updateShadowsChr(_player1, radius);
 #endif
 
 
