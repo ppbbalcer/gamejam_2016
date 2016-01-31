@@ -114,7 +114,7 @@ void Enemy::Chase(Character * ch)
 void Enemy::PrayToMonster()
 {
 
-	if (getPosBeforeX() > 4 && (way.empty() || wayAge > 1)) {
+	if (getPosBeforeX() > 3 && (way.empty() || wayAge > 1)) {
 		
 		DIRECT destBest = DIRECT_NO_WAY;
 		int startX = getPosAfterX();
@@ -155,7 +155,10 @@ void Enemy::PrayToMonster()
 		if (wayAge > 1) {
 			wayAge = 0;
 			puts("Wololo!");
-			_map->ProgressMonster(0.15);
+			// this means by default one cultist can summon
+			// ctholhoo in 40 seconds. game lasts 50 seconds
+			// in the demo level
+			_map->ProgressMonster(0.025);
 		}
 	}
 }
@@ -173,7 +176,7 @@ void Enemy::ProcessAI(Character * ch, int time_ms)
 			puts("AI:Chase");
 		}
 	} else {
-		if (chase_took > 5) {
+		if (chase_took > 15) {
 			way.clear();
 			is_praying = true;
 			puts("AI: Pray");

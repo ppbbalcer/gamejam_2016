@@ -15,8 +15,8 @@ using namespace std;
 #define MAX_ROOM_PATH 255
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
-#define DEBUG_BOTS
-#define MAX_TILE_PER_SCREEN 32
+//#define DEBUG_BOTS
+#define MAX_TILE_PER_SCREEN 12
 
 #define UI_HEIGHT	0.15f
 #define GP_HEIGHT	1.0f - UI_HEIGHT
@@ -289,7 +289,7 @@ void SceneGame::OnUpdate(int timems)
 		level->resetCurrent();
 		return;
 	}
-	float day_velocity = 0.1; // 10 seconds till dawn
+	float day_velocity = 0.02; //  seconds till dawn
 	map->ProgressDay( timems * 0.001 * day_velocity);
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);
@@ -545,43 +545,12 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 	{
 		EngineInst->setStatusLine("You lost! "
 			"Press R to try again");
-	}
-	/*Check victory condition*/
-	else if (_player1->GetState() == Character::WON) 
-	{
-		int target_level1 = level->getId() + 1;
-		int target_map1 = 0;
-		//int target_level2=level->getId()+1;
-		//int target_map2=0;
-		/* game ended with victory ? */
-		bool game_end = false;
-		Door * dor = dynamic_cast <Door*>(
-			map->GetFieldAt(_player1->getPosAfterX(),
-				_player1->getPosAfterY()));
-		if (dor) {
-			target_level1 = level->getId();
-			target_map1 = dor->GetTargetBoard();
-		}
-
-		Stairs * sta = dynamic_cast <Stairs*>(
-			map->GetFieldAt(_player1->getPosAfterX(),
-			_player1->getPosAfterY())
-		);
-
-		if (sta && sta->GetVictory()) {
-			game_end = true;
-			EngineInst->clearStatusLine();
-		}
-
-		EngineInst->font()->printfLT(100,
-			map->GetHeight()*tileSize, "Both players won");
-		if (game_end) {
-			level->SetVictoryScene();
-		}
-		else {
-			level->setId(target_level1);
-			level->setCurrentScene(target_map1);
-		}
+	} else if (map->GetMonsterProgress() >= 1) {
+		EngineInst->setStatusLine("Monster awakened! You lost! "
+					  "Press R to try again");
+	
+	} else if (map->GetDayProgress() >= 1) {
+		level->SetVictoryScene();
 	}
 }
 

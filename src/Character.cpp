@@ -388,7 +388,7 @@ void Character::OnUpdate(int time_ms)
 	}
 
 	if (getType() == TYPE_ENEMY) {
-		dist /= 5.0f;
+		dist *0.9;
 	}
 
 	float pos_x = getPosX();

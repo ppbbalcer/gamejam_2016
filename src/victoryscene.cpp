@@ -12,10 +12,17 @@
 const char * Congratulations =
 	"You won...\n"
 	"Or more accurately you survived.\n"
-	"Congratulations. Our game wasn't meant to be easy - we hope,\n"
-	"your playthrough was as exciting as our effort developing it.\n"
-
-	"\n\nRevenge of the GM is (c) 2015.\nDevelopment team:\n- Pawlowski Slawomir\n- Kaminski Maciej\n- Naruszewicz Maciej\n- Balcer Piotr"
+	"You have managed to delay appearance of monster\n"
+	"\n\nBreak the Ritual is (c) 2016.\n"
+	"Development team:"
+	"\n- Balcer Piotr"
+	"\n- Duda Michal"
+	"\n- Gokhan Solak"
+	"\n- Kaminski Maciej"
+	"\n- Kisly Zbigniew"
+	"\n\nGame wouldn't be possible without contributions from:"
+	"\n- Naruszewicz Maciej"
+	"\n- Pawlowski Slawomir"
 	"\n\nPress [ESCAPE] to return to desktop...";
 
 float cur_char=0;
