@@ -218,11 +218,18 @@ LoadedMap::LoadedMap(const char * path) {
 				dynamic_cast <Field*>(field)->SetType(IField::WALL_HORIZONTAL);
 		}
 	}
+
 	mapfile.close();
 	params = new map_params();
 	params->alpha = 140;
 	params->start_hp = 100;
 	params->start_mana = 100;
+	params->start_ammo = 10;
+	params->start_trap = 10;
+	params->day_seconds = 40;
+	params->cultist_seconds = 1;
+	params->summon_seconds = 30;
+
 	SerializeOntoConsole();
 	string config_path(path);
 	config_path+=".conf";
@@ -237,7 +244,7 @@ LoadedMap::LoadedMap(const char * path) {
 		string command;
 		mapfile >> command;
 		if (command == "start") {
-			mapfile >> params->alpha >> params->start_hp >> params->start_mana >> params->start_ammo >> params->start_trap;
+			mapfile >> params->alpha >> params->start_hp >> params->start_mana >> params->start_ammo >> params->start_trap >> params->day_seconds >> params->summon_seconds >> params->cultist_seconds;
 		} else if (command == "title_string") {
 			std::string title;
 			while (mapfile.get()!='"') ;
