@@ -267,8 +267,15 @@ void SceneGame::updateCamera()
 	_camera.y = _player1->getPosY() - GetGameplayViewport().h / 2 + EngineInst->getTileSize() / 2;
 }
 
+bool is_dead(Enemy * e) {
+	if (e->GetState() == Character::DEAD) 
+		return true;
+	else
+		return false;
+}
 void SceneGame::updateEnemies(int timems)
 {
+	_enemys.erase( std::remove_if(_enemys.begin(), _enemys.end(), is_dead), _enemys.end() );
 	/* update behaviors for each of enemies */
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
 		(*enemy)->ProcessAI(_player1, timems);
@@ -496,7 +503,7 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 			"Monster awakened! You lost! "
 			"Press R to try again");
 	
-	} else if (map->GetDayProgress() >= 1) {
+	} else if (map->GetDayProgress() >= 1 || _enemys.empty()) {
 		if (room_id == LAST_LEVEL) {
 			puts("Vicky");
 			level->SetVictoryScene();
