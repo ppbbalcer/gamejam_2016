@@ -278,6 +278,10 @@ void Enemy::OnUpdate(int time_ms)
 			if (i<0) continue;
 			if (j>=_map->GetHeight()) continue;
 			if (j<0) continue;
+			if (view_dir_y > 0 & j < getPosBeforeY()) continue;
+			if (view_dir_y < 0 & j > getPosBeforeY()) continue;
+			if (view_dir_x > 0 & j < getPosBeforeX()) continue;
+			if (view_dir_x < 0 & j > getPosBeforeX()) continue;
 			Character * wih =
 				_map->GetFieldAt(i,j)->WhoIsHere();
 			/* if field is occupied and a character

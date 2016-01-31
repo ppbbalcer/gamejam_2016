@@ -95,7 +95,8 @@ void SceneGame::OnLoad()
 {
 	/* command generating set of tiles found in Resources/tiles/walls.png
 	 * (to be invoked from Resources/tiles/walls directory)
-	 *  montage *.png -background none ../floor0.png -geometry +0x0 -tile 3x3 ../walls.png
+	 *  montage *.png -background none ../floor0.png
+	 *  -geometry +0x0 -tile 3x3 ../walls.png
 	 */
 	EngineInst->clearStatusLine();
 	SDL_Rect dvp=GetDefaultViewport();
