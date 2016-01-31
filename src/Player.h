@@ -16,7 +16,7 @@ enum inventory_value_type {
 	ITEM_CAPACITY
 };
 
-#define TRAP_ARM_TIME 5000
+#define TRAP_ARM_TIME 1500
 
 class Player : public Character
 {
