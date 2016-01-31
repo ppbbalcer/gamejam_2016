@@ -34,6 +34,7 @@ public:
 
 	virtual void Activate() {}
 	virtual void Deactivate() {}
+	virtual void update(int time) {}
 };
 
 class EvilComputer: public Field {

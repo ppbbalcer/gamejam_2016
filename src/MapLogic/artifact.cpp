@@ -7,3 +7,13 @@ void Artifact::SteppedOver(Character * who)
 {
 	Field::SteppedOver(who);
 }
+
+void Artifact::update(int time)
+{
+
+}
+
+int Artifact::GetTileId()
+{
+	return 58;
+}

@@ -83,6 +83,9 @@ public:
 	 */
 	virtual void ProgressMonster(float prog) = 0;
 	virtual void ProgressDay(float prog) = 0;
+
+	virtual void update(int time) = 0;
+
 	virtual ~IMap() {};
 
 };

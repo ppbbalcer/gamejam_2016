@@ -69,6 +69,7 @@ public:
 	virtual bool IsOccupied()=0;
 	virtual Character* WhoIsHere()=0;
 	virtual void InitMapAssociation(IMap *map)=0;
+	virtual void update(int time)=0;
 };
 
 #endif

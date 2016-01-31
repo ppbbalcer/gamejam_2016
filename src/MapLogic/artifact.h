@@ -11,6 +11,9 @@ public:
 	Artifact() : Field(ARTIFACT)
 	{
 	}
+
+	virtual void update(int time);
+	virtual int GetTileId();
 };
 
 #endif

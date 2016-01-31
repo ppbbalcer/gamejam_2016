@@ -129,6 +129,15 @@ public:
 		}
 	}
 
+	virtual void update(int time)
+	{
+		for (int i = 0; i < height; ++i) {
+			for (int j = 0; j < width; ++j) {
+				GetFieldAt(j, i)->update(time);
+			}
+		}
+	}
+
 	int placeObstruction(int x, int y, map_obstruction ob)
 	{
 		Field *f;

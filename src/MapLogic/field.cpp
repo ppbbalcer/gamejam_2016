@@ -50,7 +50,7 @@ void Field::EnsureFieldIdsInitialized()
 	assigned_field[SPIKES_ON] = 47;
 	assigned_field[SPIKES_OFF] = 48;
 	assigned_field[EVIL_COMPUTER] = 39;
-	assigned_field[ARTIFACT] = 39;
+	assigned_field[ARTIFACT] = 56;
 	assigned_field[TREE] = 51;
 	assigned_field[COASTLINE] = 49;
 	assigned_field[STONE] = 36;
