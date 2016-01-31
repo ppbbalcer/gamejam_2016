@@ -114,7 +114,7 @@ private:
 	int _pos_after_y;
 	int animation_prog_ms;
 protected:
-	void AnimateFrames(int time_ms, int first, int last, int fps=5);
+	void AnimateFrames(int time_ms, const std::vector<int> & frames, int fps=5);
 	int view_dir_x;
 	int view_dir_y;
 	int last_dir_x;

@@ -85,6 +85,14 @@ void Player::OnUpdate(int time_ms)
 		}
 	}
 
+	if (getPosAfterX() == getPosBeforeX()
+	    && getPosAfterY() == getPosBeforeY()) {
+		_texture->setTileIdx(3);
+			
+	} else {
+		AnimateFrames(time_ms,{0,1,2,1});
+	}
+
 	Character::OnUpdate(time_ms);
 }
 
