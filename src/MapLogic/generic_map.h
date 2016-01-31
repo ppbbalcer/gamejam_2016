@@ -120,6 +120,11 @@ public:
 			monster_progress = 1;
 		}
 	}
+	virtual void ResetConditions()
+	{
+		day_progress = 0;
+		monster_progress = 0;
+	}
 
 	virtual void ProgressDay(float prog)
 	{

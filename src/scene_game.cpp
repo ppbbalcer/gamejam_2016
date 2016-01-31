@@ -29,7 +29,6 @@ using namespace std;
 // Global
 IMap *gCurrentMap = NULL;
 #define LAST_LEVEL 1
-
 SceneGame::SceneGame(Level *level, int room_id)
 {
 	this->room_id = room_id;
@@ -498,16 +497,16 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 			"Press R to try again");
 	
 	} else if (map->GetDayProgress() >= 1) {
-		if (level->getId() == LAST_LEVEL) {
+		if (room_id == LAST_LEVEL) {
 			puts("Vicky");
 			level->SetVictoryScene();
 		} else {
 			puts("LevelUp");
-			level->setId(level->getId() + 1);
-			map = IMap::Factory(IMap::LOADED, buff);
+			map->ResetConditions();
+			room_id ++;
+			level->setCurrentScene(room_id);
 				
 			gCurrentMap = map;
-			is_loaded = false;
 		}
 	}
 

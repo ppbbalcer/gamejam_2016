@@ -90,7 +90,7 @@ public:
 	virtual void ProgressDay(float prog) = 0;
 
 	virtual void update(int time) = 0;
-
+	virtual void ResetConditions() = 0;
 	virtual ~IMap() {};
 
 };
