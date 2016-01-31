@@ -366,7 +366,7 @@ void Engine::mainLoop() {
 		}
 		if (_font && !status_line.empty()) {
 			_font->printf(screen_width() / 2,
-				      screen_height(),
+				      screen_height() * 0.8f,
 				      ALIGN_BOTTOM_WITH_PADDING,
 				      status_line.c_str());
 
