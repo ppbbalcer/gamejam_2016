@@ -1,7 +1,7 @@
 #include "PlayerInput.h"
 #include <SDL.h>
 
-#define DEFAULT_INPUT_DELAY 50
+#define DEFAULT_INPUT_DELAY 80
 
 PlayerInput::PlayerInput() {
 	for (int i = 0; i < MAX_INPUT_TYPE; ++i) {

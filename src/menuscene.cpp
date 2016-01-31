@@ -101,6 +101,7 @@ SDL_Color color_black = { 0, 0, 0, 255 };
 SDL_Color color_grey = {204, 204, 204, 255 };
 SDL_Color color_red = {255, 50, 50, 255 };
 SDL_Color color_blue = {50, 50, 255, 255};
+SDL_Color color_white = { 255, 255, 255, 255 };
 
 SDL_Color color_disabled = { 90, 90, 90, 255 };
 SDL_Color color_disabled_red = { 120, 0, 0, 255 };
@@ -114,12 +115,26 @@ struct menu_item {
 	"Exit"
 };
 
+static const char *controls[] = { "Keyboard:",
+"movement - arrow keys",
+"gun - right control",
+"traps - right alt",
+" ",
+"Game Controllers:",
+"movement - dpad",
+"gun - A",
+"traps - B"};
 
 void MenuScene::OnRender(SDL_Renderer* renderer) {
 	EngineInst->font()->printf(0, 0, color_blue, color_black, 0, ALIGN_TOP | ALIGN_LEFT, 3.f, "Break the ritual");
 
 	for (int i = 0; i < MAX_MENU_OPTION; ++i) {
 		EngineInst->font()->printf(30, 200 + ((i) * 20), i == current ? color_red : color_grey, color_black, 0, ALIGN_TOP | ALIGN_LEFT, 1.f, menu[i].text);
+	}
+
+	int line = 0;
+	for (const char *txt : controls) {
+		EngineInst->font()->printf(400, 100+(line++*20), ALIGN_TOP | ALIGN_LEFT, txt);
 	}
 
 	EngineInst->font()->printf(200, 220, mode == MENU_MODE_SELECT ? color_red : color_disabled, color_black, 0, ALIGN_TOP | ALIGN_LEFT, 1.f, "World: ");
