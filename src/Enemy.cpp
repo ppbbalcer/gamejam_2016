@@ -202,15 +202,29 @@ void Enemy::OnUpdate(int time_ms)
 	if (getPosAfterX() == getPosBeforeX()
 	    && getPosAfterY() == getPosBeforeY()
 	    && way.empty() && is_praying) {
-		AnimateFrames(time_ms,{1,2});
+		std::vector<int> w;
+		w.push_back(1);
+		w.push_back(2);
+		AnimateFrames(time_ms,w);
 	} else {
 
 		if (view_dir_x == 0 && view_dir_y < 0) {
-			AnimateFrames(time_ms,{6,7});
+			std::vector<int > w;
+			w.push_back(6);
+			w.push_back(7);
+			AnimateFrames(time_ms,w);
 		} else if (view_dir_x == 0 && view_dir_y) {
-			AnimateFrames(time_ms,{8,9});
+			std::vector<int > w;
+			w.push_back(8);
+			w.push_back(9);
+			AnimateFrames(time_ms,w);
 		} else {
-			AnimateFrames(time_ms,{3,4,5,4});
+			std::vector<int > w;
+			w.push_back(3);
+			w.push_back(4);
+			w.push_back(5);
+			w.push_back(4);
+			AnimateFrames(time_ms,w);
 		}
 	}
 	if (!way.empty()) {

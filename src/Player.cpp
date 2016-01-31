@@ -90,7 +90,12 @@ void Player::OnUpdate(int time_ms)
 		_texture->setTileIdx(3);
 			
 	} else {
-		AnimateFrames(time_ms,{0,1,2,1});
+		std::vector<int > w;
+		w.push_back(0);
+		w.push_back(1);
+		w.push_back(2);
+		w.push_back(1);
+		AnimateFrames(time_ms, w);
 	}
 
 	Character::OnUpdate(time_ms);
