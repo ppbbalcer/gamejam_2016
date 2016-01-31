@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(texture, map)
+Player::Player(RTexture * texture, IMap * map, int hp, int mana, int ammo, int traps) : Character(texture, map)
 {
 	equipment = Equipment();
 	_type = TYPE_PLAYER;
@@ -18,9 +18,9 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 	arming = 0;
 	viewangle = M_PI;
 
-	inventory[ITEM_AMMO].available = hp;
-	inventory[ITEM_AMMO].capacity = 5;
-	inventory[ITEM_TRAP].available = mana;
+	inventory[ITEM_AMMO].available = ammo;
+	inventory[ITEM_AMMO].capacity = 10;
+	inventory[ITEM_TRAP].available = traps;
 	inventory[ITEM_TRAP].capacity = 10;
 };
 

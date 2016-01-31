@@ -119,7 +119,7 @@ void SceneGame::OnLoad()
 	tmpTexture->setTileSizeSrc(tileSizeSrc);
 	tmpTexture->setTileSizeDst(tile_size);
 	tmpTexture->setTileIdx(1);
-	_player1 = new Player(tmpTexture, map, map->getParams()->start_hp, map->getParams()->start_mana);
+	_player1 = new Player(tmpTexture, map, map->getParams()->start_hp, map->getParams()->start_mana, map->getParams()->start_ammo, map->getParams()->start_trap);
 
 	tmpTexture = new RTexture(texturesScene_game[3]);
 	tmpTexture->setTileSizeSrc(tileSizeSrc);

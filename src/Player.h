@@ -31,7 +31,7 @@ private:
 	} inventory[MAX_INVENTORY_ITEM];
 
 public:
-	Player(RTexture* texture, IMap * map, int hp, int mana);
+	Player(RTexture* texture, IMap * map, int hp, int mana, int ammo, int traps);
 	~Player(void);
 	virtual void OnUpdate(int time_ms);
 	virtual void OnRender(SDL_Renderer *renderer, SDL_Point *camera);

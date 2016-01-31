@@ -15,6 +15,8 @@ struct map_params {
 	int alpha;
 	int start_mana;
 	int start_hp;
+	int start_ammo;
+	int start_trap;
 };
 
 enum map_obstruction {

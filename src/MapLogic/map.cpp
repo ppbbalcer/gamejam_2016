@@ -237,7 +237,7 @@ LoadedMap::LoadedMap(const char * path) {
 		string command;
 		mapfile >> command;
 		if (command == "start") {
-			mapfile >> params->alpha >> params->start_hp >> params->start_mana;
+			mapfile >> params->alpha >> params->start_hp >> params->start_mana >> params->start_ammo >> params->start_trap;
 		} else if (command == "title_string") {
 			std::string title;
 			while (mapfile.get()!='"') ;
