@@ -529,6 +529,12 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 
 	SDL_RenderSetViewport(renderer, &veryTopBar);
 
+	SDL_SetRenderDrawColor(renderer, 112, 193, 244, 255);
+	SDL_RenderFillRect(renderer, &veryTopBar);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, 23, 30, 85, (float)255 * (1.0f - map->GetDayProgress()));
+	SDL_RenderFillRect(renderer, &veryTopBar);
+
 	int defaultX = screenWidth - tileSize - playerBarXPadding;
 
 	int playerRoad = tileSize + (veryTopBar.w - 3 * tileSize) * map->GetDayProgress();
