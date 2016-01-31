@@ -163,6 +163,9 @@ void SceneGame::OnLoad()
 	_forrestbg = new RTexture(texturesScene_game[7]);
 	_forrestbg->setTileSizeSrc(tileSizeSrc);
 	_forrestbg->setTileSizeDst(tile_size);
+	_sunMoon = new RTexture(texturesScene_game[10]);
+	_sunMoon->setTileSizeSrc(tileSizeSrc);
+	_sunMoon->setTileSizeDst(tile_size);
 	/* lighting setup */
 	_arrayShadowW = map->GetWidth();
 	_arrayShadowH = map->GetHeight();
@@ -187,6 +190,7 @@ void SceneGame::OnLoad()
 void SceneGame::OnFree()
 {
 	delete _boss;
+	delete _sunMoon;
 
 	/*deallocate assets*/
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
@@ -291,7 +295,6 @@ void SceneGame::OnUpdate(int timems)
 	}
 	float day_velocity = 0.02; //  seconds till dawn
 	map->ProgressDay( timems * 0.001 * day_velocity);
-	map->update(timems);
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);
 	_boss->SetBossRatio(map->GetMonsterProgress());
@@ -528,10 +531,15 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 
 	int defaultX = screenWidth - tileSize - playerBarXPadding;
 
-	_player1->renderAvatar(renderer, defaultX, (veryTopBar.h - tileSize) * 0.5f, SDL_FLIP_HORIZONTAL);
+	int playerRoad = tileSize + (veryTopBar.w - 3 * tileSize) * map->GetDayProgress();
+	_player1->renderAvatar(renderer, playerRoad, (veryTopBar.h - tileSize) * 0.5f, SDL_FLIP_NONE);
 	EngineInst->font()->printf(0, 0, ALIGN_LEFT | ALIGN_TOP, "Room %u-%u", level->getId(), room_id);
 	EngineInst->font()->printf(veryTopBar.w * 0.45f, 0, ALIGN_RIGHT | ALIGN_TOP, "Ammo %u-%u", _player1->getInvetoryInfo(ITEM_AMMO, ITEM_CURRENT), _player1->getInvetoryInfo(ITEM_AMMO, ITEM_CAPACITY));
 	EngineInst->font()->printf(veryTopBar.w * 0.55f, 0, ALIGN_LEFT | ALIGN_TOP, "Traps %u-%u", _player1->getInvetoryInfo(ITEM_TRAP, ITEM_CURRENT), _player1->getInvetoryInfo(ITEM_TRAP, ITEM_CAPACITY));
+
+
+	_sunMoon->renderTile(renderer, 0, (veryTopBar.h - tileSize) * 0.5f, 1, SDL_FLIP_NONE);
+	_sunMoon->renderTile(renderer, veryTopBar.w - tileSize, (veryTopBar.h - tileSize) * 0.5f, 2, SDL_FLIP_NONE);
 
 	veryTopBar.h = screenHeight;
 	SDL_RenderSetViewport(renderer, &veryTopBar);
