@@ -44,7 +44,7 @@ void Field::EnsureFieldIdsInitialized()
 	assigned_field[EMPTY_FLASK] = 32;
 	assigned_field[SWITCH_DOWN] = 38;
 	assigned_field[SWITCH_UP] = 37;
-	assigned_field[ROOT_TRAP] = 30;
+	assigned_field[ROOT_TRAP] = 60;
 	assigned_field[TRAP] = 30;
 	assigned_field[STAIRS] = 46;
 	assigned_field[SPIKES_ON] = 47;

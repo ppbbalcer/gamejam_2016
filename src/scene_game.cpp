@@ -306,6 +306,7 @@ void SceneGame::OnUpdate(int timems)
 	float day_velocity = 1.f / map->getParams()->day_seconds; //  seconds till dawn
 
 	map->ProgressDay( timems * 0.001 * day_velocity);
+	map->update(timems);
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);
 	_boss->SetBossRatio(map->GetMonsterProgress());

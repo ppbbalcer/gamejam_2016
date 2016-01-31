@@ -224,11 +224,11 @@ LoadedMap::LoadedMap(const char * path) {
 	params->alpha = 140;
 	params->start_hp = 100;
 	params->start_mana = 100;
-	params->start_ammo = 0;
-	params->start_trap = 0;
+	params->start_ammo = 10;
+	params->start_trap = 10;
 	params->day_seconds = 40;
 	params->cultist_seconds = 1;
-	params->summon_seconds = 10;
+	params->summon_seconds = 30;
 
 	SerializeOntoConsole();
 	string config_path(path);
