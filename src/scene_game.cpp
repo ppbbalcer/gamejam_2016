@@ -116,10 +116,10 @@ void SceneGame::OnLoad()
 	_background ->setScaleSize(1.0f * EngineInst->screen_width() / _background->getWidth());*/
 
 	/*Texture section for player 1*/
-	tmpTexture = new RTexture(texturesScene_game[3]);
+	tmpTexture = new RTexture(texturesScene_game[8]);
 	tmpTexture->setTileSizeSrc(tileSizeSrc);
 	tmpTexture->setTileSizeDst(tile_size);
-	tmpTexture->setTileIdx(24);
+	tmpTexture->setTileIdx(1);
 	_player1 = new Player(tmpTexture, map, map->getParams()->start_hp, map->getParams()->start_mana);
 
 	tmpTexture = new RTexture(texturesScene_game[3]);

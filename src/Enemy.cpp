@@ -113,9 +113,20 @@ void Enemy::OnUpdate(int time_ms)
 //	time_ms = 9;
 
 	Character::OnUpdate(time_ms);
-	
 	wayAge += time_ms*0.001;
-	
+	is_praying = false;
+	if (is_praying) {
+		AnimateFrames(time_ms,1,2);
+	} else {
+
+		if (view_dir_x == 0 && view_dir_y < 0) {
+			AnimateFrames(time_ms,6,7);
+		} else if (view_dir_x == 0 && view_dir_y) {
+			AnimateFrames(time_ms,8,10);
+		} else {
+			AnimateFrames(time_ms,3,5);
+		}
+	}
 	if (!way.empty()) {
 		AStartPoint_t next = *way.begin();
 		if (getPosAfterX() == getPosBeforeX()

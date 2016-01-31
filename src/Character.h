@@ -112,7 +112,9 @@ private:
 	int _pos_after_x;
 	int _pos_before_y;
 	int _pos_after_y;
+	int animation_prog_ms;
 protected:
+	void AnimateFrames(int time_ms, int first, int last, int fps=5);
 	int view_dir_x;
 	int view_dir_y;
 	int last_dir_x;

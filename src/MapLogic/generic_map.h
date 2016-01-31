@@ -38,17 +38,17 @@ protected:
 	 */
 	int AllocateFields()
 	{
-		fields = new Field*[width*height];
-		memset(fields, 0, sizeof(Field**)*width*height);
+		fields = new Field* [width * height];
+		memset(fields, 0, sizeof(Field**) * width * height);
 		return 0;
 	}
 	void FreeFieldIfExists(int x, int y)
 	{
-		if (fields[x+y*width])
-			delete fields[x+y*width];
+		if (fields[x + y * width])
+			delete fields[x + y * width];
 	}
 	void DeallocateFields() {
-		for (int i = 0 ; i!=width*height; ++i ) {
+		for (int i = 0 ; i!= width * height; ++i ) {
 			if (fields[i])
 				delete fields[i];
 		}

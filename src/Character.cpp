@@ -224,9 +224,14 @@ bool Character::canSee(int x, int y) const
 void Character::OnRender(SDL_Renderer *renderer, SDL_Point *camera)
 {
 	if (GetState() == DEAD) {
-		_texture->renderTile(renderer, (int)getPosX() - camera->x, (int)getPosY() - camera->y, 30, SDL_FLIP_NONE);
+		_texture->renderTile(renderer,
+				     (int)getPosX() - camera->x,
+				     (int)getPosY() - camera->y,
+				     30, SDL_FLIP_NONE);
 	} else if (GetState() == ALIVE) {
-		_texture->renderTile(renderer, (int)getPosX() - camera->x, (int)getPosY() - camera->y);
+		_texture->renderTile(renderer,
+				     (int)getPosX() - camera->x,
+				     (int)getPosY() - camera->y);
 	}
 }
 
@@ -477,6 +482,17 @@ void Character::OnUpdate(int time_ms)
 void Character::Win() {
 		
 }
+
+void Character::AnimateFrames(int time_ms, int first, int last, int fps)
+{
+	animation_prog_ms += time_ms;
+	int frame_curr = animation_prog_ms / (1000 / fps) % (last - first + 1) + first;
+	printf("%d %d\n", frame_curr,time_ms / (1000 / fps) );
+	_texture->setTileIdx(frame_curr);
+
+	
+}
+
 
 void Character::renderAvatar(SDL_Renderer *renderer, int x, int y, SDL_RendererFlip flip)
 {

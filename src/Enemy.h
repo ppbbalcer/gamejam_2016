@@ -26,7 +26,7 @@ class Enemy : public Character
 	enemy_ai _ai;
 	AStarWay_t way;
 	float wayAge;
-
+	bool is_praying;
 public:
 	Enemy(RTexture* texture, IMap * map, int hp, int ai);
 	virtual ~Enemy(void);
