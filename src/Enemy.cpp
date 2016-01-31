@@ -158,7 +158,8 @@ void Enemy::PrayToMonster()
 			// this means by default one cultist can summon
 			// ctholhoo in 40 seconds. game lasts 50 seconds
 			// in the demo level
-			_map->ProgressMonster(0.025);
+
+			_map->ProgressMonster((1.f/_map->getParams()->summon_seconds) * _map->getParams()->cultist_seconds);
 		}
 	}
 }

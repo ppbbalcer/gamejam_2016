@@ -293,7 +293,8 @@ void SceneGame::OnUpdate(int timems)
 		level->resetCurrent();
 		return;
 	}
-	float day_velocity = 0.02; //  seconds till dawn
+
+	float day_velocity = 1.f/map->getParams()->day_seconds; //  seconds till dawn
 	map->ProgressDay( timems * 0.001 * day_velocity);
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);

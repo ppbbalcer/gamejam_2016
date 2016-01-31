@@ -17,6 +17,9 @@ struct map_params {
 	int start_hp;
 	int start_ammo;
 	int start_trap;
+	int day_seconds;
+	int cultist_seconds;
+	int summon_seconds;
 };
 
 enum map_obstruction {
