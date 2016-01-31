@@ -44,7 +44,7 @@ float Q_rsqrt( float number )
 }
 
 
-#define GAME_TITLE "WHAT DO WE DO NOW - revenge of the GM?"
+#define GAME_TITLE "Break the ritual?"
 #define _engine EngineInst
 
 Engine* EngineInst = NULL;
