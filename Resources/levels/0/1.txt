@@ -1,22 +1,7 @@
-CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-C     TT            TT                TT
-C     TT            TT                TT
-C             TT  TTTTTT  TT          TT
-C             TT  TTTTTT  TT    5     TT
-C     TT      TT    TT    TT    TTTTTTTT
-C     TT   T  TT    TT    TT    TTTTTTTT
-C     TT  TT  TT          TT          TT
-C     T   TT  TT          TT          TT
-C     5   TT  TTTTTT  TTT5TTTTTTTTTTTTTT
-C         TT  5TTTTT  TTTTTTTTTTTTTTTTTT
-C       TT                            TT
-C!      TT                            TT
-C!        TT  ww  wwwwwwwwww      5   TT
-CA        TT  w            w          TT
-C!    TT  TT  w     ww     w          TT
-C!    T5      w     ww     w          TT
-C             w            w      TT  TT
-C             wwwwwwwwww  ww      TT  TT
-C     5                               TT
-C     TT                              TT
-CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+C                     5              5    5  T
+C       TTTT  TTTTTTTTT   TTTTTTT            T
+CA!     T     T                        A     T
+C       T     5   TTTTTTT          5         T
+C       T                                5   T
+CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
