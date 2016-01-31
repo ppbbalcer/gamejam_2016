@@ -57,6 +57,7 @@ ResourceItem texturesScene_game[] = {
 	{ "Resources/tiles/ground_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
 	{ "Resources/tiles/player_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
 	{ "Resources/tiles/ritualist_ss.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
+	{ "Resources/tiles/daytime.png",			false, false, true, 0x0,	NULL, NULL, 0, 0 },
 };
 
 size_t texturesScene_gameSize = sizeof(texturesScene_game) / sizeof(texturesScene_game[0]);
