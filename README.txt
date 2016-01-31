@@ -1,4 +1,4 @@
-What Shall We Do Now - Revenge of the GM
+Brak the Ritual
 README file
 
 This is PRE ALPHA RELEASE.
@@ -11,8 +11,17 @@ Resources/levels folder.
 This game is released under THREE CLAUSE BSD LICENSE
 
 
-Copyright (c) 2015, Pawłowski Sławomir, Kaminski Maciej, Naruszewicz Maciej, Balcer Piotr
-All rights reserved.
+Copyright (c) 2016,
+	- Balcer Piotr
+	- Duda Michal
+	- Gokhan Solak
+	- Kaminski Maciej
+	- Kisly Zbigniew
+Game is utilizing certain portions of codebase from 2015 by:
+        - Naruszewicz Maciej
+  	- Pawlowski Slawomir
+Parts of soundtrack are copied from Nox Arcana album under Fair Use rules.	
+All rights reserved for all respective authors and copyright holders.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
@@ -28,18 +37,8 @@ RELEASE NOTES:
 
 Following problems are known:
 
-- when character is moving quickly and shoting in the same time,
-  fireballs may appear in character's previous location. This is
-  rare graphical glitch, that does not affect gameplay or stable
-  operation of product
-
 - when working directory DOESN'T contain resources directory,
   execution fails.
-
-- in Windows 8 the screen might get scaled unproportionally, in
-  such case disabling display scaling on high DPI settings should
-  help (right click on the executable file "Revenge of the GM.exe",
-  Compatibility -> Disable display scaling on high DPI settings
 
 - Game wasn't designed to run on dual monitor setups and may crash on
   such.
