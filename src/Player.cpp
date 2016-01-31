@@ -19,9 +19,9 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana, int ammo, int t
 	viewangle = M_PI;
 
 	inventory[ITEM_AMMO].available = ammo;
-	inventory[ITEM_AMMO].capacity = 10;
+	inventory[ITEM_AMMO].capacity = ammo;
 	inventory[ITEM_TRAP].available = traps;
-	inventory[ITEM_TRAP].capacity = 10;
+	inventory[ITEM_TRAP].capacity = traps;
 };
 
 Player::~Player(void) {};
