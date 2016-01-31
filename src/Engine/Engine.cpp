@@ -367,7 +367,7 @@ void Engine::mainLoop() {
 		if (_font && !status_line.empty()) {
 			SDL_RenderSetViewport(_renderer, &_viewportScreen);
 			_font->printf(screen_width() / 2,
-				      screen_height() *0.9,
+				      screen_height() -20 ,
 				      ALIGN_BOTTOM_WITH_PADDING,
 				      status_line.c_str());
 		}
