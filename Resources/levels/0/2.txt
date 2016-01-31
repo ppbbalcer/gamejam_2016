@@ -1,0 +1,7 @@
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+C                     5              5    5  T
+C       TTTT  TTTTTTTTT   TTTTTTT            T
+CA!     T     T                        A     T
+C       T     5   TTTTTTT          5         T
+C       T                                5   T
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
