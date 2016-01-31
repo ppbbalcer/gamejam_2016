@@ -13,7 +13,7 @@ void PAUSE() {
 }
 
 #ifndef FULLSCREEN
-//#define FULLSCREEN
+#define FULLSCREEN
 #endif
 
 #define DEF_SCREEN_WIDTH 800
@@ -365,11 +365,11 @@ void Engine::mainLoop() {
 			_font->printf(screen_width(), 0, ALIGN_RIGHT | ALIGN_TOP, "FPS: %.2f", 1000.0f/delta);
 		}
 		if (_font && !status_line.empty()) {
+			SDL_RenderSetViewport(_renderer, &_viewportScreen);
 			_font->printf(screen_width() / 2,
-				      screen_height() * 0.8f,
+				      screen_height() - 20,
 				      ALIGN_BOTTOM_WITH_PADDING,
 				      status_line.c_str());
-
 		}
 		if (_scene->getDrawType() == Scene::DrawType_Paint) {
 			//Draw 2D

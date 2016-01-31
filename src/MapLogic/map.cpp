@@ -149,6 +149,11 @@ LoadedMap::LoadedMap(const char * path) {
 			case 'T':
 				new_field= new Field(IField::TREE);
 				break;
+			case '5':
+				new_field= new Field(IField::STONE);
+				break;
+						
+
 			case '!':{
 				enemy_definition *enemy = new enemy_definition();
 				enemy->x =j;

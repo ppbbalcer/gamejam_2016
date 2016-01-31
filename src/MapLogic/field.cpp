@@ -53,7 +53,7 @@ void Field::EnsureFieldIdsInitialized()
 	assigned_field[ARTIFACT] = 56;
 	assigned_field[TREE] = 51;
 	assigned_field[COASTLINE] = 49;
-	assigned_field[STONE] = 36;
+	assigned_field[STONE] = 50;
 	
 	initialized = true;
 }
