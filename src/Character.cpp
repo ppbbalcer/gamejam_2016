@@ -21,7 +21,7 @@ Character::Character(RTexture* texture, IMap * map)
 	last_dir_y = 0;
 	view_dir_x = 1;
 	view_dir_y = 0;
-	
+	_root_timer = 0;
 	viewangle = 0.50*M_PI;
 }
 
