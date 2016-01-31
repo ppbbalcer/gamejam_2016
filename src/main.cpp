@@ -33,7 +33,7 @@ int main( int argc, char* args[] )
 {
 	printf("argc %d\n", argc);
 
-	int world = 1;
+	int world = 0;
 	int level = 0;
 
 	if (argc == 3) {

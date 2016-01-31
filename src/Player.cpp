@@ -18,9 +18,9 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 	arming = 0;
 	viewangle = M_PI;
 
-	inventory[ITEM_AMMO].available = 5;
+	inventory[ITEM_AMMO].available = hp;
 	inventory[ITEM_AMMO].capacity = 5;
-	inventory[ITEM_TRAP].available = 10;
+	inventory[ITEM_TRAP].available = mana;
 	inventory[ITEM_TRAP].capacity = 10;
 };
 
