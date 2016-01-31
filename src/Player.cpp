@@ -52,6 +52,11 @@ void Player::modInventoryItemCount(inventory_item item, int mod)
 	inventory[item].available = min(inventory[item].available, inventory[item].capacity);
 }
 
+int Player::getInvetoryInfo(inventory_item item, inventory_value_type type)
+{
+	return type == ITEM_CURRENT ? inventory[item].available : inventory[item].capacity;
+}
+
 int Player::getMana()
 {
 	return _mana;
