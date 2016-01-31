@@ -25,7 +25,7 @@ using namespace std;
 
 // Global
 IMap *gCurrentMap = NULL;
-
+#define LAST_LEVEL 1
 
 SceneGame::SceneGame(Level *level, int room_id)
 {
@@ -474,6 +474,31 @@ void SceneGame::OnRender(SDL_Renderer* renderer)
 	renderGameplay(renderer);
 	renderBoss(renderer);
 	renderGUI(renderer);
+
+	/* check loss condition */
+	if (_player1->GetState() == Character::DEAD) 
+	{
+		EngineInst->setStatusLine("You lost! "
+			"Press R to try again");
+	} else if (map->GetMonsterProgress() >= 1) {
+		EngineInst->setStatusLine(
+			"Monster awakened! You lost! "
+			"Press R to try again");
+	
+	} else if (map->GetDayProgress() >= 1) {
+		if (level->getId() == LAST_LEVEL) {
+			puts("Vicky");
+			level->SetVictoryScene();
+		} else {
+			puts("LevelUp");
+			level->setId(level->getId() + 1);
+			map = IMap::Factory(IMap::LOADED, buff);
+				
+			gCurrentMap = map;
+			is_loaded = false;
+		}
+	}
+
 }
 
 void SceneGame::renderGameplay(SDL_Renderer *renderer)
@@ -551,18 +576,6 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 	veryTopBar.h = screenHeight;
 	SDL_RenderSetViewport(renderer, &veryTopBar);
 
-	/* check loss condition */
-	if (_player1->GetState() == Character::DEAD) 
-	{
-		EngineInst->setStatusLine("You lost! "
-			"Press R to try again");
-	} else if (map->GetMonsterProgress() >= 1) {
-		EngineInst->setStatusLine("Monster awakened! You lost! "
-					  "Press R to try again");
-	
-	} else if (map->GetDayProgress() >= 1) {
-		level->SetVictoryScene();
-	}
 }
 
 void SceneGame::drawBar(SDL_Renderer *renderer, int value, int playerBarYPadding, int playerBarHeight, int defaultX, int r, int g, int b) const {
