@@ -451,8 +451,13 @@ void SceneGame::renderMap(SDL_Renderer* renderer) {
 				continue;
 			int col = j * tileSize - _camera.x;
 			int row = i * tileSize - _camera.y;
+			if (field == IField::TREE) {
+				int treenum = _rand() % 4;
+				if (treenum > 1) treenum ++;
+				_tiles->renderTile(renderer, col , row, tile+treenum, SDL_FLIP_NONE);
+			} else {
 			_tiles->renderTile(renderer, col , row, tile, SDL_FLIP_NONE);
-
+			}
 		}
 	}
 }
