@@ -18,11 +18,10 @@ Player::Player(RTexture * texture, IMap * map, int hp, int mana) : Character(tex
 	arming = 0;
 	viewangle = M_PI;
 
-	for (int i = 0; i < MAX_INVENTORY_ITEM; ++i) {
-		inventory[i].available = 10;
-		inventory[i].capacity = 10;
-	}
-
+	inventory[ITEM_AMMO].available = 5;
+	inventory[ITEM_AMMO].capacity = 5;
+	inventory[ITEM_TRAP].available = 10;
+	inventory[ITEM_TRAP].capacity = 10;
 };
 
 Player::~Player(void) {};
@@ -113,13 +112,14 @@ Fireball * Player::Shoot()
 	if (GetState() != ALIVE)
 		return NULL;
 
-	if (_mana - FIREBALL_MANA_COST < 0)
-		return NULL;
-
 	if (_time_to_shot)
 		return NULL;
 
-	_mana -= FIREBALL_MANA_COST;
+	if (inventory[ITEM_AMMO].available <= 0)
+		return NULL;
+
+	modInventoryItemCount(ITEM_AMMO, -1);
+
 	_time_to_shot=FIREBALL_MIN_DIFF_MS;
 
 	globalAudios[GameSounds::FIREBALL].res.sound->play();
