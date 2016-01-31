@@ -9,8 +9,11 @@ public:
 	void Activate();
 	void Deactivate();
 	void SteppedOver(Character * who);
+	virtual int GetTileId();
 
-	RootTrap() : Field(ROOT_TRAP) { };
+	RootTrap() : Field(ROOT_TRAP) { tile = 60; };
+
+	int tile;
 };
 
 #endif

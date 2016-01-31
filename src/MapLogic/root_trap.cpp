@@ -7,7 +7,8 @@
 
 void RootTrap::SteppedOver(Character * who)
 {
-	if (who->getType() == TYPE_ENEMY) {
+	if (tile == 60 && who->getType() == TYPE_ENEMY) {
+		tile = 61;
 		who->root(ROOT_TIMER);
 	}
 	Field::SteppedOver(who);
@@ -19,4 +20,9 @@ void RootTrap::Activate()
 
 void RootTrap::Deactivate()
 {
+}
+
+int RootTrap::GetTileId()
+{
+	return tile;
 }
