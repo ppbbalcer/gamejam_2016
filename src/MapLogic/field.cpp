@@ -74,7 +74,6 @@ bool Field::IsObstacle()
 		return true;
 	if (GetType() == TREE || GetType() == STONE
 	    || GetType() == COASTLINE) {
-		puts("TRee is obstacle");
 		return true;
 	}
 	return (type >= WALL && type <= T_BOTTOM);

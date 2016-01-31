@@ -115,17 +115,17 @@ public:
 	 */
 	virtual void ProgressMonster(float prog)
 	{
-		day_progress += prog;
-		if (day_progress > 1) {
-			day_progress = 1;
+		monster_progress += prog;
+		if (monster_progress > 1) {
+			monster_progress = 1;
 		}
 	}
 
 	virtual void ProgressDay(float prog)
 	{
-		monster_progress += prog;
-		if (monster_progress > 1) {
-			monster_progress = 1;
+		day_progress += prog;
+		if (day_progress > 1) {
+			day_progress = 1;
 		}
 	}
 

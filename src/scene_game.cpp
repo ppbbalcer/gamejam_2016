@@ -15,8 +15,8 @@ using namespace std;
 #define MAX_ROOM_PATH 255
 #define HEARTBEAT_BASE_INTERVAL 2000
 #define HEARTBEAT_MIN_INTERVAL 500
-//#define DEBUG_BOTS
-#define MAX_TILE_PER_SCREEN 12
+#define DEBUG_BOTS
+#define MAX_TILE_PER_SCREEN 32
 
 #define UI_HEIGHT	0.15f
 #define GP_HEIGHT	1.0f - UI_HEIGHT
@@ -264,8 +264,8 @@ void SceneGame::updateEnemies(int timems)
 {
 	/* update behaviors for each of enemies */
 	for (std::vector<Enemy*>::iterator enemy = _enemys.begin(); enemy != _enemys.end(); ++enemy) {
+		(*enemy)->ProcessAI(_player1, timems);
 		(*enemy)->OnUpdate(timems);
-		(*enemy)->Chase(_player1);
 
 		const AStarWay_t & way1 = (*enemy)->getWay();
 
@@ -291,9 +291,9 @@ void SceneGame::OnUpdate(int timems)
 	}
 	float day_velocity = 0.1; // 10 seconds till dawn
 	map->ProgressDay( timems * 0.001 * day_velocity);
-	
 	globalAudios[HEARTBEAT].res.sound->update(timems);
 	_boss->OnUpdate(timems);
+	_boss->SetBossRatio(map->GetMonsterProgress());
 	updatePlayers(timems);
 	updateFireballs(timems);
 	updateEnemies(timems);
