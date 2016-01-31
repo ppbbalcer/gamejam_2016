@@ -1,0 +1,13 @@
+CTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+C      T      5   5          T
+C      T              TTT    T
+CA!    T 5TTTTTT  5          T
+C      TTT           T   5   T
+CTTTT      ATT5T  TTTTT      T
+C      TTTTT5  5T            T
+CA!    T        T       TT   T
+C      T    5   T   5        T
+C      T                     T
+C      T  A    TTTTTT   TT   T
+C      T    5         5      T
+CTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
