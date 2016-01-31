@@ -40,8 +40,11 @@ public:
 	const AStarWay_t&	getWay();
 	virtual void updateDirection(DIRECT directMove);
 	void Chase(Character * ch);
-
+	void ProcessAI(Character * ch, int timems);
+	void PrayToMonster();
 private:
+	// time spent on chasing player WHEN player is not seen
+	float chase_took;
 	int default_dir_x;
 	int default_dir_y;
 };

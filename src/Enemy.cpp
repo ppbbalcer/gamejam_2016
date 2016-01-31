@@ -14,8 +14,11 @@ Enemy::Enemy(RTexture *texture, IMap *map, int hp, int ai) : Character(texture, 
 	_health = hp;
 	_ai = (enemy_ai)ai;
 	wayAge = 0.0f;
-	default_dir_x = 0;
+	default_dir_x = -1;
 	default_dir_y = 0;
+	view_dir_x = -1;
+	view_dir_y = 0;
+	is_praying = true;
 }
 
 Enemy::~Enemy(void) {};
@@ -108,18 +111,94 @@ void Enemy::Chase(Character * ch)
 	}
 }
 
+void Enemy::PrayToMonster()
+{
+
+	if (getPosBeforeX() > 4 && (way.empty() || wayAge > 1)) {
+		
+		DIRECT destBest = DIRECT_NO_WAY;
+		int startX = getPosAfterX();
+		int startY = getPosAfterY();
+			AStarWay_t way1;
+			int maxSteps = 0;
+
+		destBest =
+			findAstar(way1, maxSteps,
+				  startX, startY,
+				  1,
+				  getPosBeforeY(),
+				  _map->GetWidth(),
+				  _map->GetHeight(),
+				  I_Map_isObstacle, _map);
+
+		if (destBest != DIRECT_NO_WAY && way1.size()) {
+			if (destBest == DIRECT_DOWN) {
+			updateDirection(DIRECT_DOWN);
+			} else if (destBest == DIRECT_UP) {
+				updateDirection(DIRECT_UP);
+			} else if (destBest == DIRECT_LEFT) {
+				updateDirection(DIRECT_LEFT);
+			} else if (destBest == DIRECT_RIGHT) {
+				updateDirection(DIRECT_RIGHT);
+			}
+			setWay(way1);
+		}
+	} else {
+
+		view_dir_x = -1;
+		view_dir_y = 0;
+		last_dir_x = -1;
+		last_dir_y = 0;
+		default_dir_x = view_dir_x;
+		default_dir_y = view_dir_y;
+		_texture->setFlip(SDL_FLIP_NONE);
+		if (wayAge > 1) {
+			wayAge = 0;
+			puts("Wololo!");
+			_map->ProgressMonster(0.15);
+		}
+	}
+}
+void Enemy::ProcessAI(Character * ch, int time_ms)
+{
+	/* enemy can be in two states.
+	 * either praying to his monster
+	 * or chasing PC.
+	 */
+	if (is_praying) {
+		if ( canSee(ch->getPosBeforeX(),
+			    ch->getPosBeforeY())) {
+			is_praying = false;
+			chase_took = 0;
+			puts("AI:Chase");
+		}
+	} else {
+		if (chase_took > 5) {
+			way.clear();
+			is_praying = true;
+			puts("AI: Pray");
+			
+		}
+	}
+	if (is_praying) {
+		PrayToMonster();
+	} else {
+		Chase(ch);
+	if (!is_praying && !canSee(ch->getPosBeforeX(),
+				   ch->getPosBeforeY())) {
+		chase_took += time_ms * 0.001;
+	}		
+	}
+
+}
+
 void Enemy::OnUpdate(int time_ms)
 {
-//	time_ms = 9;
-
 	Character::OnUpdate(time_ms);
 	wayAge += time_ms*0.001;
 	if (getPosAfterX() == getPosBeforeX()
 	    && getPosAfterY() == getPosBeforeY()
-	    && way.empty()) {
-		is_praying = false;
-	}
-	if (is_praying) {
+	    && way.empty() && is_praying) {
 		AnimateFrames(time_ms,{1,2});
 	} else {
 
@@ -152,6 +231,8 @@ void Enemy::OnUpdate(int time_ms)
 				} else {
 					updateDirection(DIRECT_DOWN);
 				}
+			} else {
+				wayAge = 0;
 			}
 		}
 	}

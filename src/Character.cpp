@@ -488,7 +488,6 @@ void Character::AnimateFrames(int time_ms, const std::vector<int> & frames, int 
 	animation_prog_ms += time_ms;
 	int frame_curr = animation_prog_ms / (1000 / fps) % (frames.size());
 	frame_curr = frames[frame_curr];
-	printf("%d %d\n", frame_curr,time_ms / (1000 / fps) );
 	_texture->setTileIdx(frame_curr);
 
 	

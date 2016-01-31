@@ -32,14 +32,15 @@ private:
 	float		_bossPosY;
 
 	float		_bossDiePosY;
-
+	float _boss_ratio;
+	float _boss_target_ratio;
 public:
 
 	BossScreen(RTexture *background, RTexture *boss, SDL_Rect screenRect);
 	~BossScreen();
 	void OnUpdate(int delta);
 	void OnRender(SDL_Renderer* renderer);
-
+	void SetBossRatio(float x);
 	void Kill();
 };
 
