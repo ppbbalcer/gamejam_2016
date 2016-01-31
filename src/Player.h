@@ -11,6 +11,11 @@ enum inventory_item {
 	MAX_INVENTORY_ITEM
 };
 
+enum inventory_value_type {
+	ITEM_CURRENT,
+	ITEM_CAPACITY
+};
+
 #define TRAP_ARM_TIME 5000
 
 class Player : public Character
@@ -38,6 +43,8 @@ public:
 
 	void placeTrap();
 	void modInventoryItemCount(inventory_item item, int mod);
+
+	int getInvetoryInfo(inventory_item item, inventory_value_type type);
 
 	Fireball * Shoot();
 };

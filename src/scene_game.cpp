@@ -525,17 +525,12 @@ void SceneGame::renderGUI(SDL_Renderer *renderer) {
 
 	SDL_RenderSetViewport(renderer, &veryTopBar);
 
-		int defaultX = screenWidth - tileSize - playerBarXPadding;
+	int defaultX = screenWidth - tileSize - playerBarXPadding;
 
-		_player1->renderAvatar(renderer, defaultX, 0, SDL_FLIP_HORIZONTAL);
-		EngineInst->font()->printf(defaultX - 210, playerBarYPadding + veryTopBar.y, ALIGN_RIGHT | ALIGN_TOP, "Player controls UP, DOWN, LEFT, RIGHT CTRLl-Fire");
-
-	drawBar(renderer, _player1->getHealth(), playerBarYPadding, playerBarHeight, defaultX, 255, 0, 0);
+	_player1->renderAvatar(renderer, defaultX, (veryTopBar.h - tileSize) * 0.5f, SDL_FLIP_HORIZONTAL);
 	EngineInst->font()->printf(0, 0, ALIGN_LEFT | ALIGN_TOP, "Room %u-%u", level->getId(), room_id);
-
-	playerBarYPadding+=paddingBetweenBars;
-	playerBarYPadding+=playerBarHeight;
-	drawBar(renderer, _player1->getMana(), playerBarYPadding, playerBarHeight, defaultX, 0, 0, 255);
+	EngineInst->font()->printf(veryTopBar.w * 0.45f, 0, ALIGN_RIGHT | ALIGN_TOP, "Ammo %u-%u", _player1->getInvetoryInfo(ITEM_AMMO, ITEM_CURRENT), _player1->getInvetoryInfo(ITEM_AMMO, ITEM_CAPACITY));
+	EngineInst->font()->printf(veryTopBar.w * 0.55f, 0, ALIGN_LEFT | ALIGN_TOP, "Traps %u-%u", _player1->getInvetoryInfo(ITEM_TRAP, ITEM_CURRENT), _player1->getInvetoryInfo(ITEM_TRAP, ITEM_CAPACITY));
 
 	veryTopBar.h = screenHeight;
 	SDL_RenderSetViewport(renderer, &veryTopBar);
