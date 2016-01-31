@@ -143,6 +143,12 @@ LoadedMap::LoadedMap(const char * path) {
 			case 'A':
 				new_field = new Artifact();
 				break;
+			case 'C':
+				new_field= new Field(IField::COASTLINE);
+				break;
+			case 'T':
+				new_field= new Field(IField::TREE);
+				break;
 			case '!':{
 				enemy_definition *enemy = new enemy_definition();
 				enemy->x =j;

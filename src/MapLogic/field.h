@@ -51,8 +51,10 @@ public:
 		SWITCH_DOWN,
 		EVIL_COMPUTER, /*spawns fireballs everywhere*/
 		ARTIFACT,
+		COASTLINE,
+		STONE,
+		TREE,
 		NUM_FIELD_TYPES
-
 	};
 // as per enum FieldType
 	virtual int GetType() = 0;

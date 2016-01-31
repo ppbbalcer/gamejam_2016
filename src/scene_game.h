@@ -36,6 +36,8 @@ private:
 #endif
 	std::vector<Enemy*> _enemys;
 	RTexture *_tiles;
+	RTexture *_forrestbg;
+	RTexture *_forresttrees;
 	int _arrayShadowW;
 	int _arrayShadowH;
 	int *_arrayShadow;

@@ -161,6 +161,9 @@ void SceneGame::OnLoad()
 	_tiles = new RTexture(texturesScene_game[3]);
 	_tiles->setTileSizeSrc(tileSizeSrc);
 	_tiles->setTileSizeDst(tile_size);
+	_forrestbg = new RTexture(texturesScene_game[7]);
+	_forrestbg->setTileSizeSrc(tileSizeSrc);
+	_forrestbg->setTileSizeDst(tile_size);
 	/* lighting setup */
 	_arrayShadowW = map->GetWidth();
 	_arrayShadowH = map->GetHeight();
@@ -411,18 +414,34 @@ void SceneGame::renderMap(SDL_Renderer* renderer) {
 
 	_srand(1);
 
+	bool indoors = false;
+	if (indoors) {
 	/*Render background*/
-	for (int i = 0 ; i != map->GetHeight(); i++) {
-		for (int j = 0 ; j != map->GetWidth(); ++j) {
-			int px_left = j * tileSize - _camera.x;
-			int px_top  = i * tileSize - _camera.y;
-			_tiles->renderTile(renderer,
-			                   px_left,
-			                   px_top,
-			                   18 + _rand() % 5, SDL_FLIP_NONE);
+		for (int i = 0 ; i != map->GetHeight(); i++) {
+			for (int j = 0 ; j != map->GetWidth(); ++j) {
+				int px_left = j * tileSize - _camera.x;
+				int px_top  = i * tileSize - _camera.y;
+				_tiles->renderTile(renderer,
+						   px_left,
+						   px_top,
+						   18 + _rand() % 5, SDL_FLIP_NONE);
+			}
 		}
 	}
-
+	else
+	{
+		/* in the forrest */
+		for (int i = 0 ; i != map->GetHeight(); i++) {
+			for (int j = 0 ; j != map->GetWidth(); ++j) {
+				int px_left = j * tileSize - _camera.x;
+				int px_top  = i * tileSize - _camera.y;
+				_forrestbg->renderTile(renderer,
+						   px_left,
+						   px_top,
+						   1 + _rand() % 4, SDL_FLIP_NONE);
+			}
+		}
+	}
 	/*Render actual mapiles*/
 	for (int i = 0 ; i != map->GetHeight(); i++) {
 		for (int j = 0 ; j != map->GetWidth(); ++j) {

@@ -51,6 +51,10 @@ void Field::EnsureFieldIdsInitialized()
 	assigned_field[SPIKES_OFF] = 48;
 	assigned_field[EVIL_COMPUTER] = 39;
 	assigned_field[ARTIFACT] = 39;
+	assigned_field[TREE] = 51;
+	assigned_field[COASTLINE] = 49;
+	assigned_field[STONE] = 36;
+	
 	initialized = true;
 }
 
@@ -68,6 +72,11 @@ bool Field::IsObstacle()
 	if (GetType() == DOOR_VERTICAL_CLOSED ||
 	                GetType() == DOOR_HORIZONTAL_CLOSED)
 		return true;
+	if (GetType() == TREE || GetType() == STONE
+	    || GetType() == COASTLINE) {
+		puts("TRee is obstacle");
+		return true;
+	}
 	return (type >= WALL && type <= T_BOTTOM);
 }
 
