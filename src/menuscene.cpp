@@ -27,8 +27,6 @@ void MenuScene::handleNormalModeInput() {
 		case MENU_MAP_SELECT:
 			mode = MENU_MODE_SELECT;
 			break;
-		case MENU_OPTIONS:
-			break;
 		case MENU_EXIT:
 			EngineInst->breakMainLoop();
 			return;
@@ -111,7 +109,6 @@ struct menu_item {
 } menu[MAX_MENU_OPTION] = {
 	"Play",
 	"Map select",
-	"Options",
 	"Exit"
 };
 
